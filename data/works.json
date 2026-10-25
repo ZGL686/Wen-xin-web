@@ -1,0 +1,110 @@
+[
+  {
+    "id": "lamp",
+    "title": "AURELIA · 玉石之光",
+    "subtitle": "光，落在温润的形体上。",
+    "category": "产品设计",
+    "description": "以玉石与灯光为主题的三维灯具作品。用柔和的曲线、层叠的结构与材质对比，探索日常物件的雕塑感。展厅模型由原始 3ds Max 场景转换，原始工程可下载继续编辑。",
+    "tags": [
+      "灯具",
+      "玉石",
+      "3ds Max"
+    ],
+    "date": "2026-10-15",
+    "fileName": "AURELIA_Jade_Lamp.max",
+    "fileSize": 8966144,
+    "fileUrl": "/originals/AURELIA_Jade_Lamp.max",
+    "modelUrl": "/portfolio/lamp.glb",
+    "coverUrl": "/portfolio/lamp.webp",
+    "images": [
+      "/portfolio/lamp.webp"
+    ],
+    "format": "MAX",
+    "builtIn": true,
+    "objects": 38,
+    "dimensions": "66.1 × 71.2 × 160.1 cm",
+    "triangles": 134908,
+    "materialNote": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。"
+  },
+  {
+    "id": "sofa",
+    "title": "Cloud Bear · 云朵熊沙发",
+    "subtitle": "把舒适，塑成一个形状。",
+    "category": "家具设计",
+    "description": "熊耳、爪掌与圆润体块，把童趣放进日常生活。柔软的坐垫和饱满的扶手组成这件家具建模作品。可以在三维视图中自由查看结构，也可下载原始 MAX 场景继续编辑。",
+    "tags": [
+      "沙发",
+      "童趣家具",
+      "3ds Max"
+    ],
+    "date": "2026-09-27",
+    "fileName": "Sofa_3dsMax2026.max",
+    "fileSize": 798720,
+    "fileUrl": "/originals/Sofa_3dsMax2026.max",
+    "modelUrl": "/portfolio/sofa.glb",
+    "coverUrl": "/portfolio/sofa.webp",
+    "images": [
+      "/portfolio/sofa.webp"
+    ],
+    "format": "MAX",
+    "builtIn": true,
+    "objects": 27,
+    "dimensions": "265.0 × 126.3 × 131.4 cm",
+    "triangles": 27948,
+    "materialNote": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。"
+  },
+  {
+    "id": "cabinet",
+    "title": "秩序的容器",
+    "subtitle": "在分格与留白之间。",
+    "category": "家具设计",
+    "description": "以柜体结构与收纳分区为重点的三维作品。通过框架、隔板与体块的组合研究比例和空间秩序。此处收录已补齐完成的原始场景，并提供交互式模型浏览。",
+    "tags": [
+      "柜子",
+      "结构",
+      "3ds Max"
+    ],
+    "date": "2026-10-11",
+    "fileName": "柜子_补齐完成.max",
+    "fileSize": 962560,
+    "fileUrl": "/originals/cabinet.max",
+    "modelUrl": "/portfolio/cabinet.glb",
+    "coverUrl": "/portfolio/cabinet.webp",
+    "images": [
+      "/portfolio/cabinet.webp"
+    ],
+    "format": "MAX",
+    "builtIn": true,
+    "objects": 1,
+    "dimensions": "35.3 × 210.0 × 180.0 cm",
+    "triangles": 928,
+    "materialNote": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。"
+  },
+  {
+    "id": "house",
+    "title": "空间的初稿",
+    "subtitle": "从一个体块，走进一个空间。",
+    "category": "空间建筑",
+    "description": "房屋主题的三维空间建模作品。以基础体块和建筑构件建立空间关系，从不同角度观察整体结构。模型保留源场景的几何形态，提供原始 MAX 工程下载。",
+    "tags": [
+      "房屋",
+      "空间",
+      "3ds Max"
+    ],
+    "date": "2026-09-14",
+    "fileName": "房子3d.max",
+    "fileSize": 737280,
+    "fileUrl": "/originals/house.max",
+    "modelUrl": "/portfolio/house.glb",
+    "coverUrl": "/portfolio/house.webp",
+    "images": [
+      "/portfolio/house.webp"
+    ],
+    "format": "MAX",
+    "builtIn": true,
+    "objects": 2,
+    "dimensions": "151.9 × 152.6 × 131.2 cm",
+    "triangles": 200,
+    "materialNote": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。"
+  }
+]
