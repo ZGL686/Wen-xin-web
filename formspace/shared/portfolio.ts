@@ -3,7 +3,8 @@ export const DIRECTIONS = ['交互', '影视', '三维', '其他'] as const;
 export type Direction = typeof DIRECTIONS[number];
 export type WorkStatus = 'in-progress' | 'final';
 export type Profile = { slug: string; displayName: string; bio: string; createdAt: string; updatedAt: string; system?: boolean };
-export type User = { id: string; name: string; profile?: Profile } | null;
+/** id is an opaque browser-workspace owner, never a client-supplied account ID. */
+export type User = { id: string; name: string; profile?: Profile; identityMode?: 'browser' } | null;
 
 export type Snapshot = {
   title: string; direction: Direction; category: Direction; tags: string[];
@@ -32,6 +33,7 @@ export type WorksResponse = { works: Work[]; user: User; profile: Profile | null
 export type WorkResponse = { work: Work; versions: Version[]; user: User; isOwner: boolean };
 export type ProfileResponse = { profile: Profile; works: Work[]; user: User; isOwner: boolean };
 export type MeResponse = { user: User; profile: Profile | null };
+export type SessionResponse = MeResponse & { created: boolean; identityMode: 'browser' };
 export type PublicationInput = {
   revision: number;
   displayVersionId?: string | null;
@@ -41,7 +43,9 @@ export type PublicationInput = {
 export type ApiError = { error: string; code?: string };
 
 /**
- * GET /api/me -> MeResponse (anonymous: user/profile null)
+ * POST /api/session -> SessionResponse; requires same-origin Origin; creates or
+ * reuses an HttpOnly browser cookie, never returns the secret token in JSON.
+ * GET /api/me -> MeResponse, read-only (missing/invalid/expired cookie: null).
  * PATCH /api/me/profile JSON {displayName,bio} -> {profile,user}; stable share slug.
  * GET /api/profiles/:slug -> ProfileResponse (public work snapshots only).
  * GET /api/works?scope=public|mine&profile=:slug -> WorksResponse.
@@ -65,5 +69,12 @@ export type ApiError = { error: string; code?: string };
  * Total newly uploaded files <=40 MiB; each image <=12 MiB; JSON <=128 KiB.
  * Save always creates a version after success, including an unchanged manual save.
  * New uploads never change the visitor's current display version automatically.
- * Missing identity=401; forbidden=403/404; validation=400/413; stale revision=409.
+ * Missing browser workspace=401 code workspace_required; forbidden=403/404;
+ * validation=400/413; stale revision=409. oai-authenticated-user-* is ignored.
+ * Browser cookies are the only ownership proof. Clearing cookies, expiration,
+ * another browser/device cannot automatically restore the previous workspace.
+ * HTTPS uses __Host-changxu_workspace; HTTP development uses changxu_workspace.
+ * POST /session reuses the same token/owner, extending server expiry to 365 days
+ * only when fewer than 30 days remain; GET /me never creates or renews sessions.
+ * Old account-owned records are preserved and cannot be claimed using headers.
  */

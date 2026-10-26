@@ -1,3 +1,5 @@
+> 当前版本补充：长序第 3 版已移除账号登录，使用应用自有浏览器空间 Cookie；本文旧包的登录迁移说明不代表当前接口，接手以当前 README/shared 合同为准。
+
 > 历史交付说明：本文对应 2026-10-25 的旧版 WorkBuddy 包。2026-10-26 文心已新增私密版本、个人空间与媒体权限；接手新版请以仓库当前 `formspace/README.md` 和 `formspace/shared/portfolio.ts` 为准。旧 ZIP 未因此自动更新，本文不代表新版国内迁移已完成。
 
 # WorkBuddy 接手资料

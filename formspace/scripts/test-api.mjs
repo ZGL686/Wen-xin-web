@@ -44,7 +44,9 @@ const builtins = [{ id: 'lamp', title: '灯具', category: '产品设计', tags:
 const png = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 0]);
 const mp4 = new Uint8Array([0, 0, 0, 24, 102, 116, 121, 112, 105, 115, 111, 109, 0, 0, 0, 0, 105, 115, 111, 109, 0, 1, 2, 3]);
 const audio = new Uint8Array([73, 68, 51, 4, 0, 0, 0, 0, 0, 0, 20, 30]);
-const headers = (id = 'creator-1') => ({ 'oai-authenticated-user-id': id, Origin: 'https://portfolio.test', 'oai-authenticated-user-full-name': encodeURIComponent(id === 'creator-1' ? '创作者一' : '创作者二'), 'oai-authenticated-user-full-name-encoding': 'percent-encoded-utf-8' });
+// A test label is only a cookie jar index, never a server identity header.
+const jars = new Map();
+const headers = (browser = 'creator-1') => ({ ...(jars.has(browser) ? { Cookie: jars.get(browser) } : {}), Origin: 'https://portfolio.test' });
 const req = (path, init = {}) => new Request('https://portfolio.test' + path, init);
 const call = (path, init = {}) => handleApi(req(path, init), env, builtins);
 const read = async (response, status = 200) => { const data = await response.json(); assert.equal(response.status, status, JSON.stringify(data)); return data; };
@@ -62,14 +64,116 @@ const publish = (work, fields) => sendJson('/api/works/' + work.id + '/publicati
 const keys = () => [...bucket.data.keys()].sort();
 let checks = 0;
 
-// Authenticated writes and personal spaces.
+// Server-issued browser sessions: same-origin only, high entropy, no readable bearer.
+const pristine = keys();
+assert.deepEqual(await get('/api/me'), { user: null, profile: null });
+assert.deepEqual(keys(), pristine, 'GET /me must not create sessions or profiles');
+assert.equal((await call('/api/session', { method: 'POST' })).status, 403);
+assert.equal((await call('/api/session', { method: 'POST', headers: { Origin: 'https://evil.test' } })).status, 403);
+assert.equal((await call('/api/session', { method: 'POST', headers: { Origin: 'null' } })).status, 403);
+assert.equal((await call('/api/session', { method: 'POST', headers: { Origin: 'https://portfolio.test', 'Sec-Fetch-Site': 'cross-site' } })).status, 403);
+const spoofHeaders = { 'oai-authenticated-user-id': 'creator-1', 'oai-authenticated-user-full-name': 'Forged account', Origin: 'https://portfolio.test', Cookie: '__sites_local_auth=1' };
+assert.deepEqual(await read(await call('/api/me', { headers: spoofHeaders })), { user: null, profile: null });
+assert.equal((await call('/api/works', { method: 'POST', headers: spoofHeaders, body: createForm() })).status, 401);
+assert.deepEqual(await read(await call('/api/me', { headers: { Cookie: '__Host-changxu_workspace=not-a-valid-token' } })), { user: null, profile: null });
+assert.deepEqual(await read(await call('/api/me', { headers: { Cookie: '__Host-changxu_workspace=' + 'a'.repeat(43) } })), { user: null, profile: null });
+async function openBrowser(label, extraHeaders = {}) {
+  const response = await call('/api/session', { method: 'POST', headers: { ...headers(label), ...extraHeaders } });
+  const cookie = response.headers.get('Set-Cookie');
+  if (cookie) jars.set(label, cookie.split(';')[0]);
+  const data = await read(response);
+  return { data, cookie, response };
+}
+const firstBrowser = await openBrowser('creator-1', spoofHeaders);
+assert.equal(firstBrowser.data.created, true); assert.equal(firstBrowser.data.identityMode, 'browser');
+assert.match(firstBrowser.data.user.id, /^workspace-[a-f0-9-]{36}$/); assert.notEqual(firstBrowser.data.user.id, 'creator-1');
+assert.match(firstBrowser.cookie, /HttpOnly/); assert.match(firstBrowser.cookie, /SameSite=Lax/); assert.match(firstBrowser.cookie, /Path=\//); assert.match(firstBrowser.cookie, /Secure/); assert.match(firstBrowser.cookie, /Max-Age=31536000/);
+assert.match(firstBrowser.cookie, /^__Host-changxu_workspace=/); assert.equal(/(?:^|;\s*)Domain=/i.test(firstBrowser.cookie), false);
+assert.match(firstBrowser.response.headers.get('Cache-Control'), /no-store/); assert.equal(firstBrowser.response.headers.get('Vary'), 'Cookie');
+const firstSecret = jars.get('creator-1').split('=')[1]; assert.equal(firstSecret.length, 43);
+assert.equal(JSON.stringify(firstBrowser.data).includes(firstSecret), false, 'bearer is never returned as JSON');
+for (const [key, stored] of bucket.data) { assert.equal(new TextDecoder().decode(stored.bytes).includes(firstSecret), false, 'R2 stores no raw bearer'); if (key.startsWith('sessions/')) assert.match(JSON.parse(new TextDecoder().decode(stored.bytes)).tokenHash, /^[a-f0-9]{64}$/); }
+const reused = await openBrowser('creator-1'); assert.equal(reused.data.created, false); assert.equal(reused.data.user.id, firstBrowser.data.user.id); assert.equal(reused.cookie.split(';')[0], jars.get('creator-1'));
+assert.deepEqual(await read(await call('/api/me', { headers: { Cookie: 'changxu_workspace=' + firstSecret } })), { user: null, profile: null }, 'HTTPS rejects a parent-domain/development-name cookie even with a valid token');
+const secondBrowser = await openBrowser('creator-2'); assert.notEqual(secondBrowser.data.user.id, firstBrowser.data.user.id); assert.notEqual(jars.get('creator-1'), jars.get('creator-2'));
+const beforeRead = keys(); assert.equal((await get('/api/me', 'creator-1')).user.id, firstBrowser.data.user.id); assert.deepEqual(keys(), beforeRead);
+// Duplicate cookies are ambiguous and never authenticate.
+assert.deepEqual(await read(await call('/api/me', { headers: { Cookie: jars.get('creator-1') + '; ' + jars.get('creator-2') } })), { user: null, profile: null });
+// Concurrent cookieless opens produce independent empty owners, never a shared global workspace.
+const concurrentSessions = await Promise.all([openBrowser('parallel-a'), openBrowser('parallel-b')]);
+assert.notEqual(concurrentSessions[0].data.user.id, concurrentSessions[1].data.user.id);
+// An expired token cannot recover or attach its owner's retained data.
+const expiring = await openBrowser('expired-browser');
+const expiredSecret = jars.get('expired-browser').split('=')[1];
+const expiredHash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(expiredSecret)))].map(x => x.toString(16).padStart(2, '0')).join('');
+const expiredKey = 'sessions/' + expiredHash + '.json';
+const expiryRecord = await (await bucket.get(expiredKey)).json(); await bucket.put(expiredKey, JSON.stringify({ ...expiryRecord, createdAt: Date.now() - 366 * 86400000, expiresAt: Date.now() - 1 }));
+assert.equal((await get('/api/me', 'expired-browser')).user, null);
+const replacement = await openBrowser('expired-browser'); assert.notEqual(replacement.data.user.id, expiring.data.user.id); assert.equal(bucket.data.has(expiredKey), true);
+const invalidReplacement = await openBrowser('invalid-cookie', { Cookie: '__Host-changxu_workspace=' + 'z'.repeat(43), 'oai-authenticated-user-id': firstBrowser.data.user.id });
+assert.equal(invalidReplacement.data.created, true); assert.notEqual(invalidReplacement.data.user.id, firstBrowser.data.user.id);
+const forgedWithValidCookie = await read(await call('/api/me', { headers: { ...headers('creator-2'), 'oai-authenticated-user-id': firstBrowser.data.user.id, 'oai-authenticated-user-full-name': 'Pretend first browser' } }));
+assert.equal(forgedWithValidCookie.user.id, secondBrowser.data.user.id); assert.notEqual(forgedWithValidCookie.user.name, 'Pretend first browser');
+// A failed bootstrap never sends a bearer cookie or reports an owner as ready.
+const sessionKeysBeforeFailure = keys().filter(key => key.startsWith('sessions/'));
+const suppressedBootstrapError = console.error; console.error = () => {};
+bucket.failPrefix = 'profiles/';
+const failedBootstrap = await call('/api/session', { method: 'POST', headers: { Origin: 'https://portfolio.test' } });
+bucket.failPrefix = ''; console.error = suppressedBootstrapError;
+assert.equal(failedBootstrap.status, 500); assert.equal(failedBootstrap.headers.has('Set-Cookie'), false); assert.deepEqual(keys().filter(key => key.startsWith('sessions/')), sessionKeysBeforeFailure);
+const httpBootstrap = await handleApi(new Request('http://127.0.0.1:5173/api/session', { method: 'POST', headers: { Origin: 'http://127.0.0.1:5173' } }), env, builtins);
+assert.equal(httpBootstrap.status, 200); assert.equal(/(?:^|;\s*)Secure(?:;|$)/.test(httpBootstrap.headers.get('Set-Cookie')), false, 'HTTP loopback can retain the development cookie'); assert.match(httpBootstrap.headers.get('Set-Cookie'), /^changxu_workspace=/);
+const insecureBootstrap = await handleApi(new Request('http://public.example/api/session', { method: 'POST', headers: { Origin: 'http://public.example' } }), env, builtins);
+assert.equal(insecureBootstrap.status, 403); assert.equal(insecureBootstrap.headers.has('Set-Cookie'), false);
+const insecureIdentity = await handleApi(new Request('http://public.example/api/me', { headers: { Cookie: 'changxu_workspace=' + firstSecret } }), env, builtins);
+assert.deepEqual(await insecureIdentity.json(), { user: null, profile: null });
+checks += 36;
+checks += 7;
+checks += 4;
+checks += 3;
+
+// A read never renews; an explicit bootstrap within the last month extends the
+// same owner/token, including concurrent tabs. Fresh sessions are not extended.
+const renewalBrowser = await openBrowser('renewing');
+const renewalCookie = jars.get('renewing'), renewalSecret = renewalCookie.split('=')[1];
+const renewalHash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(renewalSecret)))].map(x => x.toString(16).padStart(2, '0')).join('');
+const renewalKey = 'sessions/' + renewalHash + '.json';
+const renewalRecord = await (await bucket.get(renewalKey)).json();
+await bucket.put(renewalKey, JSON.stringify({ ...renewalRecord, expiresAt: Date.now() + 10 * 86400000 }));
+const beforeMeRenew = new TextDecoder().decode(bucket.data.get(renewalKey).bytes);
+const readNearExpiry = await call('/api/me', { headers: headers('renewing') }); assert.equal(readNearExpiry.status, 200); assert.equal(readNearExpiry.headers.has('Set-Cookie'), false); assert.equal(new TextDecoder().decode(bucket.data.get(renewalKey).bytes), beforeMeRenew);
+const renewedTabs = await Promise.all([openBrowser('renewing'), openBrowser('renewing')]);
+for (const result of renewedTabs) { assert.equal(result.data.created, false); assert.equal(result.data.user.id, renewalBrowser.data.user.id); assert.equal(result.cookie.split(';')[0], renewalCookie); assert.match(result.cookie, /Secure/); }
+const renewedRecord = await (await bucket.get(renewalKey)).json();
+assert.ok(renewedRecord.expiresAt > Date.now() + 364 * 86400000); assert.equal(renewedRecord.ownerId, renewalRecord.ownerId); assert.equal(renewedRecord.createdAt, renewalRecord.createdAt); assert.equal(renewedRecord.tokenHash, renewalRecord.tokenHash);
+const freshRecordBefore = new TextDecoder().decode(bucket.data.get(renewalKey).bytes); await openBrowser('renewing'); assert.equal(new TextDecoder().decode(bucket.data.get(renewalKey).bytes), freshRecordBefore);
+checks += 16;
+
+// Existing-but-damaged server state must fail closed, not overwrite a still
+// recoverable cookie with a new empty workspace.
+const intactSession = await (await bucket.get(renewalKey)).json();
+for (const damaged of ['{malformed', JSON.stringify({ ...intactSession, tokenHash: 'mismatched-hash' }), JSON.stringify({ ...intactSession, ownerId: 'old-account-owner' }), JSON.stringify({ ...intactSession, createdAt: null }), JSON.stringify({ ...intactSession, expiresAt: 'not-a-date' })]) {
+  await bucket.put(renewalKey, damaged);
+  const rowsBefore = keys();
+  for (const method of ['GET', 'POST']) {
+    const response = await call(method === 'GET' ? '/api/me' : '/api/session', { method, headers: headers('renewing') });
+    const error = await read(response, 503); assert.equal(error.code, 'workspace_storage_unavailable'); assert.equal(response.headers.has('Set-Cookie'), false); assert.equal(JSON.stringify(error).includes(renewalSecret), false);
+  }
+  assert.deepEqual(keys(), rowsBefore);
+}
+await bucket.put(renewalKey, JSON.stringify(intactSession));
+assert.equal((await get('/api/me', 'renewing')).user.id, renewalBrowser.data.user.id);
+checks += 31;
+
+// Cookie-verified writes and personal spaces; protected writes also require Origin.
 assert.equal((await call('/api/works', { method: 'POST', body: createForm() })).status, 401);
+assert.equal((await call('/api/works', { method: 'POST', headers: { Cookie: jars.get('creator-1') }, body: createForm() })).status, 403);
 assert.equal((await call('/api/works', { method: 'POST', headers: { ...headers(), Origin: 'https://evil.test' }, body: createForm() })).status, 403);
 assert.equal((await call('/api/works', { method: 'POST', headers: { ...headers(), 'Sec-Fetch-Site': 'cross-site' }, body: createForm() })).status, 403);
 assert.equal((await call('/api/works?scope=mine')).status, 401);
 assert.deepEqual(await get('/api/me'), { user: null, profile: null });
 const me = await get('/api/me', 'creator-1');
-assert.equal(me.profile.displayName, '创作者一'); assert.ok(!me.profile.slug.includes('creator-1')); assert.equal('ownerId' in me.profile, false);
+assert.equal(me.profile.displayName, '我的创作空间'); assert.ok(!me.profile.slug.includes(firstBrowser.data.user.id)); assert.equal('ownerId' in me.profile, false);
 const profileUpdated = await read(await sendJson('/api/me/profile', 'PATCH', { displayName: '温柔的造物者', bio: '记录成长。' }));
 assert.equal(profileUpdated.profile.slug, me.profile.slug); assert.equal(profileUpdated.user.profile.displayName, '温柔的造物者');
 checks += 10;
@@ -87,6 +191,17 @@ assert.equal(await (await call(initialFile, { headers: headers() })).text(), 'na
 assert.equal((await get('/api/works?scope=mine', 'creator-2')).works.length, 0);
 assert.equal((await sendJson('/api/works/' + id, 'PUT', { baseRevision: work.revision, description: 'steal' }, 'creator-2')).status, 403);
 checks += 15;
+// Cookie loss creates a new empty workspace but never deletes or reassigns the old private record.
+await openBrowser('lost-browser');
+const lostDraft = await read(await sendJson('/api/works', 'POST', { title: '仍然保留的私稿', direction: '其他', contentText: 'private retained content' }, 'lost-browser'), 201);
+const lostOwner = lostDraft.work.ownerId;
+jars.delete('lost-browser'); assert.equal((await get('/api/me', 'lost-browser')).user, null);
+const afterCookieLoss = await openBrowser('lost-browser'); assert.notEqual(afterCookieLoss.data.user.id, lostOwner);
+assert.equal((await get('/api/works?scope=mine', 'lost-browser')).works.length, 0);
+assert.equal((await call('/api/works/' + lostDraft.work.id, { headers: headers('lost-browser') })).status, 404);
+assert.equal((await (await bucket.get('records/' + lostDraft.work.id + '.json')).json()).ownerId, lostOwner);
+assert.equal(bucket.data.has('versions/' + lostDraft.work.id + '/' + lostDraft.work.versionId + '.json'), true);
+checks += 6;
 
 // A selected display snapshot is public, while its private process and native source stay private.
 detail = await read(await publish(work, { displayVersionId: first })); work = detail.work;
@@ -214,19 +329,60 @@ assert.equal((await get('/api/works')).works.some((item) => item.id === other.wo
 assert.equal((await get('/api/works?profile=' + me.profile.slug)).works.every((item) => item.author.slug === me.profile.slug), true);
 checks += 7;
 
-// Legacy public records remain public; first edit upgrades their history without publishing new private files.
+// Account-era records are retained, with their public snapshot intact, but no new browser can claim them.
 const legacyId = crypto.randomUUID(), legacyFile = `files/${legacyId}/source.max`;
 await bucket.put(legacyFile, 'legacy original', { customMetadata: { name: '旧工程.max' } });
 await bucket.put('records/' + legacyId + '.json', JSON.stringify({ id: legacyId, ownerId: 'creator-1', title: '旧家具', category: '家具设计', tags: ['木质'], date: '2026-10-25', fileUrl: '/api/' + legacyFile, fileName: '旧工程.max', fileSize: 15, format: 'MAX', images: [], storageKeys: [legacyFile] }));
 let legacy = await get('/api/works/' + legacyId);
 assert.equal(legacy.work.direction, '三维'); assert.ok(legacy.work.tags.includes('家具设计')); assert.equal((await call('/api/' + legacyFile)).status, 200);
 legacy = await get('/api/works/' + legacyId, 'creator-1');
+assert.equal(legacy.isOwner, false);
 const legacyUpdate = new FormData(); legacyUpdate.set('baseRevision', String(legacy.work.revision)); legacyUpdate.set('source', new File(['new private native'], '新工程.max')); legacyUpdate.set('process', 'legacy private process');
-legacy = await read(await call('/api/works/' + legacyId, { method: 'PUT', headers: headers(), body: legacyUpdate }));
-assert.equal(legacy.versions.length, 2); assert.equal(legacy.work.displayVersionId, 'legacy'); assert.equal((await call(legacy.work.fileUrl)).status, 404);
+assert.equal((await call('/api/works/' + legacyId, { method: 'PUT', headers: { ...headers(), 'oai-authenticated-user-id': 'creator-1' }, body: legacyUpdate })).status, 403);
+assert.equal((await sendJson('/api/works/' + legacyId + '/publication', 'PATCH', { revision: 1, displayVersionId: null })).status, 403);
+assert.equal(legacy.versions.length, 1); assert.equal(legacy.work.displayVersionId, 'legacy');
 assert.equal((await get('/api/works/' + legacyId)).work.fileName, '旧工程.max');
 assert.equal((await get('/api/works/' + legacyId, 'creator-1')).versions[0].fileUrl, '/api/' + legacyFile);
-checks += 8;
+const retainedLegacyBytes = new TextDecoder().decode(bucket.data.get('records/' + legacyId + '.json').bytes);
+// Modern old-account private and published/private-history records use exact existing pointers.
+const accountPrivateId = crypto.randomUUID(), accountPublicId = crypto.randomUUID(), accountPublicVersion = crypto.randomUUID(), accountSecretVersion = crypto.randomUUID();
+const accountPrivateFile = `files/${accountPrivateId}/${accountSecretVersion}/source.max`;
+const accountSecretFile = `files/${accountPublicId}/${accountSecretVersion}/video.mp4`;
+await bucket.put(accountPrivateFile, 'old private native'); await bucket.put(accountSecretFile, mp4);
+const accountBase = { ...(await get('/api/works/' + id, 'creator-1')).versions[0], id: accountSecretVersion, number: 2, storageKeys: [accountPrivateFile], fileUrl: '/api/' + accountPrivateFile, fileName: 'old private.max', process: 'never reveal old private process', videoUrl: '', images: [], coverUrl: '', modelUrl: '' };
+await bucket.put(`versions/${accountPrivateId}/${accountSecretVersion}.json`, JSON.stringify(accountBase));
+const accountMeta = { schema: 2, id: accountPrivateId, ownerId: 'old-platform-owner', profileSlug: 'old-account-profile', createdAt: '2026-10-25', updatedAt: '2026-10-25', revision: 1, versionIds: [accountSecretVersion], latestVersionId: accountSecretVersion, displayVersionId: null, publicVersionIds: [], importantVersionIds: [] };
+await bucket.put(`records/${accountPrivateId}.json`, JSON.stringify(accountMeta));
+await bucket.put(`versions/${accountPublicId}/${accountPublicVersion}.json`, JSON.stringify({ ...accountBase, id: accountPublicVersion, number: 1, title: 'old published content', fileUrl: '', fileName: '', process: 'old private process', storageKeys: [] }));
+await bucket.put(`versions/${accountPublicId}/${accountSecretVersion}.json`, JSON.stringify({ ...accountBase, videoUrl: '/api/' + accountSecretFile, storageKeys: [accountSecretFile] }));
+await bucket.put(`records/${accountPublicId}.json`, JSON.stringify({ ...accountMeta, id: accountPublicId, versionIds: [accountPublicVersion, accountSecretVersion], latestVersionId: accountSecretVersion, displayVersionId: accountPublicVersion }));
+for (const cookie of ['', jars.get('creator-1'), jars.get('creator-2')]) {
+  const forged = { Cookie: cookie, 'oai-authenticated-user-id': 'old-platform-owner', Origin: 'https://portfolio.test' };
+  assert.equal((await call('/api/works/' + accountPrivateId, { headers: forged })).status, 404);
+  assert.equal((await call('/api/' + accountPrivateFile, { headers: { ...forged, Range: 'bytes=0-1' } })).status, 404);
+  assert.equal((await call('/api/' + accountSecretFile, { method: 'HEAD', headers: forged })).status, 404);
+  const oldPublic = await read(await call('/api/works/' + accountPublicId, { headers: forged })); assert.equal(oldPublic.isOwner, false); assert.equal(oldPublic.versions.length, 1); assert.equal(oldPublic.work.process, ''); assert.equal(JSON.stringify(oldPublic).includes(accountSecretVersion), false);
+}
+assert.equal((await get('/api/works?scope=mine', 'creator-1')).works.some(value => value.id === accountPrivateId || value.id === accountPublicId || value.id === legacyId), false);
+assert.equal(new TextDecoder().decode(bucket.data.get('records/' + legacyId + '.json').bytes), retainedLegacyBytes);
+checks += 29;
+
+// Unknown or mixed schemas are not v1 public uploads. Neither lists nor detail
+// may reveal a private ID/title by opportunistically calling the legacy adapter.
+const unknownId = crypto.randomUUID(), unknownRecordKey = `records/${unknownId}.json`;
+for (const unknown of [
+  { ...accountMeta, id: unknownId, schema: 3, title: 'schema-three-private-content', fileUrl: '', images: [] },
+  { ...accountMeta, id: unknownId, schema: undefined, title: 'mixed-private-index', fileUrl: '', images: [] },
+  { id: unknownId, ownerId: 'old-platform-owner', title: 'private-visibility-marker', fileUrl: '', images: [], visibility: 'private' },
+  { ...accountMeta, id: unknownId, schema: 2, publicVersionIds: ['not-a-real-version'] },
+]) {
+  await bucket.put(unknownRecordKey, JSON.stringify(unknown));
+  for (const path of ['/api/works', '/api/works/' + unknownId]) {
+    const response = await read(await call(path), 503); assert.equal(response.code, 'record_storage_unavailable'); assert.equal(JSON.stringify(response).includes(unknownId), false); assert.equal(JSON.stringify(response).includes(unknown.title || 'never-a-match'), false);
+  }
+}
+await bucket.delete(unknownRecordKey);
+checks += 24;
 
 // CAS conflicts and failed writes leave no phantom versions or leaked uploads.
 const staleRevision = work.revision;
@@ -259,7 +415,8 @@ assert.equal((await call('/api/works/' + id, { method: 'DELETE', headers: header
 assert.equal((await call('/api/works/' + id, { headers: headers() })).status, 404);
 assert.equal([...bucket.data.keys()].some((key) => key.startsWith('files/' + id + '/') || key.startsWith('versions/' + id + '/')), false);
 assert.equal((await call(model)).status, 404); assert.equal((await call(privateVideo)).status, 404);
-assert.equal((await call('/api/works/' + legacyId, { method: 'DELETE', headers: headers() })).status, 200); assert.equal(bucket.data.has(legacyFile), false);
+assert.equal((await call('/api/works/' + legacyId, { method: 'DELETE', headers: headers() })).status, 403); assert.equal(bucket.data.has(legacyFile), true);
+assert.equal(bucket.data.has(`records/${accountPrivateId}.json`), true); assert.equal(bucket.data.has(accountPrivateFile), true);
 assert.equal((await call('/api/works/' + other.work.id, { headers: headers('creator-2') })).status, 200);
 checks += 9;
-console.log(`PASS: ${checks} meaningful checks — independent profiles, private saves, curated publication, immutable versions/finals, file authorization, media ranges, legacy migration, validation, pagination, CAS conflicts and rollback.`);
+console.log(`PASS: ${checks} meaningful checks — HttpOnly cookie workspaces, ignored forged identity headers, CSRF, expiry, independent profiles, private saves, curated publication, immutable versions/finals, file authorization, media ranges, retained unclaimed account data, validation, pagination, CAS conflicts and rollback.`);

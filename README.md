@@ -1,8 +1,8 @@
-# Wen-xin-web · 文心 / 树莓成熟时
+# Wen-xin-web · 长序 / 树莓成熟时
 
 数字媒体创作者的个人作品集与成长档案。保留原视觉风格，支持交互、影视、三维与其他方向、自定义标签、私密版本历史和作者选择公开。前端为 React + Vite + TypeScript，后端为 Cloudflare Worker + R2。
 
-[打开文心网站](https://formspace-sm-3d-studio.h2969351680.chatgpt.site)。第 2 版于 2026-10-26 发布并完成线上匿名页面、三维与原件哈希验收。国内托管和登录迁移仍待完成。
+[打开长序网站](https://formspace-sm-3d-studio.h2969351680.chatgpt.site)。第 3 版于 2026-10-26 发布，已移除账号登录并完成真实免账号上传/编辑/权限及原件哈希验收。国内托管迁移仍待完成。
 
 ## 目录
 
@@ -37,7 +37,7 @@ npm test
 npm run build
 ```
 
-本地使用模拟登录，线上依赖平台身份。新作品与新版本默认私密，公开展示版本与过程节点由作者选择；原件下载独立控制。每次新上传合计 40 MiB，单作品最多 500 个版本。国内迁移需替换为服务端验证的登录和持久存储，详见 `docs/workbuddy/03_迁移说明.md`。
+无需注册登录，打开后按当前浏览器准备独立创作空间；文件与历史仍在服务端。清除 Cookie 或换浏览器无法自动恢复原空间。旧账号私密记录原样保留但不自动迁入新空间。新作品与新版本默认私密，公开展示版本与过程节点由作者选择；原件下载独立控制。每次新上传合计 40 MiB，单作品最多 500 个版本。国内迁移需适配 HTTPS 浏览器凭据校验与目标持久存储，详见 `docs/workbuddy/03_迁移说明.md`。
 
 ## 工程记忆与自动同步
 
@@ -51,4 +51,7 @@ pwsh -File tools/project-sync.ps1 -Summary "本轮任务" -Kind maintenance -Det
 
 ## 当前交付与历史包
 
-本轮实现与验收见 `docs/verification/wenxin-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。历史 WorkBuddy ZIP 保持为 2026-10-25 旧版快照，不含本轮文心功能；接手新版以当前 `main` 为准。源码仓库不含远端用户作品数据库。
+本轮实现与验收见 `docs/verification/changxu-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。历史 WorkBuddy ZIP 保持为 2026-10-25 旧版快照，不含后续文心及长序功能；接手新版以当前 `main` 为准。源码仓库不含远端用户作品数据库。
+
+浏览器空间与旧数据保留边界见 `wiki_memory/决策/ADR-006-免账号浏览器创作空间.md`。
+

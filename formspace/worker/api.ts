@@ -3,6 +3,8 @@ import type { Direction, Profile, Snapshot, User, Version, Work, WorkResponse } 
 
 type LegacyWork = Record<string, any>;
 type Identity = { id: string; name: string };
+type BrowserSession = { tokenHash: string; ownerId: string; createdAt: number; expiresAt: number };
+type VerifiedSession = { user: Identity; record: BrowserSession; etag: string; token: string };
 type Env = { BUCKET?: R2Bucket };
 type StoredProfile = Profile & { ownerId: string };
 type StoredVersion = Snapshot & { id: string; number: number; savedAt: string; storageKeys: string[] };
@@ -13,13 +15,18 @@ type RecordMeta = {
   publicVersionIds: string[]; importantVersionIds: string[];
 };
 type Loaded = { meta: RecordMeta; etag: string; legacyVersion?: StoredVersion; builtIn?: boolean };
-type Context = { bucket: R2Bucket; user: Identity | null; builtins: LegacyWork[]; profiles: Map<string, Profile>; versions: Map<string, StoredVersion> };
+type Context = { bucket: R2Bucket; user: Identity | null; session: VerifiedSession | null; builtins: LegacyWork[]; profiles: Map<string, Profile>; versions: Map<string, StoredVersion> };
 type Input = { get: (key: string) => unknown; has: (key: string) => boolean; files: (key: string) => File[] };
 
 const MAX_TOTAL = 40 * 1024 * 1024;
 const MAX_IMAGE = 12 * 1024 * 1024;
 const MAX_JSON = 128 * 1024;
 const MAX_VERSIONS = 500;
+const SESSION_COOKIE = '__Host-changxu_workspace';
+const DEV_SESSION_COOKIE = 'changxu_workspace';
+const SESSION_SECONDS = 365 * 24 * 60 * 60;
+const RENEW_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+const WORKSPACE_ID = /^workspace-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 const FILE_KEY = /^[a-f0-9-]{36}\/(?:[a-f0-9-]{36}\/)?(?:source|model|image-\d+|video|demo-video|audio)\.[a-z0-9]+$/;
 const SOURCE_EXTS = new Set(['max', 'blend', 'fbx', 'obj', 'stl', 'glb', 'gltf', 'zip']);
@@ -33,7 +40,7 @@ const MIME: Record<string, string> = {
   glb: 'model/gltf-binary', gltf: 'model/gltf+json', obj: 'text/plain; charset=utf-8', stl: 'model/stl',
   mp4: 'video/mp4', webm: 'video/webm', mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', m4a: 'audio/mp4',
 };
-const SYSTEM_PROFILE: Profile = { slug: 'wenxin-exhibits', displayName: '文心 · 系统展品', bio: '从真实三维工程收录的展示作品。', createdAt: '2026-10-25T00:00:00.000Z', updatedAt: '2026-10-25T00:00:00.000Z', system: true };
+const SYSTEM_PROFILE: Profile = { slug: 'wenxin-exhibits', displayName: '长序 · 系统展品', bio: '从真实三维工程收录的展示作品。', createdAt: '2026-10-25T00:00:00.000Z', updatedAt: '2026-10-25T00:00:00.000Z', system: true };
 
 class ApiFailure extends Error {
   status: number; code?: string;
@@ -44,13 +51,85 @@ const json = (value: unknown, status = 200) => Response.json(value, { status, he
 const ext = (name: string) => name.split('.').pop()?.toLowerCase() || '';
 const versionKey = (workId: string, versionId: string) => `versions/${workId}/${versionId}.json`;
 
-function identity(request: Request): Identity | null {
-  const id = request.headers.get('oai-authenticated-user-id');
-  if (!id) return null;
-  let name = '创作者';
-  const raw = request.headers.get('oai-authenticated-user-full-name');
-  if (raw) { try { name = (request.headers.get('oai-authenticated-user-full-name-encoding') === 'percent-encoded-utf-8' ? decodeURIComponent(raw) : raw).trim().slice(0, 80) || name; } catch { /* Neutral name if the optional profile header is malformed. */ } }
-  return { id, name };
+async function sha256(value: string) {
+  const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+function loopbackDevelopment(url: URL) {
+  return url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]', '::1'].includes(url.hostname.toLowerCase());
+}
+function cookieToken(request: Request): string | null {
+  const url = new URL(request.url);
+  if (url.protocol !== 'https:' && !loopbackDevelopment(url)) return null;
+  const name = url.protocol === 'https:' ? SESSION_COOKIE : DEV_SESSION_COOKIE;
+  const matches = (request.headers.get('Cookie') || '').split(';').map((part) => part.trim()).filter((part) => part.startsWith(name + '='));
+  if (matches.length !== 1) return null;
+  const token = matches[0].slice(name.length + 1);
+  return /^[A-Za-z0-9_-]{43}$/.test(token) ? token : null;
+}
+async function identity(request: Request, bucket: R2Bucket): Promise<VerifiedSession | null> {
+  // Header identity, client owner IDs and local preview sign-in cookies are
+  // deliberately ignored. Only a server-issued, hash-verified bearer is proof.
+  const token = cookieToken(request);
+  if (!token) return null;
+  const hash = await sha256(token);
+  const object = await bucket.get('sessions/' + hash + '.json');
+  if (!object) return null;
+  let session: BrowserSession;
+  try { session = await object.json<BrowserSession>(); } catch { return fail(503, '浏览器空间凭据暂时无法读取，请保留 Cookie 并稍后重试。', 'workspace_storage_unavailable'); }
+  if (!session || session.tokenHash !== hash || !WORKSPACE_ID.test(session.ownerId) || !Number.isFinite(session.createdAt) || !Number.isFinite(session.expiresAt) || session.expiresAt <= session.createdAt) return fail(503, '浏览器空间凭据校验暂时失败，请保留 Cookie 并稍后重试。', 'workspace_storage_unavailable');
+  if (session.expiresAt <= Date.now()) return null;
+  return { user: { id: session.ownerId, name: '我的创作空间' }, record: session, etag: object.etag, token };
+}
+function workspaceRequired(): never {
+  return fail(401, '当前浏览器空间尚未准备好，请重新打开空间后再试。', 'workspace_required');
+}
+async function bootstrapSession(context: Context, request: Request, url: URL) {
+  sameOrigin(request, url);
+  if (url.protocol !== 'https:' && !loopbackDevelopment(url)) return fail(403, '请通过 HTTPS 打开创作空间；仅本机开发允许 HTTP。');
+  if (context.user) {
+    const profile = await ensureProfile(context, context.user);
+    const response = json({ user: await responseUser(context), profile, created: false, identityMode: 'browser' });
+    const verified = context.session;
+    // Align the browser's remaining lifetime even if an earlier renewal reply
+    // was lost. This never rotates the token or extends the server expiry by itself.
+    if (verified) response.headers.set('Set-Cookie', sessionCookie(url, verified.token, Math.max(1, Math.floor((verified.record.expiresAt - Date.now()) / 1000))));
+    if (verified && verified.record.expiresAt - Date.now() < RENEW_WINDOW_MS) {
+      const extended = { ...verified.record, expiresAt: Date.now() + SESSION_SECONDS * 1000 };
+      const key = 'sessions/' + extended.tokenHash + '.json';
+      const saved = await context.bucket.put(key, JSON.stringify(extended), { onlyIf: { etagMatches: verified.etag }, httpMetadata: { contentType: 'application/json' } });
+      if (!saved) {
+        // Another tab can extend the same token first. It may not substitute
+        // another owner or force a new empty workspace during that race.
+        const current = await context.bucket.get(key);
+        const latest = current ? await current.json<BrowserSession>() : null;
+        if (!latest || latest.ownerId !== verified.record.ownerId || latest.tokenHash !== verified.record.tokenHash || latest.expiresAt <= Date.now()) return fail(409, '空间凭据刚刚变化，请重新打开空间后重试。');
+        response.headers.set('Set-Cookie', sessionCookie(url, verified.token, Math.max(1, Math.floor((latest.expiresAt - Date.now()) / 1000))));
+      } else response.headers.set('Set-Cookie', sessionCookie(url, verified.token));
+    }
+    return response;
+  }
+  const secret = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const tokenHash = await sha256(secret);
+  const now = Date.now();
+  const session: BrowserSession = { tokenHash, ownerId: 'workspace-' + crypto.randomUUID(), createdAt: now, expiresAt: now + SESSION_SECONDS * 1000 };
+  const key = 'sessions/' + tokenHash + '.json';
+  const stored = await context.bucket.put(key, JSON.stringify(session), { onlyIf: { etagDoesNotMatch: '*' }, httpMetadata: { contentType: 'application/json' } });
+  if (!stored) return fail(503, '浏览器空间暂时无法建立，请重试。');
+  context.user = { id: session.ownerId, name: '我的创作空间' };
+  try {
+    const profile = await ensureProfile(context, context.user);
+    const response = json({ user: await responseUser(context), profile, created: true, identityMode: 'browser' });
+    response.headers.set('Set-Cookie', sessionCookie(url, secret));
+    return response;
+  } catch (error) {
+    try { await context.bucket.delete(key); } catch { /* No token was sent; unreachable session metadata can be cleaned later. */ }
+    throw error;
+  }
+}
+function sessionCookie(url: URL, secret: string, maxAge = SESSION_SECONDS) {
+  const secure = url.protocol === 'https:';
+  return `${secure ? SESSION_COOKIE : DEV_SESSION_COOKIE}=${secret}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax${secure ? '; Secure' : ''}`;
 }
 
 async function userSlug(id: string) {
@@ -84,7 +163,18 @@ async function ensureProfile(context: Context, user: Identity): Promise<Profile>
   const result = publicProfile(profile); context.profiles.set(slug, result); return result;
 }
 async function responseUser(context: Context): Promise<User> {
-  return context.user ? { ...context.user, profile: await ensureProfile(context, context.user) } : null;
+  if (!context.user) return null;
+  const slug = await userSlug(context.user.id);
+  let profile = context.profiles.get(slug);
+  if (!profile) {
+    const object = await context.bucket.get('profiles/' + slug + '.json');
+    if (object) {
+      const stored = await object.json<StoredProfile>();
+      if (stored.ownerId !== context.user.id) return fail(409, '浏览器空间资料校验失败，请稍后重试。');
+      profile = publicProfile(stored); context.profiles.set(slug, profile);
+    }
+  }
+  return { ...context.user, ...(profile ? { profile } : {}), identityMode: 'browser' };
 }
 async function authorFor(context: Context, loaded: Loaded): Promise<Profile> {
   if (loaded.builtIn) return SYSTEM_PROFILE;
@@ -116,6 +206,8 @@ function legacySnapshot(old: LegacyWork): Snapshot {
 async function fromLegacy(old: LegacyWork, etag: string, builtIn = false): Promise<Loaded> {
   const savedAt = String(old.date || new Date(0).toISOString());
   const legacyVersion: StoredVersion = { ...legacySnapshot(old), id: builtIn ? 'builtin' : 'legacy', number: 1, savedAt, storageKeys: Array.isArray(old.storageKeys) ? old.storageKeys : [] };
+  // v1 uploads were public by contract; preserve their existing presentation.
+  // This never grants their historical account owner to a new browser space.
   return { etag, builtIn, legacyVersion, meta: { schema: 2, id: String(old.id), ownerId: builtIn ? '__system__' : String(old.ownerId || ''), profileSlug: builtIn ? SYSTEM_PROFILE.slug : await userSlug(String(old.ownerId || 'unassigned-legacy')), createdAt: savedAt, updatedAt: savedAt, revision: 1, versionIds: [legacyVersion.id], latestVersionId: legacyVersion.id, displayVersionId: legacyVersion.id, publicVersionIds: [], importantVersionIds: [] } };
 }
 async function loadRecord(context: Context, id: string): Promise<Loaded | null> {
@@ -124,8 +216,18 @@ async function loadRecord(context: Context, id: string): Promise<Loaded | null> 
   if (!UUID.test(id)) return null;
   const object = await context.bucket.get('records/' + id + '.json');
   if (!object) return null;
-  const stored = await object.json<LegacyWork>();
-  if (stored.schema === 2) return { meta: stored as RecordMeta, etag: object.etag };
+  let stored: LegacyWork;
+  try { stored = await object.json<LegacyWork>(); } catch { return fail(503, '作品记录暂时无法读取，请稍后重试。', 'record_storage_unavailable'); }
+  if (!stored || typeof stored !== 'object' || Array.isArray(stored)) return fail(503, '作品记录格式暂时无法识别。', 'record_storage_unavailable');
+  if (stored.schema === 2) {
+    const versions = stored.versionIds;
+    const validIds = Array.isArray(versions) && versions.length > 0 && versions.every((value: unknown) => typeof value === 'string' && (UUID.test(value) || value === 'legacy')) && new Set(versions).size === versions.length;
+    const subset = (values: unknown) => Array.isArray(values) && values.every((value) => typeof value === 'string' && versions.includes(value));
+    if (!validIds || stored.id !== id || typeof stored.ownerId !== 'string' || !stored.ownerId || typeof stored.profileSlug !== 'string' || !/^[a-z0-9-]{3,64}$/.test(stored.profileSlug) || !Number.isSafeInteger(stored.revision) || stored.revision < 1 || !versions.includes(stored.latestVersionId) || (stored.displayVersionId !== null && !versions.includes(stored.displayVersionId)) || !subset(stored.publicVersionIds) || !subset(stored.importantVersionIds) || typeof stored.createdAt !== 'string' || typeof stored.updatedAt !== 'string') return fail(503, '作品版本索引暂时无法识别，请稍后重试。', 'record_storage_unavailable');
+    return { meta: stored as RecordMeta, etag: object.etag };
+  }
+  const legacyShape = (stored.schema === undefined || stored.schema === 1) && !['versionIds', 'latestVersionId', 'displayVersionId', 'publicVersionIds', 'importantVersionIds', 'visibility', 'isPublic', 'private', 'publishedVersionId', 'currentVersionId'].some((key) => Object.hasOwn(stored, key)) && stored.id === id && typeof stored.ownerId === 'string' && !!stored.ownerId && typeof stored.title === 'string' && (typeof stored.fileUrl === 'string' || Array.isArray(stored.images));
+  if (!legacyShape) return fail(503, '该作品的数据版本暂不受支持，已保留原始记录。', 'record_storage_unavailable');
   return fromLegacy({ ...stored, id }, object.etag);
 }
 async function loadVersion(context: Context, loaded: Loaded, id: string): Promise<StoredVersion> {
@@ -185,7 +287,7 @@ async function allRecords(context: Context): Promise<Loaded[]> {
 
 function sameOrigin(request: Request, url: URL) {
   const origin = request.headers.get('Origin');
-  if ((origin && origin !== url.origin) || request.headers.get('Sec-Fetch-Site') === 'cross-site') fail(403, '请从本网站保存作品。');
+  if (origin !== url.origin || request.headers.get('Sec-Fetch-Site') === 'cross-site') fail(403, '请从本网站保存作品。');
 }
 async function parseInput(request: Request): Promise<Input> {
   const contentType = request.headers.get('Content-Type') || '';
@@ -444,13 +546,14 @@ async function fileResponse(context: Context, request: Request, path: string) {
 export async function handleApi(request: Request, env: Env, builtins: LegacyWork[] = []): Promise<Response> {
   const url = new URL(request.url), path = url.pathname;
   try {
-    const user = identity(request);
     if (!env.BUCKET) return fail(503, '作品存储暂时不可用，请稍后重试。');
-    const context: Context = { bucket: env.BUCKET, user, builtins, profiles: new Map(), versions: new Map() };
+    const session = await identity(request, env.BUCKET), user = session?.user || null;
+    const context: Context = { bucket: env.BUCKET, user, session, builtins, profiles: new Map(), versions: new Map() };
+    if (path === '/api/session' && request.method === 'POST') return await bootstrapSession(context, request, url);
     if (path.startsWith('/api/files/')) return await fileResponse(context, request, path);
     if (path === '/api/me' && request.method === 'GET') { const current = await responseUser(context); return json({ user: current, profile: current?.profile || null }); }
     if (path === '/api/me/profile' && request.method === 'PATCH') {
-      if (!user) return fail(401, '请先登录。'); sameOrigin(request, url);
+      if (!user) return workspaceRequired(); sameOrigin(request, url);
       const profile = await ensureProfile(context, user), input = await parseInput(request);
       const displayName = text(input, 'displayName', profile.displayName, 80), bio = text(input, 'bio', profile.bio, 600);
       if (!displayName) return fail(400, '请填写个人空间名称。');
@@ -464,7 +567,7 @@ export async function handleApi(request: Request, env: Env, builtins: LegacyWork
     const profileMatch = /^\/api\/profiles\/([a-z0-9-]{3,64})$/.exec(path);
     if ((path === '/api/works' || profileMatch) && request.method === 'GET') {
       const mine = !profileMatch && url.searchParams.get('scope') === 'mine';
-      if (mine && !user) return fail(401, '登录后可查看自己的作品。');
+      if (mine && !user) return workspaceRequired();
       const current = await responseUser(context);
       const requestedProfile = profileMatch?.[1] || url.searchParams.get('profile');
       const records = await allRecords(context);
@@ -497,7 +600,7 @@ export async function handleApi(request: Request, env: Env, builtins: LegacyWork
     const publication = !!workMatch?.[2] && request.method === 'PATCH';
     const remove = !!workMatch && !workMatch[2] && request.method === 'DELETE';
     if (!create && !update && !publication && !remove) return fail(404, '未找到该接口。');
-    if (!user) return fail(401, '登录后即可保存和管理自己的作品。'); sameOrigin(request, url);
+    if (!user) return workspaceRequired(); sameOrigin(request, url);
     let loaded: Loaded | undefined;
     if (!create) {
       loaded = await loadRecord(context, workMatch![1]) || undefined;

@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-10-26T10:44:41.192Z",
+  "product": "长序 · 树莓成熟时",
+  "identityMode": "browser workspace without accounts",
+  "siteSourceCommit": "bdd8719cae9d5f935b75c6783e60589d32ede920",
+  "versionNumber": 3,
+  "deployment": {
+    "id": "appgdep_6adf2e5740388191861eddf2be67116a",
+    "project_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c",
+    "version_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c~appgver_56aa29d17c5c8191879e3ffc6b1f5c1d",
+    "status": "succeeded",
+    "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "updated_at": "2026-10-26T10:41:46.103144+00:00"
+  },
+  "audience": "public preserved",
+  "checks": {
+    "typescript": "passed",
+    "apiAssertions": 325,
+    "localBrowserAssertions": 36,
+    "mobileViewportAssertions": 75,
+    "productionBrowserAssertions": 32,
+    "productionBuild": "passed"
+  },
+  "productionCases": [
+    "GET me is anonymous and does not issue a workspace",
+    "bootstrap rejects missing-origin requests",
+    "first visit directly opens an anonymous personal workspace",
+    "browser access cookie is HttpOnly and host-scoped",
+    "production uses HTTPS Host-prefix secure cookie",
+    "JavaScript cannot read workspace secret",
+    "visible application branding is Changxu",
+    "no account login, logout or account-avatar controls",
+    "upload without registration saves a private version in actual server storage",
+    "real model cover generated and preview/source permissions remain separate",
+    "browser workspace persists after reload",
+    "saved work remains editable after reload",
+    "same browser shares its workspace across tabs",
+    "a different browser receives an independent workspace",
+    "other browser cannot read private work",
+    "other browser cannot fetch private cover",
+    "private model ranges require owning browser",
+    "other browser cannot edit private work",
+    "old account and spoofed identity headers cannot acquire a workspace",
+    "anonymous editing retains full version history and old final",
+    "text and image edits reuse existing model files",
+    "new private cover stays inaccessible to another browser",
+    "credential loss retains visible unsaved text",
+    "credential loss retains selected local image preview",
+    "old draft cannot automatically save into a different workspace",
+    "private work stays private after original browser clears its credential",
+    "failed save did not mutate or delete old stored versions",
+    "owning browser can delete its complete work without account login",
+    "new brand retains original live 3D homepage",
+    "About copy explains Changxu creative history",
+    "entire browser flow makes no account-login or OAuth requests",
+    "no browser JavaScript runtime errors"
+  ],
+  "productionAssets": [
+    {
+      "id": "lamp",
+      "originalSha256": "d788e9657bddc43f69f1ec0e185b361c8821fb607dc751b29ef85d2042f61a57",
+      "originalBytes": 8966144,
+      "modelBytes": 2216636,
+      "coverBytes": 20792
+    },
+    {
+      "id": "cabinet",
+      "originalSha256": "a976cbef41649e5a519e1c161254bbc417d5cca62240e4967ba43e99327186cc",
+      "originalBytes": 962560,
+      "modelBytes": 46488,
+      "coverBytes": 21450
+    },
+    {
+      "id": "sofa",
+      "originalSha256": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+      "originalBytes": 798720,
+      "modelBytes": 421400,
+      "coverBytes": 14982
+    },
+    {
+      "id": "house",
+      "originalSha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+      "originalBytes": 737280,
+      "modelBytes": 15124,
+      "coverBytes": 16342
+    }
+  ],
+  "accountLoginRequests": [],
+  "temporaryWorkPolicy": "private only; exact work deleted after verification",
+  "credentialValuesPersisted": false,
+  "boundaries": [
+    "Browser credential does not automatically follow cookie clearing, devices, browsers or domains.",
+    "Legacy account-owned private records remain stored and are not automatically migrated or claimed.",
+    "Cloudflare hosting/storage remains; China migration is pending.",
+    "Mobile verification uses Edge 390px/320px viewports, not a physical device matrix."
+  ]
+}

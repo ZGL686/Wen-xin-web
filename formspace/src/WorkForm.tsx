@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type DragEvent, type FormEvent } from 'react';
 import { ArrowLeft, ArrowUpRight, Plus, Box, UploadCloud, X, FileBox, Image as ImageIcon, Film, Music2, Link2, LockKeyhole, Check, LoaderCircle, Sprout, ChevronDown, ChevronUp, FileText, History, RotateCcw } from 'lucide-react';
 import { DIRECTIONS, type Direction, type Snapshot, type Work, type WorkResponse, type User } from '../shared/portfolio';
-import { api, emptySnapshot, errorMessage, RequestError, signInHref, sizeLabel } from './ui-utils';
-import { LoadingState, SignInPanel, StateNotice } from './PortfolioViews';
+import { api, emptySnapshot, ensureBrowserSpace, errorMessage, sizeLabel } from './ui-utils';
+import { BrowserAccessNote, BrowserSpacePanel, LoadingState, StateNotice } from './PortfolioViews';
 import { extractVideoCover, extractModelCover } from './media-cover';
 
 type FileField = 'source' | 'previewModel' | 'video' | 'demoVideo' | 'audio';
@@ -34,7 +34,6 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
   const [loading, setLoading] = useState(Boolean(id));
   const [loadError, setLoadError] = useState('');
   const [error, setError] = useState('');
-  const [needLogin, setNeedLogin] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [preparing, setPreparing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -44,6 +43,8 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
   const modelRef = useRef<HTMLInputElement>(null);
   const demoRef = useRef<HTMLInputElement>(null);
   const mounted = useRef(true);
+  const originSpaceId = useRef(user?.id || '');
+  const spaceChanged = Boolean(originSpaceId.current && user?.id && originSpaceId.current !== user.id);
   const load = async () => {
     if (!id || !user) return;
     setLoading(true); setLoadError('');
@@ -53,7 +54,8 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
       setExisting(response.work); setDraft({ ...response.work, status: 'in-progress' }); setDirection(response.work.direction); setTags(response.work.tags.join('，')); setPreviewStart(response.work.previewStart?.toString() || ''); setPreviewEnd(response.work.previewEnd?.toString() || '');
     } catch (error) { setLoadError(errorMessage(error)); } finally { setLoading(false); }
   };
-  useEffect(() => { mounted.current = true; void load(); return () => { mounted.current = false; }; }, [id, user?.id]);
+  // A changed browser credential must not reload over an unsaved editing session.
+  useEffect(() => { mounted.current = true; void load(); return () => { mounted.current = false; }; }, [id]);
   useEffect(() => { const urls = images.map(file => URL.createObjectURL(file)); setPreviews(urls); return () => urls.forEach(url => URL.revokeObjectURL(url)); }, [images]);
   useEffect(() => {
     if (!submitting) return;
@@ -96,7 +98,8 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
   const hasContent = () => Boolean(draft.contentText.trim() || draft.interactiveUrl.trim() || Object.values(files).some(Boolean) || images.length || (!cleared.clearImages && existing?.images.length) || (Object.keys(fileLabels) as FileField[]).some(hasInherited));
 
   const submit = async (event: FormEvent) => {
-    event.preventDefault(); setError(''); setNeedLogin(false);
+    event.preventDefault(); setError('');
+    if (spaceChanged) { setError('当前浏览器空间已经变化。未保存的文字和文件仍保留在此页，请先复制或保留，再打开当前空间；本次没有自动转移旧空间内容。'); return; }
     if (!draft.title.trim() || !direction) { setError('请填写作品名称，并选择一个主方向。'); return; }
     if (!hasContent()) { setError('至少留下一份内容：文件、图片、影音、文字灵感或交互链接，任选一种就能开始。'); return; }
     if (total > maxTotal) { setError('本次新上传的文件总计不能超过 40 MB；保留的旧文件不占本次额度。'); return; }
@@ -130,31 +133,43 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
     for (const image of images) form.append('images', image);
     if (autoImage) form.append('images', autoImage);
     for (const [key, value] of Object.entries(cleared)) if (value) form.append(key, 'true');
-    const xhr = new XMLHttpRequest();
-    xhr.open(existing ? 'PUT' : 'POST', existing ? `/api/works/${encodeURIComponent(existing.id)}` : '/api/works');
-    xhr.timeout = 180000;
-    xhr.upload.onprogress = event => { if (event.lengthComputable && mounted.current) setProgress(Math.round(event.loaded / event.total * 100)); };
-    xhr.onload = () => {
-      if (!mounted.current) return;
-      setSubmitting(false);
-      try {
-        const response = JSON.parse(xhr.responseText) as WorkResponse & { error?: string };
-        if (xhr.status === 401) { setNeedLogin(true); throw new Error('登录已失效，本次尚未保存。请重新登录后提交。'); }
-        if (xhr.status === 409) throw new Error('这件作品已在其他页面被更新。你的输入仍在，请先复制需要保留的内容，再重新载入最新版本后保存。');
-        if (xhr.status < 200 || xhr.status >= 300 || !response.work) throw new Error(response.error || '保存没有完成，请重试。');
-        onSaved(response);
-      } catch (error) { setError(errorMessage(error)); }
+    const send = (canRetry: boolean) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(existing ? 'PUT' : 'POST', existing ? `/api/works/${encodeURIComponent(existing.id)}` : '/api/works');
+      xhr.withCredentials = true; xhr.timeout = 180000;
+      xhr.upload.onprogress = event => { if (event.lengthComputable && mounted.current) setProgress(Math.round(event.loaded / event.total * 100)); };
+      xhr.onload = async () => {
+        if (!mounted.current) return;
+        if (xhr.status === 401 && canRetry) {
+          try {
+            const ready = await ensureBrowserSpace();
+            if (user?.id && ready.user?.id !== user.id) throw new Error('当前浏览器已进入新的创作空间，本次没有自动保存或转移旧空间内容。请保留输入，并重新打开空间确认。');
+            if (mounted.current) { setProgress(0); send(false); }
+          } catch (error) { if (mounted.current) { setSubmitting(false); setError(errorMessage(error)); } }
+          return;
+        }
+        setSubmitting(false);
+        try {
+          const response = JSON.parse(xhr.responseText) as WorkResponse & { error?: string };
+          if (xhr.status === 401) throw new Error('当前浏览器空间仍未准备好，本次尚未保存。请允许本站保存 Cookie 后重新打开空间。');
+          if (xhr.status === 409) throw new Error('这件作品已在其他页面被更新。你的输入仍在，请先复制需要保留的内容，再重新载入最新版本后保存。');
+          if (xhr.status < 200 || xhr.status >= 300 || !response.work) throw new Error(response.error || '保存没有完成，请重试。');
+          onSaved(response);
+        } catch (error) { setError(errorMessage(error)); }
+      };
+      xhr.onerror = () => { if (mounted.current) { setSubmitting(false); setError('网络连接中断，本次尚未保存。文件和输入仍在，可直接重试。'); } };
+      xhr.ontimeout = () => { if (mounted.current) { setSubmitting(false); setError('上传超时，本次未确认保存成功。请检查网络，刷新我的空间确认后再重试。'); } };
+      xhr.send(form);
     };
-    xhr.onerror = () => { if (mounted.current) { setSubmitting(false); setError('网络连接中断，本次尚未保存。文件和输入仍在，可直接重试。'); } };
-    xhr.ontimeout = () => { if (mounted.current) { setSubmitting(false); setError('上传超时，本次未确认保存成功。请检查网络，刷新我的空间确认后再重试。'); } };
-    xhr.send(form);
+    send(true);
   };
 
-  if (!user) return <SignInPanel path={id ? `/edit/${id}` : '/upload'} title="把现在的灵感，留在文心。"/>;
+  if (!user) return <BrowserSpacePanel/>;
   if (loading) return <main className="section"><LoadingState text="正在取回最新的创作版本…"/></main>;
   if (loadError) return <main className="section"><StateNotice title="暂时无法继续编辑。" message={loadError} retry={load}/></main>;
   const inheritedImages = existing?.images || [];
-  return <main className="upload-page section"><div className="upload-heading"><a className="text-link" href={existing ? `#/work/${existing.id}` : '#/space'}><ArrowLeft size={15}/>{existing ? '回到作品' : '我的创作空间'}</a><span className="eyebrow">{existing ? 'KEEP THE STORY GROWING / 让故事继续' : 'PLANT THE FIRST IDEA / 种下一颗灵感'}</span><h1>{existing ? <>继续用心，<br/><span className="serif-italic">这一版也会留下。</span></> : <>不必等到完成，<br/><span className="serif-italic">现在就值得记录。</span></>}<span className="upload-star">✳</span></h1><p>{existing ? `沿用第 ${existing.versionNumber} 版的内容，无需重新上传文件。保存后生成私密新版本，原公开展示与旧定稿保持原样。` : '名称、主方向与一份内容就够了。封面、标签和过程故事，都可以以后再补。'}</p></div>
+  return <main className="upload-page section"><div className="upload-heading"><a className="text-link" href={existing ? `#/work/${existing.id}` : '#/space'}><ArrowLeft size={15}/>{existing ? '回到作品' : '我的创作空间'}</a><span className="eyebrow">{existing ? 'KEEP THE STORY GROWING / 让故事继续' : 'PLANT THE FIRST IDEA / 种下一颗灵感'}</span><h1>{existing ? <>继续写下，<br/><span className="serif-italic">这一页也会留下。</span></> : <>不必等到完成，<br/><span className="serif-italic">现在就值得记录。</span></>}<span className="upload-star">✳</span></h1><p>{existing ? `沿用第 ${existing.versionNumber} 版的内容，无需重新上传文件。保存后生成私密新版本，原公开展示与旧定稿保持原样。` : '名称、主方向与一份内容就够了。封面、标签和过程故事，都可以以后再补。'}</p></div>
+    {spaceChanged && <div className="form-error" role="alert"><span>!</span><div>浏览器空间已变化，未保存的文字和文件仍保留在此页。请先复制或保留；旧空间中的作品不会自动转入。<a href="#/space">查看当前空间（将离开此页）<ArrowUpRight size={14}/></a></div></div>}
     <div className="upload-layout"><form className="upload-form" onSubmit={submit}><fieldset disabled={submitting} className="work-form-fieldset"><section className="form-section"><div className="form-section-heading"><span>01</span><h2>给灵感一个名字</h2><small>只需要两个小信息</small></div><div className="form-field"><label htmlFor="work-title">作品名称 <span>*</span></label><input id="work-title" value={draft.title} maxLength={80} required placeholder="这个念头，叫什么名字？" onChange={event => update('title', event.target.value)}/></div><div className="form-field"><label htmlFor="work-direction">主方向 <span>*</span><small>一个方向，可添加多个标签</small></label><div className="form-select"><select id="work-direction" value={direction} required onChange={event => setDirection(event.target.value as Direction)}><option value="" disabled>选择一个创作方向</option>{DIRECTIONS.map(value => <option key={value} value={value}>{value}</option>)}</select><ChevronDown size={15}/></div></div><div className="form-field"><label htmlFor="work-tags">灵感标签 <small>选填，逗号分隔</small></label><input id="work-tags" value={tags} maxLength={240} placeholder="例如：家具设计，角色动画，实验影像" onChange={event => setTags(event.target.value)}/></div></section>
       <section className="form-section"><div className="form-section-heading"><span>02</span><h2>留下一份创作内容</h2><small>{existing ? '也可以沿用已有内容，只更新文字' : '文件、文字、链接，任选一种即可'}</small></div><input hidden ref={inputRef} type="file" multiple accept=".max,.blend,.fbx,.obj,.stl,.glb,.gltf,.zip,image/jpeg,image/png,image/webp,image/avif,image/gif,video/mp4,video/webm,audio/mpeg,audio/wav,audio/ogg,audio/mp4,.m4a" onChange={event => { acceptFiles(Array.from(event.target.files || [])); event.target.value = ''; }}/><div className={`drop-zone content-drop ${dragOver ? 'drag-over' : ''}`} onDragOver={event => { event.preventDefault(); if (!submitting) setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={drop}><button type="button" className="drop-content" onClick={() => inputRef.current?.click()}><span className="upload-icon"><UploadCloud size={29} strokeWidth={1.2}/><span>+</span></span><strong>把想法，放到这里。</strong><span>拖入文件，或 <u>点击选择内容</u></span><small>三维工程 / 图片 / MP4、WebM / MP3、WAV、OGG、M4A<br/>单次新文件共 ≤ 40 MB，图片每张 ≤ 12 MB</small></button></div>
         <div className="selected-media-list">{(Object.keys(fileLabels) as FileField[]).map(field => { const file = files[field]; const retained = hasInherited(field); if (!file && !retained) return null; return <div className="selected-media" key={field}><span className="selected-media-icon">{field === 'video' || field === 'demoVideo' ? <Film size={20}/> : field === 'audio' ? <Music2 size={20}/> : <FileBox size={20}/>}</span><div><small>{fileLabels[field]} · {file ? '本次上传' : '沿用上一版'}</small><strong>{file?.name || (field === 'source' ? existing?.fileName : `${fileLabels[field]}已保留`)}</strong>{file && <small>{sizeLabel(file.size)}</small>}</div><button type="button" className="icon-button" aria-label={`移除${fileLabels[field]}`} onClick={() => file ? removeFile(field) : setCleared(previous => ({ ...previous, [clearKeys[field]]: true }))}><X size={15}/></button></div>; })}</div>
@@ -171,7 +186,7 @@ export default function WorkForm({ id, user, onSaved }: { id?: string; user: Use
         <div className="version-status-field"><span>这一版的状态</span><div role="group" aria-label="当前创作状态"><button type="button" className={draft.status === 'in-progress' ? 'active' : ''} aria-pressed={draft.status === 'in-progress'} onClick={() => update('status', 'in-progress')}><Sprout size={16}/><span>继续生长<small>未完成也值得留下</small></span>{draft.status === 'in-progress' && <Check size={15}/>}</button><button type="button" className={draft.status === 'final' ? 'active' : ''} aria-pressed={draft.status === 'final'} onClick={() => update('status', 'final')}><Check size={16}/><span>这版定稿<small>之后仍然可以继续修改</small></span>{draft.status === 'final' && <Check size={15}/>}</button></div></div>
         <label className="form-check source-download-check"><input type="checkbox" checked={draft.allowSourceDownload} onChange={event => update('allowSourceDownload', event.target.checked)}/><span>公开这版时，允许访客下载原始文件<small>默认关闭。用于网页展示的模型、图片与影音预览在该版本公开后可被访客读取。</small></span></label>
       </section></fieldset>
-      {error && <div className="form-error" role="alert"><span>!</span><div>{error}{needLogin && <a href={signInHref(id ? `/edit/${id}` : '/upload')} target="_top">重新登录 <ArrowUpRight size={14}/></a>}</div></div>}
-      <div className="save-private-note"><LockKeyhole size={16}/><span>{existing ? `将保存为第 ${existing.versionCount + 1} 个私密版本` : '先存进你的私密空间'}<small>{existing ? '每次主动保存都会留一个版本。公开展示不会自动跟着变化。' : '保存后，再决定是否公开以及展示哪一版。'}</small></span></div><div className="submit-row"><span><span className="online-dot"/>为文之用心，让创作慢慢成熟。</span><button type="submit" className="button button-dark button-large" disabled={submitting}>{submitting ? <><LoaderCircle size={18} className="spin"/>{preparing ? '正在取作品画面…' : progress < 100 ? `上传中 ${progress}%` : '正在保存这一版…'}</> : <>{existing ? '保存这一版' : '先保存这一刻'}<ArrowUpRight size={20}/></>}</button></div>{submitting && <div className="progress-track" role="progressbar" aria-label="上传进度" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }}/></div>}
-    </form><aside className="upload-sidebar"><div className="upload-aside-card"><span className="eyebrow">EVERY STAGE IS WORTH KEEPING.</span><h3>先留下，<br/>再慢慢<span>长成。</span></h3><div className="upload-tip"><span>↗</span><div><strong>有一份内容，就够了</strong><p>文字、图片、模型、影音或可运行链接，任意一种都能作为起点。</p></div></div><div className="upload-tip"><span>↗</span><div><strong>不必为封面等太久</strong><p>手工封面选填。能取画面就自动取，暂时取不到也可以先保存。</p></div></div><div className="upload-tip"><span>↗</span><div><strong>旧定稿也会一直在</strong><p>每次主动保存留下一个版本，继续修改不会覆盖曾经的定稿。</p></div></div><div className="cloud-note"><LockKeyhole size={23} strokeWidth={1.2}/><span>每个新版本，先只留给你<small>准备好时，再选择要公开的时刻。</small></span></div></div><div className="login-note"><History size={17}/><span>{existing ? `正在继续「${existing.title}」` : `记录为 ${user.profile?.displayName || user.name} 的作品`}<small>内容保存在服务端，离开前记得点一次保存。</small></span></div></aside></div></main>;
+      {error && <div className="form-error" role="alert"><span>!</span><div>{error}</div></div>}
+      <div className="save-private-note"><LockKeyhole size={16}/><span>{existing ? `将保存为第 ${existing.versionCount + 1} 个私密版本` : '先存进你的私密空间'}<small>{existing ? '每次主动保存都会留一个版本。公开展示不会自动跟着变化。' : '保存后，再决定是否公开以及展示哪一版。'}</small></span></div><div className="submit-row"><span><span className="online-dot"/>保存这一页，续写创作的来路。</span><button type="submit" className="button button-dark button-large" disabled={submitting || spaceChanged}>{submitting ? <><LoaderCircle size={18} className="spin"/>{preparing ? '正在取作品画面…' : progress < 100 ? `上传中 ${progress}%` : '正在保存这一版…'}</> : <>{existing ? '保存这一版' : '先保存这一刻'}<ArrowUpRight size={20}/></>}</button></div>{submitting && <div className="progress-track" role="progressbar" aria-label="上传进度" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }}/></div>}
+    </form><aside className="upload-sidebar"><div className="upload-aside-card"><span className="eyebrow">EVERY STAGE IS WORTH KEEPING.</span><h3>先留下，<br/>再慢慢<span>长成。</span></h3><div className="upload-tip"><span>↗</span><div><strong>有一份内容，就够了</strong><p>文字、图片、模型、影音或可运行链接，任意一种都能作为起点。</p></div></div><div className="upload-tip"><span>↗</span><div><strong>不必为封面等太久</strong><p>手工封面选填。能取画面就自动取，暂时取不到也可以先保存。</p></div></div><div className="upload-tip"><span>↗</span><div><strong>旧定稿也会一直在</strong><p>每次主动保存留下一个版本，继续修改不会覆盖曾经的定稿。</p></div></div><div className="cloud-note"><LockKeyhole size={23} strokeWidth={1.2}/><span>每个新版本，先只留给你<small>准备好时，再选择要公开的时刻。</small></span></div></div><div className="workspace-byline"><History size={17}/><span>{existing ? `正在继续「${existing.title}」` : `当前空间：${user.profile?.displayName || '我的创作空间'}`}<small>离开前记得保存这一页，让创作的来路留下。</small></span></div><BrowserAccessNote compact/></aside></div></main>;
 }

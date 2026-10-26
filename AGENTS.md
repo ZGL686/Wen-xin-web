@@ -31,7 +31,7 @@
 - `assets/3d source/` 是原始 MAX；`formspace/public/originals/` 是网页下载副本。原件不能改写，哈希以 `formspace/public/portfolio/verification.json` 为准。
 - MAX、BLEND、FBX、GLB、ZIP 使用 Git LFS。不要把 LFS 指针误当作有效作品；克隆后运行 `git lfs pull`。
 - `node tools/verify-project.mjs` 检查原件、网页资产、交付包、嵌套 Git 和提交边界。
-- 站点仍使用 Cloudflare Worker/R2 和 Sites 登录；国内迁移是待办，不能把只复制前端称为迁移完成。
+- 站点仍使用 Cloudflare Worker/R2；应用采用免账号浏览器空间，不依赖 Sites 登录。作者权限由服务端校验浏览器 Cookie；国内托管迁移仍是待办，不能把只复制前端称为迁移完成。
 - GitHub 推送与发布网站是两项操作；同步源码不会自动重新发布现站。
 - 不上传凭据、环境文件、缓存、运行数据库、原始完整聊天或本机 Git 备份。公开仓库只保存项目资料与脱敏任务摘要。
 - 原应用 Git 历史已迁到根；`.local-history/` 保存本机备份，永不入库。未来使用 Sites 发布时准备独立的应用 checkout，不把包含资产与 Wiki 的根仓库当作单一应用目录交给 Sites helper。
