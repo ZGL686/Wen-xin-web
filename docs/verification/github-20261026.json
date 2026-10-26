@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-26",
+  "repository": "https://github.com/ZGL686/Wen-xin-web",
+  "branch": "main",
+  "verifiedSourceCommit": "b830a25b8b58e6ba449698f0af37494d1a1766f6",
+  "localAndRemoteHeadsMatched": true,
+  "workingTreeCleanAtVerification": true,
+  "trackedLfsFiles": 21,
+  "independentlyDownloadedLfsObjects": 13,
+  "downloadedLfsBytes": 22260812,
+  "independentLfsFsck": "passed",
+  "credentialHelper": "Repository-local system manager; existing global settings preserved",
+  "githubActions": [
+    {
+      "name": "Verify project",
+      "conclusion": "success",
+      "url": "https://github.com/ZGL686/Wen-xin-web/actions/runs/40264851920"
+    },
+    {
+      "name": "Verify application",
+      "conclusion": "success",
+      "url": "https://github.com/ZGL686/Wen-xin-web/actions/runs/40264851927"
+    }
+  ],
+  "scope": "This receipt verifies the initial repository push. Later documentation receipt commits are recorded in Git history. No website deployment was performed."
+}
