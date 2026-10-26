@@ -18,6 +18,8 @@ supersedes: null
 | 2026-10-26 | discussion | 以项目经理视角确认新品牌、目标用户和作品分类想法，本轮不制作或修改网站。 | archived | wenxin-positioning-classification-discussion | [[日志/2026-10-26-文心定位与分类草图讨论.md|文心定位与分类草图讨论]] |
 | 2026-10-26 | maintenance | 整理用户指定工作区、构建 Wiki、提交推送 Wen-xin-web，并保存后续每轮自动同步约定。 | archived | repository-bootstrap-20261026 | [[日志/2026-10-26-工程整理与记忆初始化.md|工程整理与记忆初始化]] |
 | 2026-10-26 | discussion | 确认两级筛选规则，讨论文心记录完整创作过程的产品定位；本轮继续只讨论，不制作网站。 | archived | classification-and-creation-history-confirmed | [[日志/2026-10-26-分类规则与创作过程留痕确认.md|分类规则与创作过程留痕确认]] |
+| 2026-10-26 | discussion | 确认低负担的作品保存规则与版本粒度，继续产品讨论，不制作网站。 | archived | save-version-granularity-and-required-fields | [[日志/2026-10-26-保存版本粒度与必填项确认.md|保存版本粒度与必填项确认]] |
+| 2026-10-26 | discussion | 确认自动留版本与作品最少必填项 | archived | session-20261026-155958-612-3900435a | [[日志/2026-10-26-155958-612-discussion-3900435a.md|2026-10-26｜确认自动留版本与作品最少必填项]] |
 | 2026-10-26 | discussion | 确认作品分类规则与私密创作历程定位 | archived | session-20261026-154811-396-fcb1546c | [[日志/2026-10-26-154811-396-discussion-fcb1546c.md|2026-10-26｜确认作品分类规则与私密创作历程定位]] |
 | 2026-10-26 | discussion | 记录文心定位与作品方向标签草图讨论 | archived | session-20261026-153225-227-f3f5e11c | [[日志/2026-10-26-153225-227-discussion-f3f5e11c.md|2026-10-26｜记录文心定位与作品方向标签草图讨论]] |
 | 2026-10-26 | discussion | 确认原始三维作品文件位置 | archived | session-20261026-114552-720-a4cedd86 | [[日志/2026-10-26-114552-720-discussion-a4cedd86.md|2026-10-26｜确认原始三维作品文件位置]] |
