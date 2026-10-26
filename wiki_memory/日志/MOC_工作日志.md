@@ -15,12 +15,14 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-26 | feature | - | archived | wenxin-implementation-and-publication | [[日志/2026-10-26-文心网站制作与发布验收.md|文心网站制作与发布验收]] |
 | 2026-10-26 | discussion | 以项目经理视角确认新品牌、目标用户和作品分类想法，本轮不制作或修改网站。 | archived | wenxin-positioning-classification-discussion | [[日志/2026-10-26-文心定位与分类草图讨论.md|文心定位与分类草图讨论]] |
 | 2026-10-26 | maintenance | 整理用户指定工作区、构建 Wiki、提交推送 Wen-xin-web，并保存后续每轮自动同步约定。 | archived | repository-bootstrap-20261026 | [[日志/2026-10-26-工程整理与记忆初始化.md|工程整理与记忆初始化]] |
 | 2026-10-26 | discussion | 记录用户采纳的封面建议，并回答影视预览形式的产品推荐；继续只讨论，不制作。 | archived | cover-rules-adopted-and-video-preview-recommendation | [[日志/2026-10-26-封面交互采纳与影视预览推荐.md|封面交互采纳与影视预览推荐]] |
 | 2026-10-26 | discussion | 讨论封面怎样直接展示真实作品和效果，减少下载原件并打开专业软件的浏览门槛；不制作页面。 | archived | multimedia-cover-preview-discussion | [[日志/2026-10-26-多媒体封面预览讨论.md|多媒体封面预览讨论]] |
 | 2026-10-26 | discussion | 确认两级筛选规则，讨论文心记录完整创作过程的产品定位；本轮继续只讨论，不制作网站。 | archived | classification-and-creation-history-confirmed | [[日志/2026-10-26-分类规则与创作过程留痕确认.md|分类规则与创作过程留痕确认]] |
 | 2026-10-26 | discussion | 确认低负担的作品保存规则与版本粒度，继续产品讨论，不制作网站。 | archived | save-version-granularity-and-required-fields | [[日志/2026-10-26-保存版本粒度与必填项确认.md|保存版本粒度与必填项确认]] |
+| 2026-10-26 | feature | 文心作品集与私密版本制作发布 | archived | session-20261026-173844-328-35c4b637 | [[日志/2026-10-26-173844-328-feature-35c4b637.md|2026-10-26｜文心作品集与私密版本制作发布]] |
 | 2026-10-26 | discussion | 记录封面交互建议采纳与影视预览推荐 | archived | session-20261026-162601-060-e4cfce99 | [[日志/2026-10-26-162601-060-discussion-e4cfce99.md|2026-10-26｜记录封面交互建议采纳与影视预览推荐]] |
 | 2026-10-26 | discussion | 记录作品卡片多媒体封面预览需求 | archived | session-20261026-161656-154-ce1e1e26 | [[日志/2026-10-26-161656-154-discussion-ce1e1e26.md|2026-10-26｜记录作品卡片多媒体封面预览需求]] |
 | 2026-10-26 | discussion | 确认自动留版本与作品最少必填项 | archived | session-20261026-155958-612-3900435a | [[日志/2026-10-26-155958-612-discussion-3900435a.md|2026-10-26｜确认自动留版本与作品最少必填项]] |

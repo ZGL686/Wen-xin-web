@@ -28,7 +28,7 @@
 ## 工程边界
 
 - 保持 React + Vite + TypeScript 架构、现有设计、交互与四个真实作品。
-- `assets/source/` 是原始 MAX；`formspace/public/originals/` 是网页下载副本。原件不能改写，哈希以 `formspace/public/portfolio/verification.json` 为准。
+- `assets/3d source/` 是原始 MAX；`formspace/public/originals/` 是网页下载副本。原件不能改写，哈希以 `formspace/public/portfolio/verification.json` 为准。
 - MAX、BLEND、FBX、GLB、ZIP 使用 Git LFS。不要把 LFS 指针误当作有效作品；克隆后运行 `git lfs pull`。
 - `node tools/verify-project.mjs` 检查原件、网页资产、交付包、嵌套 Git 和提交边界。
 - 站点仍使用 Cloudflare Worker/R2 和 Sites 登录；国内迁移是待办，不能把只复制前端称为迁移完成。

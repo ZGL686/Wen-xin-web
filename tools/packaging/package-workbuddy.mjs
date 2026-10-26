@@ -112,7 +112,7 @@ Work 字段包括 id、title、subtitle、category、description、tags、date�
 
 需要 Node.js 22.13+。原版开发服务器会打印 127.0.0.1:5173，本地模拟登录仅供开发；生产不能使用该模拟身份。迁移后还需增加针对实际新后端和登录系统的集成验收。
 
-scripts/import-portfolio.mjs 是首轮资产导入辅助脚本，依赖原工作站的assets/source 中 MAX 与 assets/pipeline，不属于安装/构建步骤。现有成品资源已完整放在 public 内，运行和重新构建网站无需执行该脚本。
+scripts/import-portfolio.mjs 是首轮资产导入辅助脚本，依赖原工作站的assets/3d source 中 MAX 与 assets/pipeline，不属于安装/构建步骤。现有成品资源已完整放在 public 内，运行和重新构建网站无需执行该脚本。
 
 ## 交付验收要求
 

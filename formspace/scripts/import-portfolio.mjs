@@ -4,7 +4,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 const root=path.resolve(import.meta.dirname,'..');
 const source=path.resolve(root,'../assets/pipeline');
-const original=path.resolve(root,'../assets/source');
+const original=path.resolve(root,'../assets/3d source');
 const assets=JSON.parse(await readFile(path.join(source,'assets.json'),'utf8'));
 const works=JSON.parse(await readFile(path.join(root,'data/works.json'),'utf8'));
 await mkdir(path.join(root,'public/portfolio'),{recursive:true});

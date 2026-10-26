@@ -13,7 +13,7 @@ await mkdir(safe('.local-history'),{recursive:true});
 const gitBackup=safe('.local-history/formspace-git-before-organization');
 if(await exists(gitBackup))throw new Error('Git backup already exists.');
 await cp(safe('formspace/.git'),gitBackup,{recursive:true,errorOnExist:true,force:false});
-for(const name of names)await move(name,'assets/source/'+name);
+for(const name of names)await move(name,'assets/3d source/'+name);
 await move('portfolio-assets','assets/pipeline');
 await move('work','archive/cabinet-20261011');
 await move('archive/cabinet-20261011/package-workbuddy.mjs','tools/packaging/package-workbuddy.mjs');
@@ -23,6 +23,6 @@ for(const item of await readdir(safe('wiki_memory/wiki_memory'),{withFileTypes:t
 // Keep the now empty template wrapper locally for traceability, outside the Wiki.
 await move('wiki_memory/wiki_memory','.local-history/empty-wiki-wrapper');
 await move('formspace/.git','.git');
-for(const name of names){const actual=createHash('sha256').update(await readFile(safe('assets/source/'+name))).digest('hex');if(actual!==hashes[name])throw new Error('Original changed '+name);}
+for(const name of names){const actual=createHash('sha256').update(await readFile(safe('assets/3d source/'+name))).digest('hex');if(actual!==hashes[name])throw new Error('Original changed '+name);}
 await writeFile(safe('.local-history/organization-2026-10-26.json'),JSON.stringify({date:'2026-10-26',moves,originalHashes:hashes},null,2)+'\n');
 console.log(JSON.stringify({moves:moves.length,originalsVerified:names.length,gitHistoryPreserved:true,backup:'.local-history/formspace-git-before-organization'}));

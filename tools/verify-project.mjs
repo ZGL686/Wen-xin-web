@@ -13,7 +13,7 @@ const assets=await json('formspace/public/portfolio/verification.json');
 if(assets.length!==4)fail('The verified initial four-work baseline is missing.');
 for(const asset of assets){
  const work=works.find(w=>w.id===asset.id);if(!work)fail('Missing built-in '+asset.id);
- for(const file of ['assets/source/'+asset.original_file,'formspace/public/'+work.fileUrl.replace(/^\//,'')]){
+ for(const file of ['assets/3d source/'+asset.original_file,'formspace/public/'+work.fileUrl.replace(/^\//,'')]){
   if(sha(await bytes(file)).toUpperCase()!==asset.original_sha256.toUpperCase())fail('Original hash mismatch: '+file);
  }
  for(const file of ['assets/pipeline/'+asset.glb,'formspace/public/portfolio/'+asset.glb]){

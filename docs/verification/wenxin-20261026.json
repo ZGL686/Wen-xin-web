@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-26T09:32:13.945Z",
+  "product": "文心 · 树莓成熟时",
+  "framework": "React + Vite + TypeScript",
+  "deployment": {
+    "id": "appgdep_6adf1d9f92ec8191a6bd3dc733369cce",
+    "project_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c",
+    "version_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c~appgver_6c718cfe50088191b63bcc80df4c509a",
+    "status": "succeeded",
+    "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "updated_at": "2026-10-26T09:30:28.047974+00:00"
+  },
+  "versionNumber": 2,
+  "siteSourceCommit": "8c335c9ba3e620961523741ba63cf6db3d7dc135",
+  "audience": "public (preserved)",
+  "checks": {
+    "typescript": "passed",
+    "apiAssertions": 177,
+    "actualMiniflareR2": 25,
+    "desktopAndFilmAssertions": 27,
+    "nodeShareWithdrawalAssertions": 10,
+    "mobileAssertions": 64,
+    "mobileFailed": 0,
+    "mediaAssertions": 28,
+    "productionAnonymousAssertions": 15,
+    "independentLockfileInstall": "passed",
+    "productionWorkerAndClientBuild": "passed"
+  },
+  "productionAssets": [
+    {
+      "id": "lamp",
+      "originalSha256": "d788e9657bddc43f69f1ec0e185b361c8821fb607dc751b29ef85d2042f61a57",
+      "originalBytes": 8966144,
+      "modelBytes": 2216636,
+      "coverBytes": 20792
+    },
+    {
+      "id": "cabinet",
+      "originalSha256": "a976cbef41649e5a519e1c161254bbc417d5cca62240e4967ba43e99327186cc",
+      "originalBytes": 962560,
+      "modelBytes": 46488,
+      "coverBytes": 21450
+    },
+    {
+      "id": "sofa",
+      "originalSha256": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+      "originalBytes": 798720,
+      "modelBytes": 421400,
+      "coverBytes": 14982
+    },
+    {
+      "id": "house",
+      "originalSha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+      "originalBytes": 737280,
+      "modelBytes": 15124,
+      "coverBytes": 16342
+    }
+  ],
+  "productionCases": [
+    "production public API HTTP 200",
+    "production retains four actual works in new taxonomy",
+    "production anonymous user remains anonymous",
+    "production private archive requires authentication",
+    "all online MAX original hashes, GLB files and WebP covers match verified assets",
+    "live page displays new brand",
+    "production hero renders actual interactive 3D model",
+    "live all filter hides secondary tags",
+    "live dynamic tag filters furniture works",
+    "live work detail loads real model and original content",
+    "live creator share page preserves system collection",
+    "live author flow uses existing trusted sign-in",
+    "live homepage fits mobile",
+    "live mobile menu navigates",
+    "live browser has no JavaScript runtime errors"
+  ],
+  "verificationBoundaries": [
+    "Production checked anonymously. Authenticated create/edit/version/media permissions were exercised against the identical local API with actual Miniflare R2, not by signing into a live third-party account.",
+    "Mobile tests use installed Edge at 390px and 320px, not a physical-device matrix.",
+    "Playwright HTTPS iframe fixture proves sandboxed script interaction; external sites may restrict embedding.",
+    "No test works or fixtures were published into production."
+  ],
+  "limits": {
+    "newUploadTotalMiB": 40,
+    "imageMiB": 12,
+    "imagesPerVersion": 8,
+    "versionsPerWork": 500
+  },
+  "preserved": [
+    "four original MAX hashes and real previews",
+    "existing visual style",
+    "public Site audience and URL",
+    "historical WorkBuddy ZIP hash"
+  ],
+  "pending": [
+    "China hosting/auth/storage migration",
+    "larger-file direct multipart uploads if required",
+    "one-click historical restoration",
+    "new WorkBuddy handoff ZIP if requested"
+  ]
+}
