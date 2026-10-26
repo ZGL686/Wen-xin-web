@@ -1,0 +1,23 @@
+name: Verify application
+on:
+  push:
+    branches: [main]
+    paths: ['formspace/**', '.github/workflows/application.yml']
+  pull_request:
+    paths: ['formspace/**', '.github/workflows/application.yml']
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: formspace/package-lock.json
+      - run: npm ci
+        working-directory: formspace
+      - run: npm run typecheck && npm test && npm run build
+        working-directory: formspace

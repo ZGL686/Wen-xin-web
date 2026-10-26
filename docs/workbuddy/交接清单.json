@@ -1,0 +1,11 @@
+{
+  "title": "FORM / SPACE · WorkBuddy China migration handoff",
+  "packagedDate": "2026-10-25",
+  "sourceCommit": "2320086ed470ec6aefa528581809a9e3b02f03c7",
+  "frontend": "React + Vite + TypeScript",
+  "backendStatus": "Original Cloudflare Worker + R2; migration required",
+  "existingSiteIdentityIncluded": false,
+  "initialWorks": 4,
+  "remoteSubmissionsExported": false,
+  "credentialsIncluded": false
+}

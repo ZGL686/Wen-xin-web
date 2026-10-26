@@ -1,0 +1,17 @@
+[
+  {
+    "id": "lamp",
+    "title": "AURELIA · 玉石灯",
+    "objects": 38,
+    "vertices": 68538,
+    "triangles": 68202,
+    "source_bounds": [
+      0.6606000661849976,
+      0.7119200229644775,
+      1.6009069681167603
+    ],
+    "glb": "lamp.glb",
+    "image": "lamp.png",
+    "preview_note": "Real source geometry. Basic colors approximated from source material; native MAX remains original."
+  }
+]

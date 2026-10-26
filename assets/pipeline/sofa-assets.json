@@ -1,0 +1,17 @@
+[
+  {
+    "id": "sofa",
+    "title": "柔软沙发",
+    "objects": 27,
+    "vertices": 14028,
+    "triangles": 15006,
+    "source_bounds": [
+      2.6500000953674316,
+      1.2630000114440918,
+      1.3142061233520508
+    ],
+    "glb": "sofa.glb",
+    "image": "sofa.png",
+    "preview_note": "Real source geometry. Basic colors approximated from source material; native MAX remains original."
+  }
+]

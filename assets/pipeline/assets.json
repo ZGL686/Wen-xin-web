@@ -1,0 +1,114 @@
+[
+  {
+    "id": "house",
+    "title": "房子 · 空间习作",
+    "original_file": "房子3d.max",
+    "original_bytes": 737280,
+    "original_sha256": "850C56242F2FC6ACC7E3D4FFDFCC8E13177ACD9F797BC1117841981B21FB74F3",
+    "source_unchanged": true,
+    "source_bounds_metres": [
+      1.5191809,
+      1.526272,
+      1.311861
+    ],
+    "visible_meshes": 2,
+    "triangles": 200,
+    "glb": "house.glb",
+    "glb_bytes": 15124,
+    "glb_sha256": "c286f401aabbe882ca13ecdd422a0615644ffa39487fa5d73192dd2ba8dd17bd",
+    "image": "house.png",
+    "image_size": [
+      1000,
+      900
+    ],
+    "image_transparent": true,
+    "conversion": "3ds Max visible geometry → OBJ → Blender → GLB",
+    "viewer_scale": "Longest source dimension normalized to 3 viewer units. Refer to source_bounds_metres for physical dimensions.",
+    "material_note": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。",
+    "status": "verified"
+  },
+  {
+    "id": "cabinet",
+    "title": "格序 · 收纳柜",
+    "original_file": "柜子_补齐完成.max",
+    "original_bytes": 962560,
+    "original_sha256": "A976CBEF41649E5A519E1C161254BBC417D5CCA62240E4967BA43E99327186CC",
+    "source_unchanged": true,
+    "source_bounds_metres": [
+      0.352504,
+      2.1,
+      1.7999987
+    ],
+    "visible_meshes": 1,
+    "triangles": 928,
+    "glb": "cabinet.glb",
+    "glb_bytes": 46488,
+    "glb_sha256": "7b2187c3795f85d06bb24ac97dbe4b03a1aa8dcaabbd12e1589ffe98488a59c8",
+    "image": "cabinet.png",
+    "image_size": [
+      1000,
+      900
+    ],
+    "image_transparent": true,
+    "conversion": "3ds Max visible Boolean result → OBJ → Blender → GLB",
+    "viewer_scale": "Longest source dimension normalized to 3 viewer units. Refer to source_bounds_metres for physical dimensions.",
+    "material_note": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。",
+    "status": "verified"
+  },
+  {
+    "id": "lamp",
+    "title": "AURELIA · 玉石灯",
+    "original_file": "AURELIA_Jade_Lamp.max",
+    "original_bytes": 8966144,
+    "original_sha256": "D788E9657BDDC43F69F1EC0E185B361C8821FB607DC751B29EF85D2042F61A57",
+    "source_unchanged": true,
+    "source_bounds_metres": [
+      0.6606001,
+      0.71192,
+      1.600907
+    ],
+    "visible_meshes": 38,
+    "triangles": 134908,
+    "glb": "lamp.glb",
+    "glb_bytes": 2216636,
+    "glb_sha256": "6a91f7d21fc5b20b8edd9cd5b78ebae960a9b84b53be9583ddfd877bc417d185",
+    "image": "lamp.png",
+    "image_size": [
+      1000,
+      900
+    ],
+    "image_transparent": true,
+    "conversion": "3ds Max native FBX → Blender → GLB",
+    "viewer_scale": "Longest source dimension normalized to 3 viewer units. Refer to source_bounds_metres for physical dimensions.",
+    "material_note": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。",
+    "status": "verified"
+  },
+  {
+    "id": "sofa",
+    "title": "Cloud Bear · 云朵熊沙发",
+    "original_file": "Sofa_3dsMax2026.max",
+    "original_bytes": 798720,
+    "original_sha256": "E6185589FBE9A6D0ED644D9E888717C7F9C3DD6C23210C21EE41BEA7F1B359A2",
+    "source_unchanged": true,
+    "source_bounds_metres": [
+      2.6500001,
+      1.263,
+      1.3142061
+    ],
+    "visible_meshes": 27,
+    "triangles": 27948,
+    "glb": "sofa.glb",
+    "glb_bytes": 421400,
+    "glb_sha256": "a073aa0cff36d50dba0e2dec5e8de4a54dcea7af9b0fbc909be65c9fdd64bcbd",
+    "image": "sofa.png",
+    "image_size": [
+      1000,
+      900
+    ],
+    "image_transparent": true,
+    "conversion": "3ds Max native FBX → Blender → GLB",
+    "viewer_scale": "Longest source dimension normalized to 3 viewer units. Refer to source_bounds_metres for physical dimensions.",
+    "material_note": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。",
+    "status": "verified"
+  }
+]

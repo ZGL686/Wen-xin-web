@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-26",
+  "scope": "Repository organization and project Wiki bootstrap",
+  "sourceBaselineCommit": "2320086ed470ec6aefa528581809a9e3b02f03c7",
+  "preservedOriginalMax": 4,
+  "verifiedDownloadCopies": 4,
+  "verifiedGlbPairs": 4,
+  "verifiedWebpCovers": 4,
+  "historicalHandoffSha256": "d0b59da221e32cf1a02522ed21870bdc2a2343ede2e237095ffcd4ed0f73c40c",
+  "localChecks": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "node tools/verify-project.mjs",
+    "Wiki index and check",
+    "PowerShell synchronization script syntax",
+    "Python pipeline and packaging syntax"
+  ],
+  "nativeModelsRegenerated": false,
+  "liveSiteRechecked": false,
+  "gitPushReceipt": "Confirm from Git branch refs after synchronization; this report does not predict network results."
+}
