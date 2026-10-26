@@ -60,13 +60,19 @@ export type ApiError = { error: string; code?: string };
  * Create/save accepts multipart or JSON. Text keys are Snapshot scalar names;
  * category is a legacy alias for direction. tags: comma-separated or JSON array.
  * Update requires baseRevision (number/string) and otherwise inherits prior data.
- * Multipart files: source (one), previewModel (one GLB/OBJ/STL), images (<=8),
+ * Multipart files: source (one opaque original, any extension or no extension),
+ * previewModel (one GLB/OBJ/STL), images (<=8),
  * video (MP4/WebM), demoVideo (MP4/WebM), audio (MP3/WAV/OGG/M4A).
  * Images replace the previous image set when any are uploaded; clearImages=true
  * clears it. clearSource/clearVideo/clearDemoVideo/clearAudio/clearModel may clear
  * inherited media. A snapshot must retain some content: text, file, image, video,
  * audio, or valid HTTPS interactiveUrl. First image becomes the default cover.
  * Total newly uploaded files <=40 MiB; each image <=12 MiB; JSON <=128 KiB.
+ * Source filenames and bytes are retained; storage URLs use a normalized hint
+ * or .bin, always octet-stream/attachment/nosniff. Archiving any source format
+ * does not imply parsing, conversion, generated images, or playable preview.
+ * Real modelUrl/coverUrl/images/video fields remain the only preview evidence;
+ * there is no fake conversion queue or status in this contract.
  * Save always creates a version after success, including an unchanged manual save.
  * New uploads never change the visitor's current display version automatically.
  * Missing browser workspace=401 code workspace_required; forbidden=403/404;

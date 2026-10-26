@@ -29,7 +29,9 @@ const RENEW_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 const WORKSPACE_ID = /^workspace-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 const FILE_KEY = /^[a-f0-9-]{36}\/(?:[a-f0-9-]{36}\/)?(?:source|model|image-\d+|video|demo-video|audio)\.[a-z0-9]+$/;
-const SOURCE_EXTS = new Set(['max', 'blend', 'fbx', 'obj', 'stl', 'glb', 'gltf', 'zip']);
+// This is a storage-name hint, never an upload allowlist. Unknown/native and
+// extensionless files are archived unchanged under source.bin.
+const SOURCE_STORAGE_HINTS = new Set(['max', 'blend', 'fbx', 'obj', 'stl', 'glb', 'gltf', 'zip', '3ds', 'c4d', 'ma', 'mb', 'usd', 'usda', 'usdc', 'usdz', 'abc', 'vdb', 'skp', '3dm', 'rvt', 'rfa', 'ifc', 'step', 'stp', 'iges', 'igs', 'dae', 'ply', 'f3d', 'f3z', 'sldprt', 'sldasm', 'catpart', 'catproduct', 'lwo', 'lws', 'ztl', 'zpr']);
 const IMAGE_EXTS = new Set(['png', 'jpg', 'jpeg', 'webp', 'avif', 'gif']);
 const VIDEO_EXTS = new Set(['mp4', 'webm']);
 const AUDIO_EXTS = new Set(['mp3', 'wav', 'ogg', 'm4a']);
@@ -49,6 +51,13 @@ class ApiFailure extends Error {
 const fail = (status: number, message: string, code?: string): never => { throw new ApiFailure(status, message, code); };
 const json = (value: unknown, status = 200) => Response.json(value, { status, headers: { 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie' } });
 const ext = (name: string) => name.split('.').pop()?.toLowerCase() || '';
+function sourceExtension(name: string) {
+  const basename = name.split(/[\\/]/).pop() || '';
+  const dot = basename.lastIndexOf('.');
+  if (dot <= 0) return '';
+  const suffix = basename.slice(dot + 1).toLowerCase();
+  return /^[a-z0-9]{1,12}$/.test(suffix) ? suffix : '';
+}
 const versionKey = (workId: string, versionId: string) => `versions/${workId}/${versionId}.json`;
 
 async function sha256(value: string) {
@@ -391,7 +400,6 @@ async function prepareSnapshot(input: Input, previous?: StoredVersion) {
   const source = input.files('source'), models = input.files('previewModel'), images = input.files('images'), videos = input.files('video'), demos = input.files('demoVideo'), audios = input.files('audio');
   if ([source, models, videos, demos, audios].some((files) => files.length > 1)) return fail(400, '每种源文件或媒体最多选择一个。');
   if (images.length > 8) return fail(400, '最多上传 8 张图片。');
-  if (source.some((file) => !SOURCE_EXTS.has(ext(file.name)))) return fail(400, '源文件支持 MAX、BLEND、FBX、OBJ、STL、GLB、GLTF、ZIP。');
   if (models.some((file) => !MODEL_EXTS.has(ext(file.name)))) return fail(400, '网页三维预览文件支持 GLB、OBJ、STL。');
   if (images.some((file) => !IMAGE_EXTS.has(ext(file.name)) || file.size > MAX_IMAGE)) return fail(400, '图片支持 PNG/JPG/WebP/AVIF/GIF，每张不超过 12 MB。');
   if ([...videos, ...demos].some((file) => !VIDEO_EXTS.has(ext(file.name)))) return fail(400, '视频支持 MP4 或 WebM。');
@@ -427,18 +435,20 @@ async function saveVersion(context: Context, input: Input, loaded?: Loaded): Pro
   let wroteVersion = false;
   let attemptedMeta: RecordMeta | undefined;
   async function saveFile(file: File, role: string) {
-    const key = `files/${id}/${versionId}/${role}.${ext(file.name)}`;
+    const inputExtension = role === 'source' ? sourceExtension(file.name) : ext(file.name);
+    const storageExtension = role === 'source' ? SOURCE_STORAGE_HINTS.has(inputExtension) ? inputExtension : 'bin' : inputExtension;
+    const key = `files/${id}/${versionId}/${role}.${storageExtension}`;
     storedKeys.push(key);
-    await context.bucket.put(key, file.stream(), { httpMetadata: { contentType: MIME[ext(file.name)] || 'application/octet-stream' }, customMetadata: { name: file.name.slice(0, 255) } });
+    await context.bucket.put(key, file.stream(), { httpMetadata: { contentType: role === 'source' ? 'application/octet-stream' : MIME[inputExtension] || 'application/octet-stream' }, customMetadata: { name: file.name } });
     return '/api/' + key;
   }
   try {
     const snapshot = prepared.snapshot;
     if (prepared.source) {
-      snapshot.fileUrl = await saveFile(prepared.source, 'source'); snapshot.fileName = prepared.source.name; snapshot.fileSize = prepared.source.size; snapshot.format = ext(prepared.source.name).toUpperCase();
+      snapshot.fileUrl = await saveFile(prepared.source, 'source'); snapshot.fileName = prepared.source.name; snapshot.fileSize = prepared.source.size; snapshot.format = sourceExtension(prepared.source.name).toUpperCase() || 'SOURCE';
       // Public preview uses its own role/key. The native source URL and original
       // filename never become public merely because a preview was selected.
-      snapshot.modelUrl = MODEL_EXTS.has(ext(prepared.source.name)) && !prepared.model ? await saveFile(prepared.source, 'model') : '';
+      snapshot.modelUrl = MODEL_EXTS.has(sourceExtension(prepared.source.name)) && !prepared.model ? await saveFile(prepared.source, 'model') : '';
     }
     if (prepared.model) snapshot.modelUrl = await saveFile(prepared.model, 'model');
     if (prepared.images.length) {
@@ -522,8 +532,13 @@ async function fileResponse(context: Context, request: Request, path: string) {
   const storageKey = 'files/' + key;
   const head = await context.bucket.head(storageKey);
   if (!head) return fail(404, '文件不存在。');
-  const headers = new Headers({ 'Content-Type': MIME[ext(key)] || 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store', Vary: 'Cookie', 'Accept-Ranges': 'bytes', 'Content-Length': String(head.size), ETag: head.httpEtag });
-  if (/\/source\./.test(key)) headers.set('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent((head.customMetadata?.name || key.split('/').pop()!).replace(/[\r\n]/g, ''))}`);
+  const isSource = /\/source\./.test(key);
+  const headers = new Headers({ 'Content-Type': isSource ? 'application/octet-stream' : MIME[ext(key)] || 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store', Vary: 'Cookie', 'Accept-Ranges': 'bytes', 'Content-Length': String(head.size), ETag: head.httpEtag });
+  if (isSource) {
+    const name = (head.customMetadata?.name || key.split('/').pop()!).replace(/[\r\n\0]/g, '');
+    const encoded = encodeURIComponent(name).replace(/['()*]/g, (char) => '%' + char.charCodeAt(0).toString(16).toUpperCase());
+    headers.set('Content-Disposition', `attachment; filename*=UTF-8''${encoded}`);
+  }
   if (request.method === 'HEAD') return new Response(null, { headers });
   let offset = 0, length = head.size, partial = false;
   const range = request.headers.get('Range');

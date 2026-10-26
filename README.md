@@ -2,7 +2,7 @@
 
 数字媒体创作者的个人作品集与成长档案。保留原视觉风格，支持交互、影视、三维与其他方向、自定义标签、私密版本历史和作者选择公开。前端为 React + Vite + TypeScript，后端为 Cloudflare Worker + R2。
 
-[打开长序网站](https://formspace-sm-3d-studio.h2969351680.chatgpt.site)。第 3 版于 2026-10-26 发布，已移除账号登录并完成真实免账号上传/编辑/权限及原件哈希验收。国内托管迁移仍待完成。
+[打开长序网站](https://formspace-sm-3d-studio.h2969351680.chatgpt.site)。第 4 版于 2026-10-26 发布，保留免账号空间并开放不限后缀原件归档；40 MiB 新增文件合计上限仍在。自动 MAX 预览的独立云端服务尚未接入，部署方案见 [云端转换方案](docs/cloud-conversion-plan.md)。国内托管迁移仍待完成。
 
 ## 目录
 

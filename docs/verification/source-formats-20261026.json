@@ -1,0 +1,292 @@
+{
+  "checkedAt": "2026-10-26T13:51:14.463294+00:00",
+  "product": "长序 · 树莓成熟时",
+  "siteSourceCommit": "6e3717bfe4034782a3368ca7a28395d9f93d0e1b",
+  "versionNumber": 4,
+  "deployment": {
+    "id": "appgdep_6adf53c9af608191a035c7a4326418fd",
+    "project_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c",
+    "version_id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c~appgver_b08b460e74988191a6078e5a30a4463c",
+    "status": "succeeded",
+    "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "updated_at": "2026-10-26T13:21:31.674498+00:00"
+  },
+  "audience": "public preserved",
+  "archive": {
+    "sha256": "cadad2b5bca126810739f6eb432e632f65c39d59412cb6e5a890c9394edcbc90",
+    "bytes": 4111093
+  },
+  "checks": {
+    "typescript": "passed",
+    "apiAssertions": 476,
+    "productionBuild": "passed",
+    "assetIntegrityLocal": "passed",
+    "wikiLint": "passed",
+    "localBrowserAssertions": 30,
+    "localBrowserFailed": 0,
+    "liveHtml": {
+      "status": 200,
+      "correctTitle": true,
+      "newClientBundle": true
+    },
+    "completeProductionBrowserFlow": "not completed due to transport failures"
+  },
+  "localCases": [
+    "Source picker has no accept restriction",
+    "Source selection accepts model.c4d",
+    "Source selection accepts scene.ma",
+    "Source selection accepts scene.usd",
+    "Source selection accepts cache.abc",
+    "Source selection accepts volume.vdb",
+    "Source selection accepts part.skp",
+    "Source selection accepts model.unknownformat",
+    "Source selection accepts model-without-extension",
+    "Unsupported preview limit is visible outside collapsed details",
+    "40 MiB remains explicit",
+    "MAX archive succeeds privately without invented preview",
+    "Saved MAX clearly states no web preview",
+    "MAX detail has no canvas or false conversion progress",
+    "MAX download preserves exact original bytes",
+    "MAX card shows archive status without interactive badge",
+    "Another browser cannot read private MAX record",
+    "Another browser cannot fetch private MAX bytes",
+    "Unknown suffix archives privately with original name and bytes",
+    "Separate GLB creates a new private version of the same work",
+    "True model resource enables actual browser 3D canvas",
+    "Private GLB remains hidden from other browser",
+    "Adding GLB does not alter archived MAX bytes",
+    "Author explicitly selects the true preview version for public display",
+    "Visitor sees public GLB snapshot without private older version",
+    "Public preview GLB is readable and byte-exact",
+    "Publishing preview does not expose private original MAX",
+    "No browser runtime errors",
+    "Cleanup script-owned QA record",
+    "Cleanup script-owned QA record"
+  ],
+  "productionBrowser": {
+    "attempts": [
+      {
+        "passedBeforeTransportFailure": 15,
+        "result": "MAX saved privately and accurate no-preview UI verified; original download channel failed",
+        "knownOwnedQaRecordsDeleted": 1
+      },
+      {
+        "passedBeforeTransportFailure": 11,
+        "result": "create response exceeded test observer 30-second wait; request outcome unknown",
+        "possiblePrivateQaRecordsRemaining": {
+          "minimum": 0,
+          "maximum": 1
+        },
+        "cleanupLimit": "Process exited and temporary browser context closed without a persisted credential jar; cannot safely identify or recover this space to verify/delete a possible late record"
+      }
+    ],
+    "productionPublicationRequestsSent": false,
+    "otherUserWorksModified": false,
+    "newProductionAttemptsStopped": true,
+    "credentialValuesRetainedInDeliverables": false,
+    "failedReportInitiallyIncludedRequestDiagnostics": true,
+    "failedDiagnosticReportsSanitized": true,
+    "workerLogObservation": "One POST /api/works canceled; no application-exception proof from the bounded error-log query. Cancellation does not prove absence of a committed record."
+  },
+  "productionPublicAssets": {
+    "checkedAt": "2026-10-26T13:46:05.405Z",
+    "publicApiStatus": 200,
+    "publicWorksCount": 5,
+    "fourSystemExhibitsPresent": true,
+    "assetChecks": {
+      "verified": 9,
+      "total": 12,
+      "failed": [
+        {
+          "id": "lamp",
+          "role": "original",
+          "error": "fetch failed"
+        },
+        {
+          "id": "lamp",
+          "role": "model",
+          "error": "The operation was aborted due to timeout"
+        },
+        {
+          "id": "cabinet",
+          "role": "original",
+          "error": "The operation was aborted due to timeout"
+        }
+      ]
+    },
+    "assets": [
+      {
+        "id": "lamp",
+        "present": true,
+        "verified": false,
+        "cover": {
+          "url": "/portfolio/lamp.webp",
+          "status": 200,
+          "bytes": 20792,
+          "sha256": "7c9ab422f92e9382ae7ebc0734d03415eb78537af08a00d22de5548d7c6b2ca0",
+          "localBytes": 20792,
+          "localSha256": "7c9ab422f92e9382ae7ebc0734d03415eb78537af08a00d22de5548d7c6b2ca0",
+          "baselineBytes": 20792,
+          "baselineSha256": null,
+          "signatureValid": true,
+          "verified": true
+        },
+        "model": {
+          "url": "/portfolio/lamp.glb",
+          "verified": false,
+          "error": "The operation was aborted due to timeout"
+        },
+        "original": {
+          "url": "/originals/AURELIA_Jade_Lamp.max",
+          "verified": false,
+          "error": "fetch failed"
+        },
+        "originalMatchesPreviousRelease": false
+      },
+      {
+        "id": "sofa",
+        "present": true,
+        "verified": true,
+        "cover": {
+          "url": "/portfolio/sofa.webp",
+          "status": 200,
+          "bytes": 14982,
+          "sha256": "04398e9f7c7639b948e9ed02fcfadaeee8d4a9747b7365654fdaa39719acb790",
+          "localBytes": 14982,
+          "localSha256": "04398e9f7c7639b948e9ed02fcfadaeee8d4a9747b7365654fdaa39719acb790",
+          "baselineBytes": 14982,
+          "baselineSha256": null,
+          "signatureValid": true,
+          "verified": true
+        },
+        "original": {
+          "url": "/originals/Sofa_3dsMax2026.max",
+          "status": 200,
+          "bytes": 798720,
+          "sha256": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+          "localBytes": 798720,
+          "localSha256": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+          "baselineBytes": 798720,
+          "baselineSha256": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+          "signatureValid": true,
+          "verified": true
+        },
+        "model": {
+          "url": "/portfolio/sofa.glb",
+          "status": 200,
+          "bytes": 421400,
+          "sha256": "a073aa0cff36d50dba0e2dec5e8de4a54dcea7af9b0fbc909be65c9fdd64bcbd",
+          "localBytes": 421400,
+          "localSha256": "a073aa0cff36d50dba0e2dec5e8de4a54dcea7af9b0fbc909be65c9fdd64bcbd",
+          "baselineBytes": 421400,
+          "baselineSha256": "a073aa0cff36d50dba0e2dec5e8de4a54dcea7af9b0fbc909be65c9fdd64bcbd",
+          "signatureValid": true,
+          "verified": true
+        },
+        "originalMatchesPreviousRelease": true
+      },
+      {
+        "id": "cabinet",
+        "present": true,
+        "verified": false,
+        "cover": {
+          "url": "/portfolio/cabinet.webp",
+          "status": 200,
+          "bytes": 21450,
+          "sha256": "3209acaff1dd79711278c9f2d2ee4bb984e8f715757d23a2fc9e4bf747dad5ba",
+          "localBytes": 21450,
+          "localSha256": "3209acaff1dd79711278c9f2d2ee4bb984e8f715757d23a2fc9e4bf747dad5ba",
+          "baselineBytes": 21450,
+          "baselineSha256": null,
+          "signatureValid": true,
+          "verified": true
+        },
+        "model": {
+          "url": "/portfolio/cabinet.glb",
+          "status": 200,
+          "bytes": 46488,
+          "sha256": "7b2187c3795f85d06bb24ac97dbe4b03a1aa8dcaabbd12e1589ffe98488a59c8",
+          "localBytes": 46488,
+          "localSha256": "7b2187c3795f85d06bb24ac97dbe4b03a1aa8dcaabbd12e1589ffe98488a59c8",
+          "baselineBytes": 46488,
+          "baselineSha256": "7b2187c3795f85d06bb24ac97dbe4b03a1aa8dcaabbd12e1589ffe98488a59c8",
+          "signatureValid": true,
+          "verified": true
+        },
+        "original": {
+          "url": "/originals/cabinet.max",
+          "verified": false,
+          "error": "The operation was aborted due to timeout"
+        },
+        "originalMatchesPreviousRelease": false
+      },
+      {
+        "id": "house",
+        "present": true,
+        "verified": true,
+        "model": {
+          "url": "/portfolio/house.glb",
+          "status": 200,
+          "bytes": 15124,
+          "sha256": "c286f401aabbe882ca13ecdd422a0615644ffa39487fa5d73192dd2ba8dd17bd",
+          "localBytes": 15124,
+          "localSha256": "c286f401aabbe882ca13ecdd422a0615644ffa39487fa5d73192dd2ba8dd17bd",
+          "baselineBytes": 15124,
+          "baselineSha256": "c286f401aabbe882ca13ecdd422a0615644ffa39487fa5d73192dd2ba8dd17bd",
+          "signatureValid": true,
+          "verified": true
+        },
+        "cover": {
+          "url": "/portfolio/house.webp",
+          "status": 200,
+          "bytes": 16342,
+          "sha256": "26547f498efccec92709c68c6829237b53f23de658a4582392f33b7d29d5d983",
+          "localBytes": 16342,
+          "localSha256": "26547f498efccec92709c68c6829237b53f23de658a4582392f33b7d29d5d983",
+          "baselineBytes": 16342,
+          "baselineSha256": null,
+          "signatureValid": true,
+          "verified": true
+        },
+        "original": {
+          "url": "/originals/house.max",
+          "status": 200,
+          "bytes": 737280,
+          "sha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+          "localBytes": 737280,
+          "localSha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+          "baselineBytes": 737280,
+          "baselineSha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+          "signatureValid": true,
+          "verified": true
+        },
+        "originalMatchesPreviousRelease": true
+      }
+    ],
+    "additionalPublicWorks": [
+      {
+        "id": "f0b4e73e-169e-41a1-bc3f-4505be3d802d",
+        "title": "ARC01 Mouse 3dsMax2026",
+        "createdAt": "2026-10-26T12:17:47.739Z",
+        "updatedAt": "2026-10-26T12:22:30.837Z",
+        "date": "2026-10-26T12:22:30.837Z",
+        "visibility": "public",
+        "builtIn": false,
+        "modelUrlPresent": false,
+        "coverUrlPresent": true,
+        "imagesCount": 1,
+        "handling": "Public metadata read only; preserve actual user contribution. No source URL recorded; no model preview inferred."
+      }
+    ],
+    "readOnly": true
+  },
+  "boundaries": [
+    "Original source accepts arbitrary extensions or no extension; names and bytes are preserved, storage uses a normalized hint or .bin.",
+    "Newly uploaded files remain limited to 40 MiB total per save; browser preview models remain GLB/OBJ/STL.",
+    "Cloud native conversion is not configured or deployed; no automatic MAX preview or fake queue is claimed.",
+    "User selected independent cloud processing but has no resources yet. APS engine/MAX2026 compatibility is a proposed validation route, not a verified provider selection.",
+    "Full production browser flow and three of twelve fresh asset downloads were not completed due to network transport errors; local successful results are not a substitute for those missing production checks.",
+    "The actual additional public ARC01 mouse contribution was preserved; it has a cover/image and no modelUrl, and is not any registered QA record.",
+    "One private QA create outcome remains uncertain; no broad search, deletion or ownership bypass was used."
+  ]
+}

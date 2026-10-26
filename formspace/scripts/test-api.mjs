@@ -309,7 +309,7 @@ const beforeValidation = keys();
 const invalidImage = createForm(); invalidImage.set('images', new File(['<script>unsafe</script>'], 'fake.png'));
 assert.equal((await postForm(invalidImage)).status, 400);
 const invalidVideo = createForm(); invalidVideo.set('video', new File(['not a video'], 'fake.mp4')); assert.equal((await postForm(invalidVideo)).status, 400);
-const unsupported = createForm(); unsupported.set('source', new File(['bad'], 'app.exe')); assert.equal((await postForm(unsupported)).status, 400);
+const unsupported = createForm(); unsupported.set('previewModel', new File(['bad'], 'app.exe')); assert.equal((await postForm(unsupported)).status, 400);
 const duplicate = createForm(); duplicate.append('source', new File(['native'], 'other.max')); assert.equal((await postForm(duplicate)).status, 400);
 const tooMany = createForm(); for (let i = 0; i < 8; i++) tooMany.append('images', new File([png], i + '.png')); assert.equal((await postForm(tooMany)).status, 400);
 const tooBig = createForm(); tooBig.set('images', new File([new Uint8Array(12 * 1024 * 1024 + 1)], 'large.png')); assert.equal((await postForm(tooBig)).status, 400);
@@ -318,6 +318,45 @@ assert.deepEqual(keys(), beforeValidation);
 assert.equal((await call('/api/files/%E0%A4%A')).status, 404);
 assert.equal((await handleApi(req('/api/works'), {}, builtins)).status, 503);
 checks += 10;
+
+// Original files are opaque archives: format/name does not determine acceptance,
+// execution, or a claim that a render/preview has been generated.
+const opaqueSources = [
+  ['scene.c4d', 'c4d'], ['场景.ma', 'ma'], ['world.usd', 'usd'], ['cache.abc', 'abc'],
+  ['volume.vdb', 'vdb'], ['模型.skp', 'skp'], ['custom.unknown-format', 'bin'],
+  ['没有扩展名', 'bin'], ['雪人🧊\'().c4d', 'c4d'], ['scene.奇怪扩展', 'bin'],
+  ['../../dangerous.html', 'bin'], ['..\\nested\\scene.php', 'bin'], ['scene.html', 'bin'],
+];
+const originalBytes = new Uint8Array([0, 255, 13, 10, 80, 75, 1, 2, 60, 115, 99, 114, 105, 112, 116, 62]);
+const htmlBytes = new TextEncoder().encode('<!doctype html><html><body><script>globalThis.__source_must_not_execute = true</script></body></html>');
+let htmlArchive;
+for (const [name, suffix] of opaqueSources) {
+  const expectedBytes = name === 'scene.html' ? htmlBytes : originalBytes;
+  const form = new FormData(); form.set('title', '任意原件归档'); form.set('direction', '三维'); form.set('source', new File([expectedBytes], name));
+  const archived = await read(await postForm(form), 201);
+  assert.match(archived.work.fileUrl, new RegExp('^/api/files/[a-f0-9-]{36}/[a-f0-9-]{36}/source\\.' + suffix + '$'));
+  if (!/[\\/]/.test(name)) assert.equal(archived.work.fileName, name);
+  assert.equal(archived.work.modelUrl, ''); assert.equal(archived.work.coverUrl, ''); assert.deepEqual(archived.work.images, []);
+  assert.equal((await call(archived.work.fileUrl)).status, 404);
+  const download = await call(archived.work.fileUrl, { headers: headers() });
+  assert.equal(download.status, 200); assert.equal(download.headers.get('Content-Type'), 'application/octet-stream'); assert.equal(download.headers.get('X-Content-Type-Options'), 'nosniff');
+  assert.match(download.headers.get('Content-Disposition'), /^attachment; filename\*=UTF-8''/);
+  assert.deepEqual(new Uint8Array(await download.arrayBuffer()), expectedBytes);
+  if (name === 'scene.html') htmlArchive = archived;
+  else assert.equal((await call('/api/works/' + archived.work.id, { method: 'DELETE', headers: headers() })).status, 200);
+}
+// Even when explicitly allowed for public download, HTML is an attachment, not
+// an executable same-origin document. Its original bytes are never rewritten.
+htmlArchive = await read(await save(htmlArchive.work, { allowSourceDownload: true }));
+htmlArchive = await read(await publish(htmlArchive.work, { displayVersionId: htmlArchive.work.versionId }));
+const publicHtmlDownload = await call(htmlArchive.work.fileUrl);
+assert.equal(publicHtmlDownload.status, 200); assert.equal(publicHtmlDownload.headers.get('Content-Type'), 'application/octet-stream'); assert.match(publicHtmlDownload.headers.get('Content-Disposition'), /^attachment/); assert.equal(publicHtmlDownload.headers.get('X-Content-Type-Options'), 'nosniff');
+assert.deepEqual(new Uint8Array(await publicHtmlDownload.arrayBuffer()), htmlBytes);
+assert.equal((await call('/api/works/' + htmlArchive.work.id, { method: 'DELETE', headers: headers() })).status, 200);
+const beforeOversizeSource = keys();
+const largeNative = new FormData(); largeNative.set('title', '大原件'); largeNative.set('direction', '三维'); largeNative.set('source', new File([new Uint8Array(40 * 1024 * 1024 + 1)], 'large.c4d'));
+assert.equal((await postForm(largeNative)).status, 413); assert.deepEqual(keys(), beforeOversizeSource);
+checks += opaqueSources.length * 11 + 8;
 
 // Record listing follows storage pagination, and private spaces never mix authors.
 const countBefore = bucket.lists;
