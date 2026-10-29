@@ -1,0 +1,70 @@
+{
+  "result": "passed",
+  "nativeMaxReopen": true,
+  "editableKeycaps": 104,
+  "liveTextNodes": 150,
+  "renderableParts": 395,
+  "nativeFbxBoundsMatch": true,
+  "webBoundsMetersYUp": [
+    0.3880000114440918,
+    0.019157200527843088,
+    0.12380000203847885
+  ],
+  "webMeshCount": 395,
+  "webExportSource": "evaluated 3ds Max scene",
+  "archive": "deliverables/Keyboard_Rapoo_3dsMax2026_Package.zip",
+  "archiveBytes": 14605779,
+  "archiveSha256": "0f0617d6b60443e41ae53d48db6cbab64b465bad2be55c2e88813e7886be5480",
+  "files": [
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Keyboard_Hero.png",
+      "bytes": 1765039,
+      "sha256": "0fb2b6acd5628b8a868cf9c023c2c90c945c487bacbd06f9522b4dcd4270dc6b"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Keyboard_Rapoo.fbx",
+      "bytes": 4305360,
+      "sha256": "3f05f49e6fba922fdc1a9418cb6eddee43d702a9190937abecb3fef3653bd1c5"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Keyboard_Rapoo.glb",
+      "bytes": 5396244,
+      "sha256": "3fa385f7107fd6f8695a182b13f8e68e1174fb536a1a23c8ca76fa30dfdf7b5f"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Keyboard_Rapoo_3dsMax2026.max",
+      "bytes": 6729728,
+      "sha256": "34cb7137acd0af0a9f6bcf8d25c67d28e5bc4098c726073aca17efd5eab50989"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Keyboard_Top.png",
+      "bytes": 2131414,
+      "sha256": "facee9e587a5e9d2641bb773fe7cff1e873464a0e680c3ec0a288d69738707b6"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/Reference.png",
+      "bytes": 6043010,
+      "sha256": "26ef3c1c6eee5b8527225d85289b16349b0c2bc9b896a3b556ee2c9988549dc4"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/verification.txt",
+      "bytes": 501,
+      "sha256": "b6760bece8f385e66ed22535da7206adcd809238a9bda25c770600766f24f813"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/web-export.json",
+      "bytes": 210,
+      "sha256": "733257c418abc472af34b4ea309200d496f8bde348cc175ce348d31bf243dae6"
+    },
+    {
+      "path": "deliverables/Keyboard_Rapoo_20261029/使用说明.md",
+      "bytes": 2645,
+      "sha256": "ddc21bc3d374c0b29c72d98d0d4703de4f1e2b5467a6ec2a955920b8e2c06d3b"
+    }
+  ],
+  "limitations": [
+    "Photo only: dimensions and unseen underside are inferred.",
+    "Some lettering/icons and key profiles are approximated.",
+    "No general cloud MAX conversion service was installed."
+  ]
+}

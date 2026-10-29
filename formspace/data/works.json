@@ -106,5 +106,26 @@
     "dimensions": "151.9 × 152.6 × 131.2 cm",
     "triangles": 200,
     "materialNote": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。"
+  },
+  {
+    "id": "rapoo-keyboard",
+    "title": "RAPOO · 104 键键盘",
+    "subtitle": "从一张照片，重建指尖的秩序。",
+    "category": "产品设计",
+    "description": "根据提供的键盘正面照片，在 3ds Max 2026 中重建的 104 键三维作品。键帽、文字、外壳和底部组件分别保留，原生 MAX 可继续修改。网页模型从同一场景的实际网格导出，支持旋转、缩放和线框浏览。实物尺寸未提供，比例、底部结构和部分字标为视觉近似。",
+    "tags": ["键盘", "产品建模", "3ds Max 2026"],
+    "date": "2026-10-29",
+    "fileName": "Keyboard_Rapoo_3dsMax2026.max",
+    "fileSize": 6729728,
+    "fileUrl": "/originals/Keyboard_Rapoo_3dsMax2026.max",
+    "modelUrl": "/portfolio/keyboard-rapoo.glb",
+    "coverUrl": "/portfolio/keyboard-rapoo.png",
+    "images": ["/portfolio/keyboard-rapoo.png", "/portfolio/keyboard-rapoo-top.png"],
+    "format": "MAX",
+    "builtIn": true,
+    "objects": 395,
+    "dimensions": "38.8 × 12.38 × 1.92 cm（比例重建）",
+    "triangles": 148160,
+    "materialNote": "Max 原生可编辑几何与文字；网页材质为基础色和粗糙度近似。尺寸、底部和部分字标按参考照片作视觉重建。"
   }
 ]

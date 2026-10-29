@@ -51,6 +51,8 @@ pwsh -File tools/project-sync.ps1 -Summary "本轮任务" -Kind maintenance -Det
 
 ## 当前交付与历史包
 
+2026-10-29 新增参考键盘原生建模：`deliverables/Keyboard_Rapoo_3dsMax2026_Package.zip`，内含可直接在 3ds Max 2026 中文版打开的 MAX、FBX、GLB、两张真实渲染、参考图和说明。104 个键帽独立，150 个文字节点可编辑；比例及隐藏底部按照片推定。网页详情：https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/rapoo-keyboard 。模型与站点回执为 `docs/verification/keyboard-model-20261029.json`、`keyboard-site-20261029.json`，源管线见 `assets/keyboard-rapoo-reference/`。
+
 本轮实现与验收见 `docs/verification/changxu-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。历史 WorkBuddy ZIP 保持为 2026-10-25 旧版快照，不含后续文心及长序功能；接手新版以当前 `main` 为准。源码仓库不含远端用户作品数据库。
 
 浏览器空间与旧数据保留边界见 `wiki_memory/决策/ADR-006-免账号浏览器创作空间.md`。
