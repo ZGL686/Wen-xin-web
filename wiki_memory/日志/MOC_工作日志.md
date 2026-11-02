@@ -18,6 +18,8 @@ supersedes: null
 | 2026-11-02 | discussion | - | archived | desktop-browser-primary-acceptance | [[日志/2026-11-02-确认电脑网页端验收重点.md|确认电脑网页端验收重点]] |
 | 2026-11-02 | feature | - | archived | desktop-browser-and-mouse-preview-delivery | [[日志/2026-11-02-电脑网页端验收与鼠标预览转换.md|电脑网页端验收与鼠标预览转换]] |
 | 2026-11-02 | feature | - | archived | interactive-multiformat-model-viewer | [[日志/2026-11-02-多格式三维查看器集成与发布.md|多格式三维查看器集成与发布]] |
+| 2026-11-02 | feature | - | archived | owner-delete-and-creation-form-redesign | [[日志/2026-11-02-作品删除交互与创作页精简.md|作品删除交互与创作页精简]] |
+| 2026-11-02 | feature | 上线作品删除入口与精简创作表单 | archived | session-20261102-214013-760-0c9f7170 | [[日志/2026-11-02-214013-760-feature-0c9f7170.md|2026-11-02｜上线作品删除入口与精简创作表单]] |
 | 2026-11-02 | discussion | 核实云端MAX转换开通流程与费用预算 | archived | session-20261102-163321-887-f9fd20ca | [[日志/2026-11-02-163321-887-discussion-f9fd20ca.md|2026-11-02｜核实云端MAX转换开通流程与费用预算]] |
 | 2026-11-02 | discussion | 解释新上传MAX的自动云转换边界与注意事项 | archived | session-20261102-150004-120-e9c5df1c | [[日志/2026-11-02-150004-120-discussion-e9c5df1c.md|2026-11-02｜解释新上传MAX的自动云转换边界与注意事项]] |
 | 2026-11-02 | feature | 电脑网页端验收与已有鼠标真实预览上线 | archived | session-20261102-120953-654-248ec0bb | [[日志/2026-11-02-120953-654-feature-248ec0bb.md|2026-11-02｜电脑网页端验收与已有鼠标真实预览上线]] |
