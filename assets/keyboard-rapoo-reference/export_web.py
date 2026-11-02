@@ -2,13 +2,15 @@
 No external modeler or procedural replacement of the saved native scene.
 """
 from pathlib import Path
-import json, struct, math
+import json, struct, math, sys
 import numpy as np
 
 ROOT=Path(__file__).resolve().parent
 PROJECT=ROOT.parents[1]
 OUT=PROJECT/'deliverables'/'Keyboard_Rapoo_20261029'
-source=PROJECT/'formspace/outputs/keyboard/native-meshes.json'
+source=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else PROJECT/'formspace/outputs/keyboard/native-meshes.json'
+target=Path(sys.argv[2]).resolve() if len(sys.argv)>2 else OUT/'Keyboard_Rapoo.glb'
+target.parent.mkdir(parents=True,exist_ok=True)
 data=json.loads(source.read_text(encoding='utf-8-sig'))
 g={'asset':{'version':'2.0','generator':'3ds Max 2026 evaluated meshes / Changxu native export'},'scene':0,'scenes':[{'nodes':[]}],'nodes':[],'meshes':[],'materials':[],'accessors':[],'bufferViews':[],'buffers':[]}
 binary=bytearray(); mats={}; total_triangles=0
@@ -41,7 +43,9 @@ for o in data['objects']:
  packed,indices=np.unique(np.concatenate([positions,normals],axis=1),axis=0,return_inverse=True)
  positions=packed[:,:3].copy();normals=packed[:,3:].copy();indices=indices.astype('<u4')
  if o['material'] not in mats:
-  mats[o['material']]=len(g['materials']);g['materials'].append({'name':o['material'],'pbrMetallicRoughness':{'baseColorFactor':[linear(c) for c in o['color']]+[1],'metallicFactor':.5 if 'Steel' in o['material'] else 0,'roughnessFactor':.48 if 'Keycaps' in o['material'] else .64}})
+  material={'name':o['material'],'pbrMetallicRoughness':{'baseColorFactor':[linear(c) for c in o['color']]+[1],'metallicFactor':.5 if any(label in o['material'].lower() for label in ['steel','metal','titanium']) else 0,'roughnessFactor':max(.18,min(.85,1-o['gloss']/100)) if 'gloss' in o else .48 if 'Keycaps' in o['material'] else .64}}
+  if o.get('emission',0)>0:material['emissiveFactor']=[linear(c)*o['emission'] for c in o['color']]
+  mats[o['material']]=len(g['materials']);g['materials'].append(material)
  primitive={'attributes':{'POSITION':buffer(positions,5126,'VEC3',34962,True),'NORMAL':buffer(normals,5126,'VEC3',34962)},'indices':buffer(indices,5125,'SCALAR',34963),'material':mats[o['material']]}
  mesh=len(g['meshes']);g['meshes'].append({'name':o['name'],'primitives':[primitive]})
  node=len(g['nodes']);g['nodes'].append({'name':o['name'],'mesh':mesh});g['scenes'][0]['nodes'].append(node)
@@ -51,7 +55,7 @@ g['buffers']=[{'byteLength':len(binary)}]
 j=json.dumps(g,separators=(',',':'),ensure_ascii=False).encode('utf-8')
 while len(j)%4:j+=b' '
 result=struct.pack('<III',0x46546C67,2,12+8+len(j)+8+len(binary))+struct.pack('<II',len(j),0x4E4F534A)+j+struct.pack('<II',len(binary),0x004E4942)+binary
-target=OUT/'Keyboard_Rapoo.glb';target.write_bytes(result)
+target.write_bytes(result)
 report={'source':'3ds Max 2026 evaluated native meshes','objects':len(g['meshes']),'triangles':total_triangles,'materials':len(mats),'glbBytes':len(result),'externalResources':0,'units':'meters','axes':'Y-up'}
-(OUT/'web-export.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+(target.with_suffix('.verification.json') if len(sys.argv)>2 else OUT/'web-export.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(json.dumps(report))

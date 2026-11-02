@@ -1,0 +1,19 @@
+{
+  "source": "3ds Max 2026 evaluated native meshes",
+  "objects": 82,
+  "triangles": 131144,
+  "materials": 9,
+  "glbBytes": 3464316,
+  "externalResources": 0,
+  "units": "meters",
+  "axes": "Y-up",
+  "sourceSha256": "e9918e40d1abb39338f38e70774681983e97ecdfe4320e7e9d6d24c021602bbb",
+  "modelSha256": "7c4b3b7eb558b4869e0bfb5d7b2183dc01eb71e4427daa7becf327d2943670eb",
+  "dimensionsMetersYUp": [
+    0.0748995989561081,
+    0.04209979830193333,
+    0.12769000232219696
+  ],
+  "nativeMaxReadback": "passed",
+  "sourceUnchanged": true
+}

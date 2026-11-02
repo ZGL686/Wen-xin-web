@@ -1,11 +1,12 @@
 import { DIRECTIONS, DIRECT_MODEL_EXTENSIONS, MODEL_PREVIEW_EXTENSIONS } from '../shared/portfolio.ts';
 import type { Direction, Profile, Snapshot, User, Version, Work, WorkResponse } from '../shared/portfolio.ts';
+import { DERIVED_PREVIEWS } from '../data/derived-previews.ts';
 
 type LegacyWork = Record<string, any>;
 type Identity = { id: string; name: string };
 type BrowserSession = { tokenHash: string; ownerId: string; createdAt: number; expiresAt: number };
 type VerifiedSession = { user: Identity; record: BrowserSession; etag: string; token: string };
-type Env = { BUCKET?: R2Bucket };
+type Env = { BUCKET?: R2Bucket; readDerivedModel?: (url: string) => Promise<Uint8Array<ArrayBuffer> | null> };
 type StoredProfile = Profile & { ownerId: string };
 type StoredVersion = Snapshot & { id: string; number: number; savedAt: string; storageKeys: string[] };
 type RecordMeta = {
@@ -15,7 +16,7 @@ type RecordMeta = {
   publicVersionIds: string[]; importantVersionIds: string[];
 };
 type Loaded = { meta: RecordMeta; etag: string; legacyVersion?: StoredVersion; builtIn?: boolean };
-type Context = { bucket: R2Bucket; user: Identity | null; session: VerifiedSession | null; builtins: LegacyWork[]; profiles: Map<string, Profile>; versions: Map<string, StoredVersion> };
+type Context = { bucket: R2Bucket; readDerivedModel?: Env['readDerivedModel']; user: Identity | null; session: VerifiedSession | null; builtins: LegacyWork[]; profiles: Map<string, Profile>; versions: Map<string, StoredVersion> };
 type Input = { get: (key: string) => unknown; has: (key: string) => boolean; files: (key: string) => File[] };
 
 const MAX_TOTAL = 40 * 1024 * 1024;
@@ -255,8 +256,13 @@ function owner(context: Context, loaded: Loaded) { return !loaded.builtIn && !!c
 function publicIds(loaded: Loaded) {
   return loaded.meta.displayVersionId ? loaded.meta.versionIds.filter((id) => id === loaded.meta.displayVersionId || loaded.meta.publicVersionIds.includes(id)) : [];
 }
+function withDerivedModel(version: StoredVersion, workId: string): StoredVersion {
+  if (version.modelUrl) return version;
+  const derived = DERIVED_PREVIEWS.find(item => item.workId === workId && item.versionIds.includes(version.id) && item.sourceUrl === version.fileUrl && item.sourceName === version.fileName && item.sourceBytes === version.fileSize);
+  return derived ? { ...version, modelUrl: derived.modelUrl } : version;
+}
 function snapshotFor(version: StoredVersion, loaded: Loaded, isOwner: boolean): Snapshot {
-  const { id: _id, number: _number, savedAt: _savedAt, storageKeys: _keys, ...snapshot } = version;
+  const { id: _id, number: _number, savedAt: _savedAt, storageKeys: _keys, ...snapshot } = withDerivedModel(version, loaded.meta.id);
   if (isOwner) return snapshot;
   const result = { ...snapshot };
   if (!result.allowSourceDownload) { result.fileUrl = ''; result.fileName = ''; result.fileSize = 0; }
@@ -427,7 +433,7 @@ async function saveVersion(context: Context, input: Input, loaded?: Loaded): Pro
     revision(input, 'baseRevision', loaded.meta.revision);
     if (loaded.meta.versionIds.length >= MAX_VERSIONS) return fail(400, '这件作品已达到 500 个保存版本，请联系维护者扩容。');
   }
-  const previous = loaded ? await loadVersion(context, loaded, loaded.meta.latestVersionId) : undefined;
+  const previous = loaded ? withDerivedModel(await loadVersion(context, loaded, loaded.meta.latestVersionId), loaded.meta.id) : undefined;
   const prepared = await prepareSnapshot(input, previous);
   const profile = await ensureProfile(context, user);
   const id = loaded?.meta.id || crypto.randomUUID();
@@ -515,7 +521,8 @@ async function updatePublication(context: Context, loaded: Loaded, input: Input)
   return { meta, etag: saved.etag } satisfies Loaded;
 }
 
-function authorizedUrls(version: StoredVersion) {
+function authorizedUrls(stored: StoredVersion, workId: string) {
+  const version = withDerivedModel(stored, workId);
   return [version.modelUrl, version.coverUrl, ...version.images, version.videoUrl, version.demoVideoUrl, version.audioUrl, ...(version.allowSourceDownload ? [version.fileUrl] : [])].filter(Boolean);
 }
 async function fileResponse(context: Context, request: Request, path: string) {
@@ -528,11 +535,17 @@ async function fileResponse(context: Context, request: Request, path: string) {
   if (!owner(context, loaded)) {
     let authorized = false;
     const url = '/api/files/' + key;
-    for (const id of publicIds(loaded)) { if (authorizedUrls(await loadVersion(context, loaded, id)).includes(url)) { authorized = true; break; } }
+    for (const id of publicIds(loaded)) { if (authorizedUrls(await loadVersion(context, loaded, id), loaded.meta.id).includes(url)) { authorized = true; break; } }
     if (!authorized) return fail(404, '文件不存在或尚未公开。');
   }
   const storageKey = 'files/' + key;
-  const head = await context.bucket.head(storageKey);
+  const derived = DERIVED_PREVIEWS.find(item => item.modelUrl === '/api/files/' + key);
+  let derivedBytes: Uint8Array<ArrayBuffer> | undefined;
+  if (derived) {
+    derivedBytes = await context.readDerivedModel?.(derived.modelUrl) || undefined;
+    if (!derivedBytes) return fail(503, '三维预览资源暂不可用。');
+  }
+  const head = derivedBytes ? { size: derivedBytes.byteLength, httpEtag: `"${derived!.modelSha256}"`, customMetadata: {} as Record<string, string> } : await context.bucket.head(storageKey);
   if (!head) return fail(404, '文件不存在。');
   const isSource = /\/source\./.test(key);
   const headers = new Headers({ 'Content-Type': isSource ? 'application/octet-stream' : MIME[ext(key)] || 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'private, no-store', Vary: 'Cookie', 'Accept-Ranges': 'bytes', 'Content-Length': String(head.size), ETag: head.httpEtag });
@@ -555,7 +568,7 @@ async function fileResponse(context: Context, request: Request, path: string) {
     if (!valid) { headers.set('Content-Range', `bytes */${head.size}`); headers.set('Content-Length', '0'); return new Response(null, { status: 416, headers }); }
     partial = true; headers.set('Content-Range', `bytes ${offset}-${offset + length - 1}/${head.size}`); headers.set('Content-Length', String(length));
   }
-  const object = await context.bucket.get(storageKey, partial ? { range: { offset, length } } : undefined);
+  const object = derivedBytes ? { body: derivedBytes.slice(offset, offset + length) } : await context.bucket.get(storageKey, partial ? { range: { offset, length } } : undefined);
   if (!object) return fail(404, '文件不存在。');
   return new Response(object.body, { status: partial ? 206 : 200, headers });
 }
@@ -565,7 +578,7 @@ export async function handleApi(request: Request, env: Env, builtins: LegacyWork
   try {
     if (!env.BUCKET) return fail(503, '作品存储暂时不可用，请稍后重试。');
     const session = await identity(request, env.BUCKET), user = session?.user || null;
-    const context: Context = { bucket: env.BUCKET, user, session, builtins, profiles: new Map(), versions: new Map() };
+    const context: Context = { bucket: env.BUCKET, readDerivedModel: env.readDerivedModel, user, session, builtins, profiles: new Map(), versions: new Map() };
     if (path === '/api/session' && request.method === 'POST') return await bootstrapSession(context, request, url);
     if (path.startsWith('/api/files/')) return await fileResponse(context, request, path);
     if (path === '/api/me' && request.method === 'GET') { const current = await responseUser(context); return json({ user: current, profile: current?.profile || null }); }

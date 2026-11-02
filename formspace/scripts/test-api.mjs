@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { handleApi } from '../worker/api.ts';
+import { DERIVED_PREVIEWS } from '../data/derived-previews.ts';
+import { isProtectedPreviewPath } from '../worker/protected-assets.ts';
 
 class MemoryBucket {
   data = new Map();
@@ -478,4 +480,42 @@ bundleForm.set('previewModel', new File(['PK-bundle-bytes'], 'scene.zip'));
 const bundleWork = (await read(await postForm(bundleForm), 201)).work;
 assert(bundleWork.modelUrl.endsWith('.zip')); assert.equal((await call(bundleWork.modelUrl)).status, 404);
 assert.equal((await call('/api/works/' + bundleWork.id, { method: 'DELETE', headers: headers() })).status, 200); checks += 3;
-console.log(`PASS: ${checks} meaningful checks — HttpOnly cookie workspaces, ignored forged identity headers, CSRF, expiry, independent profiles, private saves, curated publication, immutable versions/finals, file authorization, media ranges, retained unclaimed account data, validation, pagination, CAS conflicts, rollback and multi-format preview authorization.`);
+// A verified native derivative does not mutate source snapshots or bypass publication.
+const derivative = DERIVED_PREVIEWS[0], derivativeId = derivative.workId;
+const derivativeOwner = (await get('/api/me', 'creator-1')).user.id;
+const derivativeVersion = (versionId, number) => ({ id: versionId, number, savedAt: '2026-10-26T00:00:00.000Z', storageKeys: [], title: 'Existing mouse', direction: '三维', category: '三维', tags: [], subtitle: '', description: '', contentText: '', process: '', difficulties: '', solutions: '', reflection: '', status: 'final', fileName: derivative.sourceName, fileSize: derivative.sourceBytes, fileUrl: derivative.sourceUrl, format: 'MAX', modelUrl: '', coverUrl: '/unchanged-cover.png', images: ['/unchanged-cover.png'], videoUrl: '', audioUrl: '', demoVideoUrl: '', interactiveUrl: '', allowSourceDownload: false });
+const derivativeMeta = { schema: 2, id: derivativeId, ownerId: derivativeOwner, profileSlug: 'derived-mouse-fixture', createdAt: '2026-10-26T00:00:00.000Z', updatedAt: '2026-10-26T00:00:00.000Z', revision: 1, versionIds: derivative.versionIds, latestVersionId: derivative.versionIds[1], displayVersionId: derivative.versionIds[1], publicVersionIds: [], importantVersionIds: [] };
+await bucket.put('records/' + derivativeId + '.json', JSON.stringify(derivativeMeta));
+for (const [index, vid] of derivative.versionIds.entries()) await bucket.put(`versions/${derivativeId}/${vid}.json`, JSON.stringify(derivativeVersion(vid, index + 1)));
+const snapshotKey = `versions/${derivativeId}/${derivative.versionIds[1]}.json`, savedSnapshot = new TextDecoder().decode(bucket.data.get(snapshotKey).bytes), beforeReadKeys = keys();
+let assetReads = 0;
+env.readDerivedModel = async url => { assert.equal(url, derivative.modelUrl); assetReads++; return new TextEncoder().encode('glTF-verified-native-preview'); };
+let derivedPublic = await get('/api/works/' + derivativeId);
+assert.equal(derivedPublic.work.modelUrl, derivative.modelUrl); assert.equal(derivedPublic.work.coverUrl, '/unchanged-cover.png'); assert.equal(derivedPublic.work.isOwner, false);
+assert.equal(new TextDecoder().decode(bucket.data.get(snapshotKey).bytes), savedSnapshot); assert.deepEqual(keys(), beforeReadKeys);
+let previewResponse = await call(derivative.modelUrl);
+assert.equal(previewResponse.status, 200); assert.equal(previewResponse.headers.get('Cache-Control'), 'private, no-store'); assert.equal(previewResponse.headers.get('Vary'), 'Cookie'); assert.equal((await previewResponse.text()).startsWith('glTF'), true);
+assert.equal((await call(derivative.modelUrl, { method: 'HEAD' })).status, 200);
+previewResponse = await call(derivative.modelUrl, { headers: { Range: 'bytes=0-3' } }); assert.equal(previewResponse.status, 206); assert.equal(await previewResponse.text(), 'glTF'); checks += 12;
+previewResponse = await call(derivative.modelUrl, { headers: { Range: 'bytes=-7' } }); assert.equal(previewResponse.status, 206); assert.equal(await previewResponse.text(), 'preview');
+assert.equal((await call(derivative.modelUrl, { headers: { Range: 'bytes=999-1000' } })).status, 416);
+assert.equal((await call(derivative.modelUrl, { headers: { Range: 'bytes=0-3', 'If-Range': '"old-model"' } })).status, 200); checks += 4;
+let derivedOwnerWork = (await get('/api/works/' + derivativeId, 'creator-1')).work;
+await read(await publish(derivedOwnerWork, { displayVersionId: null, publicVersionIds: [] }));
+const readsAfterWithdrawal = assetReads;
+assert.equal((await call(derivative.modelUrl)).status, 404); assert.equal((await call(derivative.modelUrl, { headers: headers('creator-2') })).status, 404); assert.equal(assetReads, readsAfterWithdrawal);
+assert.equal((await call(derivative.modelUrl, { headers: headers() })).status, 200); checks += 4;
+derivedOwnerWork = (await get('/api/works/' + derivativeId, 'creator-1')).work;
+derivedOwnerWork = (await read(await save(derivedOwnerWork, { description: 'Continue without reupload' }))).work;
+assert.equal(derivedOwnerWork.modelUrl, derivative.modelUrl);
+derivedOwnerWork = (await read(await save(derivedOwnerWork, { clearModel: true }))).work;
+assert.equal(derivedOwnerWork.modelUrl, '');
+await read(await publish(derivedOwnerWork, { displayVersionId: derivedOwnerWork.versionId })); assert.equal((await call(derivative.modelUrl)).status, 404); checks += 3;
+await bucket.put('records/' + derivativeId + '.json', JSON.stringify(derivativeMeta));
+await bucket.put(snapshotKey, JSON.stringify({ ...derivativeVersion(derivative.versionIds[1], 2), fileUrl: '/different-source.max' }));
+assert.equal((await get('/api/works/' + derivativeId)).work.modelUrl, ''); assert.equal((await call(derivative.modelUrl)).status, 404);
+await bucket.put(snapshotKey, JSON.stringify({ ...derivativeVersion(derivative.versionIds[1], 2), modelUrl: '/explicit-author-preview.glb' }));
+assert.equal((await get('/api/works/' + derivativeId)).work.modelUrl, '/explicit-author-preview.glb'); assert.equal((await call(derivative.modelUrl)).status, 404); checks += 4;
+for (const alias of ['/protected-previews/arc01-mouse.glb', '/%70rotected-previews/arc01-mouse.glb', '/%2570rotected-previews/arc01-mouse.glb', '/x/../protected-previews/arc01-mouse.glb', '//protected-previews/arc01-mouse.glb', '/%2fprotected-previews/arc01-mouse.glb', '/%5cprotected-previews%5carc01-mouse.glb']) { assert.equal(isProtectedPreviewPath(alias), true); checks++; }
+assert.equal(isProtectedPreviewPath('/portfolio/lamp.glb'), false); checks++;
+console.log(`PASS: ${checks} meaningful checks — browser spaces, immutable versions, publication, file authorization/ranges, model formats and protected native derivatives.`);

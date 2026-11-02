@@ -74,6 +74,14 @@ GLB、glTF、OBJ、STL、FBX、STEP/STP 可直接网页预览。glTF 的外置 .
 
 独立云端转换服务尚未接通，原始 MAX/BLEND/影视工程不会自动在 Worker 生成图片或动效。“保存成功”表示作品内容与原件已经保存，不能表示全部格式已解析或预览已经生成，也没有虚构的转换队列。外部 HTTPS 体验能否嵌入仍受目标网站和浏览器策略限制，上传 ZIP 不代表可运行其中代码。
 
+### 已有鼠标的网页预览
+
+ARC01 鼠标通过本机 3ds Max 2026 只读导出真实求值网格，再转换成 GLB；原 MAX 不改写。`data/derived-previews.ts` 将已核对哈希的结果关联到原有作品和两个源版本，读取时补充预览地址，不改写作者、封面、公开指针或历史快照。后续普通保存沿用预览，替换原件或明确清除预览仍按原规则处理。
+
+预览字节位于 `data/models/arc01-mouse.glb`，仅由服务端 Worker 内联，按需解码并经过 `/api/files/` 的作者/公开节点权限检查读取，不属于公开静态资源。禁止复制到 public 或客户端代码；发布前执行 `node scripts/test-derived-build.mjs` 确认无静态副本。当前托管环境会优先提供已有静态文件，不能仅靠 Worker 路径拦截保护它们。此单件离线转换不代表通用 MAX 云转换已接入。转换依据见根仓库 `docs/verification/mouse-conversion-20261102.json`。
+
+当前主要验收目标为电脑浏览器。`node scripts/test-desktop.mjs [网址]` 检查三种桌面窗口及鼠标/键盘、复位和全屏；`node scripts/test-mouse-preview.mjs [网址]` 检查鼠标真实交互与资源授权。生产模式只读，不写入或删除作品。
+
 ## API 合同
 
 类型和完整字段注释见 `shared/portfolio.ts`。

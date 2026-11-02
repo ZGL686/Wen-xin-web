@@ -1,0 +1,127 @@
+{
+  "result": "passed",
+  "date": "2026-11-02",
+  "audience": "public",
+  "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+  "projectId": "appgprj_6addc2985e6c8191b7e6b6a746e0911c",
+  "version": 8,
+  "sourceCommit": "67faab52867350a39d441211ddf37c6392d6c184",
+  "savedVersionId": "appgprj_6addc2985e6c8191b7e6b6a746e0911c~appgver_653313bbc22c8191bf85ee28858bdea4",
+  "deploymentId": "appgdep_6ae80b8d7b9c8191b66da918ccee2127",
+  "deploymentStatus": "succeeded",
+  "apiChecks": 542,
+  "typecheck": "passed",
+  "releaseBuild": "passed",
+  "privateBuild": {
+    "result": "passed",
+    "staticModelCopies": 0,
+    "workerGzipBytes": 1988679
+  },
+  "assetIntegrity": "passed",
+  "originalBaselineCount": 4,
+  "desktop": {
+    "result": "passed",
+    "origin": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "browser": "Microsoft Edge",
+    "version": "156.0.4314.58",
+    "viewportSizes": [
+      "1280x720",
+      "1366x768",
+      "1920x1080"
+    ],
+    "checks": [
+      "homepage rotation button reflects manual camera control",
+      "homepage reset does not request model again",
+      "homepage reset retains the same WebGL canvas",
+      "desktop arrow key rotates homepage model",
+      "desktop plus key zooms homepage model",
+      "keyboard reset keeps loaded geometry",
+      "desktop work-card preview fills fullscreen viewport",
+      "desktop card preview stops cleanly",
+      "desktop right mouse drag pans detail model",
+      "desktop mouse wheel zooms detail model",
+      "desktop double click focuses model detail",
+      "desktop wireframe control works",
+      "1280x720 / has no horizontal overflow",
+      "1280x720 /works has no horizontal overflow",
+      "1280x720 /work/rapoo-keyboard has no horizontal overflow",
+      "1280x720 /upload has no horizontal overflow",
+      "1366x768 / has no horizontal overflow",
+      "1366x768 /works has no horizontal overflow",
+      "1366x768 /work/rapoo-keyboard has no horizontal overflow",
+      "1366x768 /upload has no horizontal overflow",
+      "1920x1080 / has no horizontal overflow",
+      "1920x1080 /works has no horizontal overflow",
+      "1920x1080 /work/rapoo-keyboard has no horizontal overflow",
+      "1920x1080 /upload has no horizontal overflow",
+      "existing system works remain available",
+      "no desktop page runtime errors",
+      "desktop preview never starts file download"
+    ],
+    "errors": [],
+    "downloads": [],
+    "workWrites": 0,
+    "publicCount": 6
+  },
+  "mouse": {
+    "result": "passed",
+    "origin": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "mode": "live authorized existing work",
+    "checks": [
+      "mouse original reference retained",
+      "same existing creator work retained",
+      "mouse snapshot exposes verified derived preview",
+      "real converted mouse rendered by WebGL",
+      "mouse model rotates with desktop drag",
+      "no raw model exposed at /protected-previews/arc01-mouse.glb",
+      "no raw model exposed at /%70rotected-previews/arc01-mouse.glb",
+      "no raw model exposed at /%2570rotected-previews/arc01-mouse.glb",
+      "no raw model exposed at /x/%2e%2e/protected-previews/arc01-mouse.glb",
+      "no raw model exposed at /data/models/arc01-mouse.glb",
+      "authorized mouse GLB bytes match native conversion",
+      "preview response stays private and uncached",
+      "authorized model HEAD reports correct length",
+      "authorized model supports byte-range preview",
+      "no mouse page runtime errors",
+      "mouse preview does not trigger file download"
+    ],
+    "modelSha256": "7c4b3b7eb558b4869e0bfb5d7b2183dc01eb71e4427daa7becf327d2943670eb",
+    "sourceSha256": "e9918e40d1abb39338f38e70774681983e97ecdfe4320e7e9d6d24c021602bbb",
+    "workWrites": 0
+  },
+  "nativeConversion": {
+    "source": "3ds Max 2026 evaluated native meshes",
+    "objects": 82,
+    "triangles": 131144,
+    "materials": 9,
+    "glbBytes": 3464316,
+    "externalResources": 0,
+    "units": "meters",
+    "axes": "Y-up",
+    "sourceSha256": "e9918e40d1abb39338f38e70774681983e97ecdfe4320e7e9d6d24c021602bbb",
+    "modelSha256": "7c4b3b7eb558b4869e0bfb5d7b2183dc01eb71e4427daa7becf327d2943670eb",
+    "dimensionsMetersYUp": [
+      0.0748995989561081,
+      0.04209979830193333,
+      0.12769000232219696
+    ],
+    "nativeMaxReadback": "passed",
+    "sourceUnchanged": true
+  },
+  "retained": {
+    "publicWorks": 6,
+    "mouseCover": "unchanged",
+    "mouseVisibleNodes": 2,
+    "workWrites": 0,
+    "sourceUnchanged": true
+  },
+  "repairedDuringQA": [
+    "Homepage reset reloaded model and manual camera state did not update the rotation button.",
+    "Initial version 7 static derivative bypassed the Worker guard on this host; final version 8 contains the model only inside the server Worker, with no public static or client bundle copy."
+  ],
+  "limits": [
+    "Existing mouse converted offline using 3ds Max 2026; no universal MAX cloud conversion service.",
+    "Desktop Microsoft Edge automated WebGL verification; no other installed browsers or physical GPU performance matrix.",
+    "No huge assembly stress test; no production R2 work or version writes."
+  ]
+}
