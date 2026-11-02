@@ -1,6 +1,6 @@
 ---
 status: proposed
-updated: 2026-10-26
+updated: 2026-11-02
 topic: independent-cloud-3d-conversion
 ---
 
@@ -14,11 +14,11 @@ topic: independent-cloud-3d-conversion
 
 ## 当前项目边界
 
-- 前端仍为 React + Vite + TypeScript，Three.js 提供网页模型浏览；网页预览当前支持 GLB、单文件 OBJ 和 STL。
+- 前端仍为 React + Vite + TypeScript，Three.js 提供网页模型浏览；网页预览当前支持 GLB/glTF/OBJ/STL/FBX/STEP/STP，以及一份主模型和配套资源的预览 ZIP。
 - 后端仍为 Cloudflare Worker，作品、版本、附件与浏览器空间凭据保存在 R2。Worker 负责 HTTP、鉴权和存储，不承担原生 3ds Max 程序的运行。
 - 本轮源码已允许原始工程不限后缀归档，原文件保留原名并作为附件下载；这不表示已经具备解析、转换、缩略图生成或网页运行能力。线上状态以发布及验收回执为准。
 - 每次新增文件合计仍限制为 **40 MiB**，图片单张最多 12 MiB。此方案不暗中放大上传限制；大工程及贴图包的传输策略需要另行实现、验证。
-- 已有四件作品的 GLB 与封面来自离线真实场景转换；专业工程不会因为保存成功就自动进入云队列。现有上传进度仅表示浏览器上传，不是转换进度。
+- 已有四件作品、键盘和鼠标的网页模型来自离线真实场景转换；专业工程不会因为保存成功就自动进入云队列。现有上传进度仅表示浏览器上传，不是转换进度。
 - 新作品和新版本默认私密，作者选择的公开展示版与公开历史节点保持独立。云转换不能替作者做公开选择。
 
 ## 推荐路径：先验证 APS 托管引擎
@@ -27,7 +27,7 @@ APS 提供以 3ds Max Batch 执行 MAXScript、Python 和插件的托管能力�
 
 ### 第一步：账号、凭据和引擎实查
 
-1. 由项目所有者准备 APS 账号及应用，确认 Automation 服务是否对该账号开放、适用的计费与使用资格、支持的区域和配额。免费额度或试用资格必须以账号实际显示及当前官方条件核实，不将其作为项目永久免费运行的前提。
+1. 由项目所有者准备 APS 账号，按真实国家/地区选择 Free 或 Paid offering 并分配给团队，在 Autodesk Account 的 Products and Services > Hubs 创建 APS Developer Hub，再在其中登记应用并启用 Automation API。确认服务是否对该账号开放、用途、付费方式和配额。当前 Free 为按月限额的验证方案，已替代旧的 90 天 APS 试用；免费开通仍要求付款方式验证身份，不能据此推断已购买付费服务。以账号实际显示及现行条款核实，不将其作为永久免费运营承诺。[官方开通说明](https://aps.autodesk.com/blog/aps-developer-hub-setup-and-app-migration)、[官方入门](https://get-started.aps.autodesk.com/)
 2. 获取服务端应用 Client ID、Client Secret，按官方要求使用 app-only OAuth 和所需权限。这些凭据仅进入服务端密钥配置，不写入仓库、前端、浏览器存储或公开交接文件。
 3. 调用官方 `GET engines`，读取全部分页，查询候选引擎详情，保存实际返回的引擎 ID 和版本记录。**目前未核实存在可供本账号使用的 MAX2026 引擎**，不得凭名称猜测或把桌面软件版本当作云端引擎支持证明。[官方 API 参考](https://aps.autodesk.com/en/docs/design-automation/v3/reference)、[官方引擎枚举示例](https://blog.autodesk.io/design-automation-api-obtaining-supported-engines/)
 4. 准备一个最小、可追溯的转换脚本及所需 AppBundle/Activity，先测试用户真实的 MAX2026 样本，再测试项目四件基线原件。使用副本执行，处理前后核对原件 SHA-256，不改写原件。
@@ -54,6 +54,29 @@ APS 提供以 3ds Max Batch 执行 MAXScript、Python 和插件的托管能力�
 | 运行配额、超时与清理配置 | 限制并发和资源消耗，清理临时文件；配额、耗时目标与费用在样本实测后确定 |
 
 任务记录可以继续使用受控的服务端存储，可靠投递机制的具体产品待资源确认后选定。现有 Worker/R2 绑定不等于已经拥有 APS 应用凭据、通用 R2 S3 密钥或任务队列，不能假设这些配置已经存在。
+
+## 2026-11-02 计费快照与条件预算（proposed）
+
+本节回答费用与开通操作，仅为采购前预算，未开通付费、充值或购买服务器。实际账户资格、MAX2026 引擎、计费分钟、插件和中国区结算报价尚未验证。价格会变化，不能作为固定报价或最终总费用。
+
+- 官方 APS 费率表列出 3ds Max Automation 的 Free 档每月 300 处理分钟；Paid 档每 30 处理分钟消耗 1 个代币。官方说明升级 Paid 后按付费用量计费，不再叠加 Free 的月度额度；Free 超限时该 API 暂停，或由所有者选择升级。[官方费率表](https://www.autodesk.com/ae/products/autodesk-platform-services/product-details)、[官方 Free/Paid 说明](https://aps.autodesk.com/blog/aps-business-model-evolution)
+- 中国官方 Flex 费率表的人民币估算数值对应约 25 元/代币，可作为预算假设；这不是中国区 APS 实际购物车、税费或付款报价。预付费的最低购买量可能让首次付款高于当月实际消耗，须核对账户结算与有效期。即付即用能否选择也应按所在地区核实。[中国官方 Flex 费率表](https://www.autodesk.com.cn/buying/flex/flex-rate-sheet)、[中国 APS 方案](https://www.autodesk.com.cn/products/autodesk-platform-services/overview)
+
+假设每件作品实际计费处理时间为 2 分钟，且包括本次任务需要的模型导出和封面生成；此耗时是举例，尚非云端实测：
+
+| 场景 | 月处理分钟 | 估算转换 API 消耗 |
+| --- | --- | --- |
+| Free 档内进行用途符合条款的样本验证 | 不超过 300 | 0 元 |
+| Paid，每月 100 件 × 2 分钟 | 200 | 约 6.67 代币，按 25 元估算约 167 元 |
+| Paid，每月 500 件 × 2 分钟 | 1000 | 约 33.33 代币，按 25 元估算约 833 元 |
+
+以上按费率比例估算；计量取整、重试、实际任务耗时和税费以正式账单为准。付费 200 分钟没有扣除 Free 的 300 分钟。处理时间翻倍时，在其他条件相同的情况下，转换 API 预算也约翻倍。
+
+存储与调度另计。Cloudflare R2 自有账户 Standard 存储的公开参考为每月 10 GB-month 免费、100 万次 A 类和 1000 万次 B 类免费；超额存储 0.015 美元/GB-month，出站流量免费。该价格不等于当前 Sites 管理托管的实际账单，也不包含 Worker、任务调度或第三方费用；所有版本、原件、贴图和结果都应计入容量。[R2 官方计价](https://developers.cloudflare.com/r2/pricing/)
+
+针对 100 件/月、2 分钟/件的付费示例，可先预留每月 200–300 元作为新增转换、少量存储和调度的条件预算，实测后校正；它不是消费硬上限或确定报价。整站总费用还需加现有托管、必要插件、开发/运维和税费；国内托管迁移也不在该预算内。若改用 Windows 自建，服务器和适用的软件服务授权另行核价，不能沿用 APS 的单项预算或默认现有桌面/教育许可可用于对外转换服务。
+
+下一步先用 Free 样本验证，核对账户实际引擎并处理真实 MAX2026，记录每次计费分钟、输出质量和错误；成功后再选择正式套餐、配置任务超时与每日数量限制并接入网页。只有官方服务套餐开通不能自动让现站具备转换功能，网站侧队列、私密传输、结果关联和失败处理仍需实现与验收。
 
 ## 私密传输与同版本回写
 
