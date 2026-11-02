@@ -18,6 +18,7 @@ supersedes: null
 | 2026-11-02 | discussion | - | archived | desktop-browser-primary-acceptance | [[日志/2026-11-02-确认电脑网页端验收重点.md|确认电脑网页端验收重点]] |
 | 2026-11-02 | feature | - | archived | desktop-browser-and-mouse-preview-delivery | [[日志/2026-11-02-电脑网页端验收与鼠标预览转换.md|电脑网页端验收与鼠标预览转换]] |
 | 2026-11-02 | feature | - | archived | interactive-multiformat-model-viewer | [[日志/2026-11-02-多格式三维查看器集成与发布.md|多格式三维查看器集成与发布]] |
+| 2026-11-02 | discussion | 解释新上传MAX的自动云转换边界与注意事项 | archived | session-20261102-150004-120-e9c5df1c | [[日志/2026-11-02-150004-120-discussion-e9c5df1c.md|2026-11-02｜解释新上传MAX的自动云转换边界与注意事项]] |
 | 2026-11-02 | feature | 电脑网页端验收与已有鼠标真实预览上线 | archived | session-20261102-120953-654-248ec0bb | [[日志/2026-11-02-120953-654-feature-248ec0bb.md|2026-11-02｜电脑网页端验收与已有鼠标真实预览上线]] |
 | 2026-11-02 | discussion | 确认电脑网页端验收重点 | archived | session-20261102-104951-097-57819009 | [[日志/2026-11-02-104951-097-discussion-57819009.md|2026-11-02｜确认电脑网页端验收重点]] |
 | 2026-11-02 | discussion | 解释MAX转换与设备压力测试边界 | archived | session-20261102-104435-164-98a11eae | [[日志/2026-11-02-104435-164-discussion-98a11eae.md|2026-11-02｜解释MAX转换与设备压力测试边界]] |
