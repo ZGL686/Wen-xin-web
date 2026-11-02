@@ -51,6 +51,8 @@ pwsh -File tools/project-sync.ps1 -Summary "本轮任务" -Kind maintenance -Det
 
 ## 当前交付与历史包
 
+2026-11-02 已发布多格式三维查看器：左键旋转、右键平移、平滑缩放、双击聚焦、居中/复位、全屏和触屏；支持 GLB/glTF/OBJ/STL/FBX/STEP/STP 与模型资源 ZIP。复位不重复请求模型，预览无需主动下载或安装软件。采用 Three.js、camera-controls 与 OCCT Worker，原界面与私密权限保留。507 项接口、45 项本地与 30 项线上浏览器检查通过；回执 `docs/verification/model-viewer-20261102.json`，工程说明见 `wiki_memory/知识/模块/浏览器三维查看器.md`。
+
 2026-10-29 新增参考键盘原生建模：`deliverables/Keyboard_Rapoo_3dsMax2026_Package.zip`，内含可直接在 3ds Max 2026 中文版打开的 MAX、FBX、GLB、两张真实渲染、参考图和说明。104 个键帽独立，150 个文字节点可编辑；比例及隐藏底部按照片推定。网页详情：https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/rapoo-keyboard 。模型与站点回执为 `docs/verification/keyboard-model-20261029.json`、`keyboard-site-20261029.json`，源管线见 `assets/keyboard-rapoo-reference/`。
 
 本轮实现与验收见 `docs/verification/changxu-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。历史 WorkBuddy ZIP 保持为 2026-10-25 旧版快照，不含后续文心及长序功能；接手新版以当前 `main` 为准。源码仓库不含远端用户作品数据库。

@@ -8,7 +8,7 @@ import './media-preview.css';
 type Props = {
   work: Snapshot; mode: 'card' | 'detail'; active?: boolean;
   onActivate?: () => void; onDeactivate?: () => void; onViewFull?: () => void;
-  autoRotate?: boolean; wireframe?: boolean; className?: string;
+  autoRotate?: boolean; wireframe?: boolean; resetToken?: number; onModelInteraction?: () => void; className?: string;
 };
 type Kind = 'model' | 'video' | 'audio' | 'web' | 'image' | 'file';
 
@@ -24,7 +24,7 @@ function mediaKind(work: Snapshot): Kind {
 }
 
 /** Only receives an already-authorized snapshot; private revisions are never fetched here. */
-export default function MediaPreview({ work, mode, active: controlledActive, onActivate, onDeactivate, onViewFull, autoRotate = true, wireframe = false, className = '' }: Props) {
+export default function MediaPreview({ work, mode, active: controlledActive, onActivate, onDeactivate, onViewFull, autoRotate = true, wireframe = false, resetToken = 0, onModelInteraction, className = '' }: Props) {
   const [localActive, setLocalActive] = useState(mode === 'detail');
   const active = controlledActive ?? localActive;
   const [webStarted, setWebStarted] = useState(false);
@@ -102,7 +102,7 @@ export default function MediaPreview({ work, mode, active: controlledActive, onA
       {kind !== 'file' && <button type="button" className="media-activate" onClick={activate} aria-label={`${action}：${work.title}`}>{kind === 'video' || kind === 'audio' ? <Play size={18} fill="currentColor"/> : icon}<span>{action}</span><ArrowUpRight size={17}/></button>}
     </>}
 
-    {active && kind === 'model' && <><ModelViewer src={work.modelUrl} poster={poster} interactive autoRotate={autoRotate} wireframe={wireframe}/><span className="media-hint">拖动旋转 · 双指缩放</span></>}
+    {active && kind === 'model' && <><ModelViewer src={work.modelUrl} poster={poster} interactive autoRotate={autoRotate} wireframe={wireframe} resetToken={resetToken} onInteraction={onModelInteraction}/><span className="media-hint">{mode === 'detail' ? '左键旋转 · 右键平移 · 双击聚焦' : '拖动旋转 · 双指缩放'}</span></>}
     {active && kind === 'video' && <>
       <video ref={player} src={videoSrc} poster={poster || undefined} controls playsInline muted preload="metadata" onLoadedMetadata={previewReady} onTimeUpdate={checkPreview} onSeeking={clampPreview} onEnded={() => mode === 'card' && setEnded(true)} onError={() => setMediaError(true)} aria-label={`${work.title}${mode === 'card' ? '片段预览' : '完整视频'}`}/>
       {mode === 'card' && !ended && <span className="media-hint">片段预览 · 点击音量键开启声音</span>}

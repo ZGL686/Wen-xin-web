@@ -56,7 +56,7 @@ HTTP 开发 Cookie 仅在 localhost/回环地址启用；对外服务必须使�
 | 内容 | 格式或限制 |
 | --- | --- |
 | 原始工程 `source` | 不限文件后缀，也可无扩展名；按原件归档，最多一个，不代表可解析所有格式 |
-| 独立三维预览 `previewModel` | GLB、单文件 OBJ、STL；最多一个 |
+| 独立三维预览 `previewModel` | GLB、glTF、OBJ、STL、FBX、STEP/STP，或含一份主模型与配套文件的 ZIP；最多一个 |
 | 图片 `images` | PNG、JPG/JPEG、WebP、AVIF、GIF；最多八张，每张不超过 12 MiB |
 | 正片 `video`、演示 `demoVideo` | MP4、WebM；各最多一个，支持鉴权后的字节范围读取 |
 | 音频 `audio` | MP3、WAV、OGG、M4A；最多一个 |
@@ -66,7 +66,11 @@ HTTP 开发 Cookie 仅在 localhost/回环地址启用；对外服务必须使�
 
 源文件保留收到的原始文件名和原字节；服务端仅为存储地址生成固定角色与安全后缀，未知或无扩展名使用 `.bin`，不改写原件内容。所有原件通过 `application/octet-stream`、`Content-Disposition: attachment` 和 `nosniff` 返回，不作为网页内联执行。网页 `model` 预览与 `source` 原件分角色、分地址授权，公开预览不自动开放原件下载。
 
-兼容的 GLB、单文件 OBJ、STL 可直接网页预览；MAX、C4D、MA、USD、ABC、VDB、SKP 等其他原件目前只做归档，可同时提供图片、演示视频或独立预览模型。图片、视频、音频及独立预览模型仍分别执行各自格式校验，源文件放开不等于这些展示字段也接受任意内容。
+GLB、glTF、OBJ、STL、FBX、STEP/STP 可直接网页预览。glTF 的外置 .bin/贴图、OBJ 的 MTL/贴图与 FBX 的外置纹理需随模型一起上传；“选择模型与配套文件”或“选择模型文件夹”会生成只供解析的预览 ZIP，内含一份主模型。ZIP 不会执行脚本，也不会自动访问未提供的外部资源。MAX、C4D、MA、USD、ABC、VDB、SKP 等其他原件目前只做归档，可同时提供图片、演示视频或独立预览模型。
+
+查看器沿用 Three.js，使用 camera-controls 3.1.2 支持左键旋转、右键平移、平滑滚轮缩放、双击局部聚焦、居中、复位、全屏及触屏手势；复位不重新加载几何。STEP 由 occt-import-js 0.0.23 在可取消的 Worker 中网格化。Draco、Meshopt 与 KTX2 解码按需加载，所需 WASM/脚本由 `predev` / `prebuild` 从锁定依赖准备到本站。源码与 LGPL 许可位于独立解码器目录，详见 `public/decoders/README.md`。
+
+用户不必主动下载原件或安装软件；浏览器仍须获取预览字节。模型包解压上限 80 MiB / 256 项，STEP 解析超时为 120 秒；这些浏览器保护不改变每次上传 40 MiB 的限制。大于 50 万三角形时降低像素比并关闭动态阴影；相机静止或页面不可见时停止重绘。大型装配仍受设备内存、GPU 与浏览器能力限制，未承诺任意规模或所有插件效果。验收脚本为 `scripts/test-viewer.mjs`，使用现有 Edge 和 Codex 配套 Playwright；生产模式不写入作品记录。
 
 独立云端转换服务尚未接通，原始 MAX/BLEND/影视工程不会自动在 Worker 生成图片或动效。“保存成功”表示作品内容与原件已经保存，不能表示全部格式已解析或预览已经生成，也没有虚构的转换队列。外部 HTTPS 体验能否嵌入仍受目标网站和浏览器策略限制，上传 ZIP 不代表可运行其中代码。
 

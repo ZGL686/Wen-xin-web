@@ -1,4 +1,4 @@
-import { DIRECTIONS } from '../shared/portfolio.ts';
+import { DIRECTIONS, DIRECT_MODEL_EXTENSIONS, MODEL_PREVIEW_EXTENSIONS } from '../shared/portfolio.ts';
 import type { Direction, Profile, Snapshot, User, Version, Work, WorkResponse } from '../shared/portfolio.ts';
 
 type LegacyWork = Record<string, any>;
@@ -35,11 +35,13 @@ const SOURCE_STORAGE_HINTS = new Set(['max', 'blend', 'fbx', 'obj', 'stl', 'glb'
 const IMAGE_EXTS = new Set(['png', 'jpg', 'jpeg', 'webp', 'avif', 'gif']);
 const VIDEO_EXTS = new Set(['mp4', 'webm']);
 const AUDIO_EXTS = new Set(['mp3', 'wav', 'ogg', 'm4a']);
-const MODEL_EXTS = new Set(['glb', 'obj', 'stl']);
+const MODEL_EXTS = new Set<string>(MODEL_PREVIEW_EXTENSIONS);
+const DIRECT_MODELS = new Set<string>(DIRECT_MODEL_EXTENSIONS);
 const LEGACY_3D = new Set(['产品设计', '家具设计', '空间建筑']);
 const MIME: Record<string, string> = {
   png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', avif: 'image/avif', gif: 'image/gif',
   glb: 'model/gltf-binary', gltf: 'model/gltf+json', obj: 'text/plain; charset=utf-8', stl: 'model/stl',
+  fbx: 'application/octet-stream', step: 'model/step', stp: 'model/step', zip: 'application/zip',
   mp4: 'video/mp4', webm: 'video/webm', mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', m4a: 'audio/mp4',
 };
 const SYSTEM_PROFILE: Profile = { slug: 'wenxin-exhibits', displayName: '长序 · 系统展品', bio: '从真实三维工程收录的展示作品。', createdAt: '2026-10-25T00:00:00.000Z', updatedAt: '2026-10-25T00:00:00.000Z', system: true };
@@ -400,7 +402,7 @@ async function prepareSnapshot(input: Input, previous?: StoredVersion) {
   const source = input.files('source'), models = input.files('previewModel'), images = input.files('images'), videos = input.files('video'), demos = input.files('demoVideo'), audios = input.files('audio');
   if ([source, models, videos, demos, audios].some((files) => files.length > 1)) return fail(400, '每种源文件或媒体最多选择一个。');
   if (images.length > 8) return fail(400, '最多上传 8 张图片。');
-  if (models.some((file) => !MODEL_EXTS.has(ext(file.name)))) return fail(400, '网页三维预览文件支持 GLB、OBJ、STL。');
+  if (models.some((file) => !MODEL_EXTS.has(ext(file.name)))) return fail(400, '网页三维预览支持 GLB、glTF、OBJ、STL、FBX、STEP，以及包含配套文件的 ZIP。');
   if (images.some((file) => !IMAGE_EXTS.has(ext(file.name)) || file.size > MAX_IMAGE)) return fail(400, '图片支持 PNG/JPG/WebP/AVIF/GIF，每张不超过 12 MB。');
   if ([...videos, ...demos].some((file) => !VIDEO_EXTS.has(ext(file.name)))) return fail(400, '视频支持 MP4 或 WebM。');
   if (audios.some((file) => !AUDIO_EXTS.has(ext(file.name)))) return fail(400, '音频支持 MP3、WAV、OGG 或 M4A。');
@@ -448,7 +450,7 @@ async function saveVersion(context: Context, input: Input, loaded?: Loaded): Pro
       snapshot.fileUrl = await saveFile(prepared.source, 'source'); snapshot.fileName = prepared.source.name; snapshot.fileSize = prepared.source.size; snapshot.format = sourceExtension(prepared.source.name).toUpperCase() || 'SOURCE';
       // Public preview uses its own role/key. The native source URL and original
       // filename never become public merely because a preview was selected.
-      snapshot.modelUrl = MODEL_EXTS.has(sourceExtension(prepared.source.name)) && !prepared.model ? await saveFile(prepared.source, 'model') : '';
+      snapshot.modelUrl = DIRECT_MODELS.has(sourceExtension(prepared.source.name)) && !prepared.model ? await saveFile(prepared.source, 'model') : '';
     }
     if (prepared.model) snapshot.modelUrl = await saveFile(prepared.model, 'model');
     if (prepared.images.length) {

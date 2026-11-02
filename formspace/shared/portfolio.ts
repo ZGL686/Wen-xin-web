@@ -1,5 +1,7 @@
 /** Shared browser/API contract. Do not place storage keys or credentials here. */
 export const DIRECTIONS = ['交互', '影视', '三维', '其他'] as const;
+export const DIRECT_MODEL_EXTENSIONS = ['glb', 'gltf', 'obj', 'stl', 'fbx', 'step', 'stp'] as const;
+export const MODEL_PREVIEW_EXTENSIONS = [...DIRECT_MODEL_EXTENSIONS, 'zip'] as const;
 export type Direction = typeof DIRECTIONS[number];
 export type WorkStatus = 'in-progress' | 'final';
 export type Profile = { slug: string; displayName: string; bio: string; createdAt: string; updatedAt: string; system?: boolean };
@@ -61,7 +63,7 @@ export type ApiError = { error: string; code?: string };
  * category is a legacy alias for direction. tags: comma-separated or JSON array.
  * Update requires baseRevision (number/string) and otherwise inherits prior data.
  * Multipart files: source (one opaque original, any extension or no extension),
- * previewModel (one GLB/OBJ/STL), images (<=8),
+ * previewModel (one GLB/glTF/OBJ/STL/FBX/STEP/STP or model-resource ZIP), images (<=8),
  * video (MP4/WebM), demoVideo (MP4/WebM), audio (MP3/WAV/OGG/M4A).
  * Images replace the previous image set when any are uploaded; clearImages=true
  * clears it. clearSource/clearVideo/clearDemoVideo/clearAudio/clearModel may clear

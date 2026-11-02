@@ -3,7 +3,7 @@ type: moc
 status: active
 kind: process
 importance: high
-updated: 2026-10-29
+updated: 2026-11-02
 topic: work-log-index
 source_logs: []
 supersedes: null
@@ -15,6 +15,8 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-02 | feature | - | archived | interactive-multiformat-model-viewer | [[日志/2026-11-02-多格式三维查看器集成与发布.md|多格式三维查看器集成与发布]] |
+| 2026-11-02 | feature | 多格式三维查看器集成与发布 | archived | session-20261102-103502-950-863dbf05 | [[日志/2026-11-02-103502-950-feature-863dbf05.md|2026-11-02｜多格式三维查看器集成与发布]] |
 | 2026-10-29 | feature | - | archived | keyboard-native-model-and-site-publication | [[日志/2026-10-29-键盘原生建模与网站发布.md|键盘原生建模与网站发布]] |
 | 2026-10-29 | feature | 键盘原生建模与网站发布 | archived | session-20261029-165610-003-f1ed3d44 | [[日志/2026-10-29-165610-003-feature-f1ed3d44.md|2026-10-29｜键盘原生建模与网站发布]] |
 | 2026-10-26 | feature | - | archived | changxu-brand-and-accountless-publication | [[日志/2026-10-26-长序品牌与免账号空间发布.md|长序品牌与免账号空间发布]] |

@@ -458,4 +458,24 @@ assert.equal((await call('/api/works/' + legacyId, { method: 'DELETE', headers: 
 assert.equal(bucket.data.has(`records/${accountPrivateId}.json`), true); assert.equal(bucket.data.has(accountPrivateFile), true);
 assert.equal((await call('/api/works/' + other.work.id, { headers: headers('creator-2') })).status, 200);
 checks += 9;
-console.log(`PASS: ${checks} meaningful checks — HttpOnly cookie workspaces, ignored forged identity headers, CSRF, expiry, independent profiles, private saves, curated publication, immutable versions/finals, file authorization, media ranges, retained unclaimed account data, validation, pagination, CAS conflicts and rollback.`);
+// Added browser formats retain the same preview/source authorization boundary.
+for (const extension of ['gltf', 'fbx', 'step', 'stp']) {
+  const body = new FormData(); body.set('title', 'Format boundary ' + extension); body.set('direction', '三维');
+  const bytes = 'fixture-bytes-' + extension; body.set('source', new File([bytes], 'model.' + extension));
+  const created = await read(await postForm(body), 201); const w = created.work;
+  assert(w.modelUrl.endsWith('.' + extension));
+  assert.equal((await call(w.modelUrl)).status, 404);
+  assert.equal(await (await call(w.modelUrl, { headers: headers() })).text(), bytes);
+  const published = await read(await publish(w, { displayVersionId: w.versionId }));
+  assert.equal((await call(published.work.fileUrl)).status, 404);
+  assert.equal(await (await call(published.work.modelUrl)).text(), bytes);
+  assert.equal((await call(published.work.modelUrl, { method: 'HEAD' })).status, 200);
+  assert.equal((await call('/api/works/' + w.id, { method: 'DELETE', headers: headers() })).status, 200);
+  checks += 7;
+}
+const bundleForm = new FormData(); bundleForm.set('title', 'Explicit preview bundle'); bundleForm.set('direction', '三维');
+bundleForm.set('previewModel', new File(['PK-bundle-bytes'], 'scene.zip'));
+const bundleWork = (await read(await postForm(bundleForm), 201)).work;
+assert(bundleWork.modelUrl.endsWith('.zip')); assert.equal((await call(bundleWork.modelUrl)).status, 404);
+assert.equal((await call('/api/works/' + bundleWork.id, { method: 'DELETE', headers: headers() })).status, 200); checks += 3;
+console.log(`PASS: ${checks} meaningful checks — HttpOnly cookie workspaces, ignored forged identity headers, CSRF, expiry, independent profiles, private saves, curated publication, immutable versions/finals, file authorization, media ranges, retained unclaimed account data, validation, pagination, CAS conflicts, rollback and multi-format preview authorization.`);

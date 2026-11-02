@@ -43,3 +43,8 @@ yarn-error.log*
 
 # OS metadata
 .DS_Store
+
+# Reproducible decoder assets prepared from package-lock.json
+/public/decoders/occt/
+/public/decoders/draco/
+/public/decoders/basis/
