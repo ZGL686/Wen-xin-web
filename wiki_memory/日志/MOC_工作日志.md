@@ -15,7 +15,9 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-02 | discussion | - | archived | desktop-browser-primary-acceptance | [[日志/2026-11-02-确认电脑网页端验收重点.md|确认电脑网页端验收重点]] |
 | 2026-11-02 | feature | - | archived | interactive-multiformat-model-viewer | [[日志/2026-11-02-多格式三维查看器集成与发布.md|多格式三维查看器集成与发布]] |
+| 2026-11-02 | discussion | 确认电脑网页端验收重点 | archived | session-20261102-104951-097-57819009 | [[日志/2026-11-02-104951-097-discussion-57819009.md|2026-11-02｜确认电脑网页端验收重点]] |
 | 2026-11-02 | discussion | 解释MAX转换与设备压力测试边界 | archived | session-20261102-104435-164-98a11eae | [[日志/2026-11-02-104435-164-discussion-98a11eae.md|2026-11-02｜解释MAX转换与设备压力测试边界]] |
 | 2026-11-02 | feature | 多格式三维查看器集成与发布 | archived | session-20261102-103502-950-863dbf05 | [[日志/2026-11-02-103502-950-feature-863dbf05.md|2026-11-02｜多格式三维查看器集成与发布]] |
 | 2026-10-29 | feature | - | archived | keyboard-native-model-and-site-publication | [[日志/2026-10-29-键盘原生建模与网站发布.md|键盘原生建模与网站发布]] |
