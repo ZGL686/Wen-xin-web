@@ -5,6 +5,7 @@ import initialWorks from '../data/works.json';
 import { About, BrowserSpacePanel, CreatorSpace, Home, Library, LoadingState } from './PortfolioViews';
 import WorkDetail from './WorkDetail';
 import WorkForm from './WorkForm';
+import Favorites from './Favorites';
 import { api, emptySnapshot, ensureBrowserSpace, errorMessage, go, safeFavorites, useRoute } from './ui-utils';
 import './styles.css';
 import './wenxin.css';
@@ -42,7 +43,12 @@ export default function App() {
     return () => { window.removeEventListener('changxu:space-ready', ready); if (toastTimer.current) clearTimeout(toastTimer.current); };
   }, [refresh, prepareSpace]);
   useEffect(() => { setMenuOpen(false); }, [route.full]);
-  useEffect(() => { document.title = route.path === '/space' ? '我的创作空间 · 长序' : route.path === '/upload' || route.path.startsWith('/edit/') ? '记录创作 · 长序' : '长序 · 树莓成熟时'; }, [route.path]);
+  useEffect(() => {
+    const sync = (event: StorageEvent) => { if (event.storageArea === localStorage && (event.key === 'formspace-favorites' || event.key === null)) setFavorites(safeFavorites()); };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, []);
+  useEffect(() => { document.title = route.path === '/favorites' ? '我的收藏 · 长序' : route.path === '/space' ? '我的创作空间 · 长序' : route.path === '/upload' || route.path.startsWith('/edit/') ? '记录创作 · 长序' : '长序 · 树莓成熟时'; }, [route.path]);
   const onFavorite = (id: string) => {
     setFavorites(previous => { const next = previous.includes(id) ? previous.filter(value => value !== id) : [...previous, id]; try { localStorage.setItem('formspace-favorites', JSON.stringify(next)); } catch { notify('这台浏览器暂未允许保存收藏。'); } return next; });
   };
@@ -61,13 +67,14 @@ export default function App() {
   else if (needsSpace && !user) page = <BrowserSpacePanel error={spaceError} onRetry={() => void prepareSpace()}/>;
   else if (route.path === '/') page = <Home works={works} favorites={favorites} onFavorite={onFavorite}/>;
   else if (route.path === '/works') page = <Library works={works} favorites={favorites} onFavorite={onFavorite}/>;
+  else if (route.path === '/favorites') page = <Favorites favorites={favorites} onFavorite={onFavorite} ownerId={user?.id || ''} spaceLoading={spaceLoading}/>;
   else if (route.path === '/space') page = user ? <CreatorSpace key={`mine-${user.id}`} mine user={user} favorites={favorites} onFavorite={onFavorite} notify={notify} onUser={setUser} onDeleted={onDeleted}/> : <BrowserSpacePanel error={spaceError} onRetry={() => void prepareSpace()}/>;
   else if (creatorSlug) page = <CreatorSpace key={creatorSlug} slug={creatorSlug} user={user} favorites={favorites} onFavorite={onFavorite} notify={notify} onUser={setUser} onDeleted={onDeleted}/>;
   else if (route.path === '/upload' || editId) page = <WorkForm key={route.path} id={editId} user={user} onSaved={onSaved}/>;
   else if (isDetail && decode(route.path.slice(6))) { const id = decode(route.path.slice(6)); page = <WorkDetail key={`${id}-${user?.id || 'visitor'}`} id={id} requestedVersion={route.query.get('version') || undefined} favorite={favorites.includes(id)} onFavorite={() => onFavorite(id)} notify={notify} onChange={() => void refresh()} onDeleted={onDeleted}/>; }
   else if (route.path === '/about') page = <About count={works.length}/>;
   else page = <main className="not-found"><span className="eyebrow">A LITTLE OFF THE PATH</span><h1>这个角落，<br/>还没有故事。</h1><p>可以回作品展厅看看，也许会遇见下一颗灵感。</p><a href="#/works" className="button button-dark">回到作品展厅 <ArrowUpRight size={18}/></a></main>;
-  return <div className="site-shell wenxin-site"><header className="header"><a href="#/" className="brand wenxin-brand" aria-label="长序，树莓成熟时，返回首页"><span className="brand-mark"><Sprout size={24} strokeWidth={1.5}/></span><span className="brand-word">长序<span className="brand-cn">树莓成熟时</span></span><span className="brand-en">CHANGXU</span></a><nav className={menuOpen ? 'nav-links is-open' : 'nav-links'} aria-label="主导航"><a href="#/" className={route.path === '/' ? 'active' : ''}>首页</a><a href="#/works" className={route.path === '/works' || isDetail ? 'active' : ''}>作品展厅<span className="nav-count">{String(works.length).padStart(2, '0')}</span></a><a href="#/space" className={route.path === '/space' || creatorSlug ? 'active' : ''}>我的空间</a><a href="#/about" className={route.path === '/about' ? 'active' : ''}>关于长序</a></nav><div className="header-actions"><a href="#/upload" className="button button-dark header-upload"><Plus size={16}/><span>记录创作</span></a><button className="menu-button icon-button" aria-label={menuOpen ? '关闭菜单' : '打开菜单'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</button></div></header>
+  return <div className="site-shell wenxin-site"><header className="header"><a href="#/" className="brand wenxin-brand" aria-label="长序，树莓成熟时，返回首页"><span className="brand-mark"><Sprout size={24} strokeWidth={1.5}/></span><span className="brand-word">长序<span className="brand-cn">树莓成熟时</span></span><span className="brand-en">CHANGXU</span></a><nav className={menuOpen ? 'nav-links is-open' : 'nav-links'} aria-label="主导航"><a href="#/" className={route.path === '/' ? 'active' : ''}>首页</a><a href="#/works" className={route.path === '/works' || isDetail ? 'active' : ''}>作品展厅<span className="nav-count">{String(works.length).padStart(2, '0')}</span></a><a href="#/space" className={route.path === '/space' || creatorSlug ? 'active' : ''}>我的空间</a><a href="#/favorites" aria-label="我的收藏" aria-current={route.path === '/favorites' ? 'page' : undefined} className={route.path === '/favorites' ? 'active' : ''}>我的收藏<span className="nav-count">{favorites.length}</span></a><a href="#/about" className={route.path === '/about' ? 'active' : ''}>关于长序</a></nav><div className="header-actions"><a href="#/upload" className="button button-dark header-upload"><Plus size={16}/><span>记录创作</span></a><button className="menu-button icon-button" aria-label={menuOpen ? '关闭菜单' : '打开菜单'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</button></div></header>
     {apiError && <div className="api-notice" role="status">{apiError}<button onClick={() => void refresh()}>重新连接 <RotateCcw size={12}/></button></div>}{page}
     <footer className="footer"><div><a href="#/" className="footer-logo">CHANGXU / 长序<span>树莓成熟时</span></a><p>每一段创作，都有自己的成熟时。</p></div><div className="footer-right"><span className="online-dot"/>为每一份创作留下来路<a href="#/upload">下一颗灵感，等你留下 <ArrowUpRight size={15}/></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} 长序 · 数字媒体创作档案</span><span>EVERY IDEA HAS A SEASON.</span><a href="#/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>回到首页 ↑</a></div></footer>{toast && <div className="toast" role="status"><CheckCircle2 size={18}/>{toast}</div>}</div>;
 }

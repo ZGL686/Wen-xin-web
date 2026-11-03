@@ -3,7 +3,7 @@ type: moc
 status: active
 kind: process
 importance: high
-updated: 2026-11-02
+updated: 2026-11-03
 topic: work-log-index
 source_logs: []
 supersedes: null
@@ -15,6 +15,8 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-03 | feature | - | archived | favorites-page-implementation-and-release | [[日志/2026-11-03-独立收藏页与原有收藏保留.md|独立收藏页与原有收藏保留]] |
+| 2026-11-03 | feature | 上线独立收藏页并保留原有收藏记录 | archived | session-20261103-165313-002-63711500 | [[日志/2026-11-03-165313-002-feature-63711500.md|2026-11-03｜上线独立收藏页并保留原有收藏记录]] |
 | 2026-11-02 | discussion | - | archived | desktop-browser-primary-acceptance | [[日志/2026-11-02-确认电脑网页端验收重点.md|确认电脑网页端验收重点]] |
 | 2026-11-02 | feature | - | archived | desktop-browser-and-mouse-preview-delivery | [[日志/2026-11-02-电脑网页端验收与鼠标预览转换.md|电脑网页端验收与鼠标预览转换]] |
 | 2026-11-02 | feature | - | archived | interactive-multiformat-model-viewer | [[日志/2026-11-02-多格式三维查看器集成与发布.md|多格式三维查看器集成与发布]] |

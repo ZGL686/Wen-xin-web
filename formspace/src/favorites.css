@@ -1,0 +1,10 @@
+.wenxin-site .favorite-filter{display:inline-flex;align-items:center;justify-content:center}
+.favorites-note{display:flex;align-items:center;gap:10px;padding:18px 0 23px;border-bottom:1px solid var(--line);margin:-14px 0 28px;color:var(--muted);font-size:12px;line-height:1.9}
+.favorites-note .text-link{margin-left:auto;color:var(--ink);white-space:nowrap}
+.favorites-status{display:flex;align-items:center;gap:12px;font-size:12px;line-height:1.9;color:#7c806c;background:#eef0e5;border-radius:6px;padding:15px 18px;margin:0 0 20px}
+.favorites-status .text-icon{margin-left:auto;white-space:nowrap}
+.favorites-empty{border:1px solid var(--line);border-radius:8px;background:#f4f5ed;margin:28px 0 0}
+.favorites-empty>svg{color:#879755}
+.favorites-page .page-loading{min-height:100px}
+@media(max-width:850px){.wenxin-site .nav-links{gap:14px}.favorites-note{flex-wrap:wrap}.favorites-note>span{flex:1;min-width:220px}.favorites-note .text-link{font-size:12px}.favorites-status{align-items:flex-start}}
+@media(max-width:600px){.wenxin-site .nav-links{gap:12px}.wenxin-site .nav-links>a{font-size:11px}.favorites-note{font-size:11px;margin-top:0}.favorites-note .text-link{margin-left:24px}.favorites-empty{padding:45px 20px}}

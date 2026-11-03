@@ -72,7 +72,7 @@ export function emptySnapshot(): Snapshot {
   return { title: '', direction: '其他', category: '其他', tags: [], subtitle: '', description: '', contentText: '', process: '', difficulties: '', solutions: '', reflection: '', status: 'in-progress', fileName: '', fileSize: 0, fileUrl: '', format: '', modelUrl: '', coverUrl: '', images: [], videoUrl: '', audioUrl: '', demoVideoUrl: '', interactiveUrl: '', allowSourceDownload: false };
 }
 export function safeFavorites(): string[] {
-  try { const data: unknown = JSON.parse(localStorage.getItem('formspace-favorites') || '[]'); return Array.isArray(data) ? data.filter(item => typeof item === 'string') : []; } catch { return []; }
+  try { const data: unknown = JSON.parse(localStorage.getItem('formspace-favorites') || '[]'); return Array.isArray(data) ? [...new Set(data.filter(item => typeof item === 'string' && item.length > 0))] : []; } catch { return []; }
 }
 export function publicSharePath(work: Work, versionId?: string) { return `/work/${encodeURIComponent(work.id)}${versionId ? '?version=' + encodeURIComponent(versionId) : ''}`; }
 export async function copyShare(path: string): Promise<boolean> {
