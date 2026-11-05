@@ -1,6 +1,6 @@
 -- Independent native reopen of the delivered house; never repairs the scene.
 (
-local out=@"C:\Users\SM\Desktop\3d\deliverables\Cute_House_2026\"
+local out=@"C:\Users\SM\Desktop\3d\formspace\outputs\house-native\"
 local report=createFile (out+"native-verification.txt")
 local jsonFile=createFile (out+"native-verification.json")
 try (

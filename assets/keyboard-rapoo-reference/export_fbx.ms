@@ -1,6 +1,6 @@
 -- Interchange export uses evaluated mesh copies. Native file stays editable.
 (
-local dir=@"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\"
+local dir=@"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\"
 local report=createFile @"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\fbx-export.log"
 global keyboardWorldMesh
 try (

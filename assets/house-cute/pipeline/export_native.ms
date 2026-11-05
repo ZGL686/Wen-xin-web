@@ -1,5 +1,5 @@
 (
-local jf=createFile (HouseRoot+@"assets\house-cute\native-meshes.json")
+local jf=createFile (HouseOut+"native-meshes.json")
 format "{\"objects\":[" to:jf
 local first=true
 for n in HouseParts do (

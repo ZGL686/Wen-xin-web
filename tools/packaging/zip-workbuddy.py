@@ -9,7 +9,7 @@ repository = Path(__file__).resolve().parents[2]
 package_name = sys.argv[1] if len(sys.argv) > 1 else 'FormSpace_WorkBuddy_China_' + datetime.now(timezone(timedelta(hours=8))).strftime('%Y%m%d')
 if not package_name.replace('_', '').replace('-', '').isalnum():
     raise RuntimeError('Use a simple archive name.')
-base = repository / 'deliverables' / package_name
+base = repository / 'formspace' / 'outputs' / 'handovers' / package_name
 archive = base.parent / (package_name + '.zip')
 excluded = {'node_modules', '.git', '.sites-runtime', '.wrangler', 'dist'}
 if archive.exists():

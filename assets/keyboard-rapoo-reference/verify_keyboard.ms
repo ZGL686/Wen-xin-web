@@ -1,6 +1,6 @@
 -- Independent native reopen, editable structure and clean FBX import audit.
 (
-local dir=@"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\"
+local dir=@"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\"
 local report=createFile (dir+"verification.txt")
 fn boundsOf nodes = (
  local lo=[1e9,1e9,1e9]; local hi=[-1e9,-1e9,-1e9]

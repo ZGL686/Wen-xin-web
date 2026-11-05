@@ -5,7 +5,7 @@ from pathlib import Path
 import json,math
 ROOT=Path(__file__).resolve().parent
 PROJECT=ROOT.parents[1]
-OUT=PROJECT/'deliverables'/'Keyboard_Rapoo_20261029'
+OUT=PROJECT/'formspace'/'outputs'/'keyboard'
 RUNTIME=PROJECT/'formspace'/'outputs'/'keyboard'
 OUT.mkdir(parents=True,exist_ok=True);RUNTIME.mkdir(parents=True,exist_ok=True)
 layout=json.loads((ROOT/'layout.json').read_text(encoding='utf-8'))

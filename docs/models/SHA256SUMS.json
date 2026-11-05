@@ -1,0 +1,23 @@
+{
+  "assets/3d source/房子3d.max": "4783fed9f5a0d0e123dbdc37dffccaae071a08f854dd33106582b01a2074e1bc",
+  "assets/3d source/柜子_补齐完成.max": "a976cbef41649e5a519e1c161254bbc417d5cca62240e4967ba43e99327186cc",
+  "assets/3d source/ARC01_Mouse_3dsMax2026.max": "e9918e40d1abb39338f38e70774681983e97ecdfe4320e7e9d6d24c021602bbb",
+  "assets/3d source/AURELIA_Jade_Lamp.max": "d788e9657bddc43f69f1ec0e185b361c8821fb607dc751b29ef85d2042f61a57",
+  "assets/3d source/Keyboard_Rapoo_3dsMax2026.max": "34cb7137acd0af0a9f6bcf8d25c67d28e5bc4098c726073aca17efd5eab50989",
+  "assets/3d source/Porcelain_Teapot_2026/3d.max": "2ba6189c80ee77ce45dbd31719a5bffbaeaf8f0dadd962b141ebd3a4097df6e7",
+  "assets/3d source/Porcelain_Teapot_2026/peony_albedo.png": "62e1ce316d7c7d3d186ed25bc28609cffde0b549c2dcf4fb9cee615056a0dae8",
+  "assets/3d source/Sofa_3dsMax2026.max": "e6185589fbe9a6d0ed644d9e888717c7f9c3dd6c23210c21ee41bea7f1b359a2",
+  "assets/keyboard-rapoo-reference/reference.png": "26ef3c1c6eee5b8527225d85289b16349b0c2bc9b896a3b556ee2c9988549dc4",
+  "assets/pipeline/Keyboard_Rapoo.fbx": "3f05f49e6fba922fdc1a9418cb6eddee43d702a9190937abecb3fef3653bd1c5",
+  "assets/pipeline/Keyboard_Rapoo.glb": "3fa385f7107fd6f8695a182b13f8e68e1174fb536a1a23c8ca76fa30dfdf7b5f",
+  "assets/pipeline/Teapot.glb": "22815891907ae4c8031f1f60f4a37705af432ec7c516fd2147e50e69bac8acbb",
+  "assets/renders/cabinet/cabinet.png": "ae86b22fc2bd4bdf948d7e210196ecfa30acbe5c100c2e2f9ab0e63b74bd2594",
+  "assets/renders/house/House_Alternate.png": "c143915b0071d0ebe49495aac2cd9679e1dbfe0498c2f63154d8bd47438de3ed",
+  "assets/renders/house/House_Hero.png": "f13d30a9414844713817e2c1254958184149582cde19e548a142a2ee2a342617",
+  "assets/renders/keyboard/Keyboard_Hero.png": "0fb2b6acd5628b8a868cf9c023c2c90c945c487bacbd06f9522b4dcd4270dc6b",
+  "assets/renders/keyboard/Keyboard_Top.png": "facee9e587a5e9d2641bb773fe7cff1e873464a0e680c3ec0a288d69738707b6",
+  "assets/renders/lamp/lamp.png": "3654385afb3222cb806148e3140b9ca14ff1ebf70fb0013711a86c7853f10517",
+  "assets/renders/sofa/sofa.png": "cf341e1c7eb91da6649b18b41c1257a11ab37b9a4c10edf9b84d4a319783b9b2",
+  "assets/renders/teapot/Teapot_Alternate.png": "0c2909ef2b8b7adb4133767d26bb449a4055fa7371d22bc188774b3575478cbf",
+  "assets/renders/teapot/Teapot_Hero.png": "b4987efff523eb8a704fc0395eda9924bd9a9687b9f1e812051529ac3cf87cce"
+}

@@ -1,5 +1,5 @@
 (
-local out=@"C:\Users\SM\Desktop\3d\deliverables\Porcelain_Teapot_2026\"
+local out=@"C:\Users\SM\Desktop\3d\formspace\outputs\teapot-native\"
 local log=createFile (out+"native-verification.txt")
 try (
  resetMaxFile #noPrompt
@@ -21,11 +21,6 @@ try (
  local dims=hi-lo
  local ok=(valid and loaded and parts.count==13 and editable==13 and missing==0 and texturesPresent and tex.count>=1 and units.SystemType==#centimeters and tris==106224 and abs(dims.x-31.8128)<.05 and abs(dims.z-21.1995)<.05)
  format "IS_MAX_FILE=%\nREOPENED=%\nMAX_VERSION=%\nEDITABLE_POLY_PARTS=%\nPARTS=%\nTRIANGLES=%\nMISSING_MATERIALS=%\nTEXTURES_PRESENT=%\nTEXTURE_MAPS=%\nUNITS=%\nDIMENSIONS_CM=%\nALL_CHECKS_PASS=%\n" valid loaded (maxVersion()) editable parts.count tris missing texturesPresent tex.count units.SystemType dims ok to:log
- -- Keep all companion resources local to the delivered scene.
- if ok do (
-  for m in tex do m.filename=(out+"peony_albedo.png")
-  saveMaxFile (out+"3d.max") quiet:true
- )
 ) catch (format "ERROR: %\n" (getCurrentException()) to:log)
 close log
 )

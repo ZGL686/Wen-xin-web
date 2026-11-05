@@ -1,7 +1,6 @@
 莓糖小屋 · 卡通可爱风房子
 
-主文件：3d.max
-建议使用 Autodesk 3ds Max 2026 或更高版本打开。
+使用 Autodesk 3ds Max 2026 或更高版本打开 assets/3d source/房子3d.max。
 
 模型信息
 在 3ds Max 2026.2 原生创建并从磁盘重新打开检查通过。
@@ -10,7 +9,7 @@
 原生网格共 98,280 个三角面；网页 GLB 共 98,218 个三角面（导出时跳过 62 个退化三角面）。
 
 继续修改
-1. 打开 3d.max，使用“场景资源管理器”按名称或图层选择屋顶、墙体、门窗和庭院部件。
+1. 打开房子3d.max，使用“场景资源管理器”按名称或图层选择屋顶、墙体、门窗和庭院部件。
 2. 可独立移动、缩放、改色；需要改轮廓时进入对象的 Editable Poly（可编辑多边形）修改顶点、边或面。
 3. 更改材质球的漫反射颜色即可调整配色。模型采用纯色材质，不依赖外置贴图。
 4. 场景包含用于展示的相机、灯光和摄影棚地面；修改模型时可隐藏这些辅助对象。
@@ -26,13 +25,12 @@
 90_STUDIO：相机、灯光和摄影棚地面，不进入网页 GLB。
 
 文件用途
-3d.max：可继续修改的原生场景。
-House.glb：网页交互预览，来自同一 Max 场景的实际网格；GLB 与 Max 的渲染效果可能存在差异。
-House_Hero / House_Alternate：同一场景的两个角度展示图。
-native-verification.txt：Max 原生重新打开后的检查结果。
-native-verification.json：原生检查的机器可读摘要。
-House.verification.json：网页模型的几何、材质、坐标与文件检查记录。
-SHA256SUMS.json：交付文件校验值。
+assets/3d source/房子3d.max 是可继续修改的原生场景。
+assets/pipeline/house.glb 是来自同一 Max 场景实际网格的网页交互预览。
+assets/renders/house/House_Hero.png 与 House_Alternate.png 是同一场景的两个角度展示图。
+本目录的 native-verification.txt 和 native-verification.json 记录 Max 原生重开的检查结果。
+House.verification.json 记录网页模型的几何、材质、坐标与文件检查。
+本目录的 SHA256SUMS.json 记录历史交付，当前文件校验见 docs/models/SHA256SUMS.json。
 
 设计范围
 这是卡通风格的外观与小庭院模型，用于作品展示和继续创作，未制作可施工的建筑工程图或内部装修。网站模型预览为本次离线导出，不代表任意 MAX 文件都能在网页自动转换。

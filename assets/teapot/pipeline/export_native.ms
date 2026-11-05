@@ -1,5 +1,5 @@
 (
-local jf=createFile @"C:\Users\SM\Desktop\3d\assets\teapot\native-meshes.json"
+local jf=createFile @"C:\Users\SM\Desktop\3d\formspace\outputs\teapot-native\native-meshes.json"
 format "{\"objects\":[" to:jf
 local first=true
 for n in TeaParts do (

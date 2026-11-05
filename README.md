@@ -9,11 +9,12 @@
 | 路径 | 用途 |
 | --- | --- |
 | `formspace/` | 可运行的网站源码、前后端及网页资产 |
-| `assets/3d source/` | 原始 MAX 工程，保留原文件名和内容；网页四作基线由验证清单单独核对 |
-| `assets/pipeline/` | 离线导出脚本、FBX/OBJ 中间文件、GLB、PNG、资产验证资料 |
-| `deliverables/` | WorkBuddy 接手 ZIP 与 SHA-256；展开副本仅在本地保留 |
-| `docs/workbuddy/` | 接手任务与国内迁移说明 |
-| `docs/verification/` | 历史验收与本次整理基线 |
+| `assets/3d source/` | 可直接打开的 MAX 原件及配套贴图 |
+| `assets/pipeline/` | 离线导出脚本、FBX、OBJ、GLB 和转换记录 |
+| `assets/renders/` | 按作品归类的原生渲染图 |
+| `docs/models/` | 模型使用说明与本地验收记录 |
+| `docs/workbuddy/` | 历史接手任务与国内迁移说明 |
+| `docs/verification/` | 网站和历次交付的验收回执 |
 | `archive/cabinet-20261011/` | 柜子补齐过程中的来源、脚本、图片和验证资料；原始运行日志不入库 |
 | `wiki_memory/` | 当前状态、决策、知识、追加式工作日志 |
 | `tools/` | 项目校验、每轮同步、打包工具 |
@@ -49,13 +50,17 @@ pwsh -File tools/project-sync.ps1 -Summary "本轮任务" -Kind maintenance -Det
 
 同步工具由 Agent 每轮结束执行；遇到网络、权限或远端分歧会保留本地结果并报错，不强推。源码推送不会自动重新发布网站。
 
-## 当前交付与历史包
+## 当前作品文件
 
 2026-11-02 已发布多格式三维查看器：左键旋转、右键平移、平滑缩放、双击聚焦、居中/复位、全屏和触屏；支持 GLB/glTF/OBJ/STL/FBX/STEP/STP 与模型资源 ZIP。复位不重复请求模型，预览无需主动下载或安装软件。采用 Three.js、camera-controls 与 OCCT Worker，原界面与私密权限保留。507 项接口、45 项本地与 30 项线上浏览器检查通过；回执 `docs/verification/model-viewer-20261102.json`，工程说明见 `wiki_memory/知识/模块/浏览器三维查看器.md`。
 
-2026-10-29 新增参考键盘原生建模：`deliverables/Keyboard_Rapoo_3dsMax2026_Package.zip`，内含可直接在 3ds Max 2026 中文版打开的 MAX、FBX、GLB、两张真实渲染、参考图和说明。104 个键帽独立，150 个文字节点可编辑；比例及隐藏底部按照片推定。网页详情：https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/rapoo-keyboard 。模型与站点回执为 `docs/verification/keyboard-model-20261029.json`、`keyboard-site-20261029.json`，源管线见 `assets/keyboard-rapoo-reference/`。
+- 莓糖小屋使用 [房子3d.max](<assets/3d source/房子3d.max>)，渲染图位于 [house](assets/renders/house/)。
+- RAPOO 键盘使用 [Keyboard_Rapoo_3dsMax2026.max](<assets/3d source/Keyboard_Rapoo_3dsMax2026.max>)，FBX 和 GLB 位于 [转换目录](assets/pipeline/)，渲染图位于 [keyboard](assets/renders/keyboard/)。
+- 青花瓷壶的 MAX 与牡丹贴图放在同一个 [茶壶源文件夹](<assets/3d source/Porcelain_Teapot_2026/>)，渲染图位于 [teapot](assets/renders/teapot/)。
 
-本轮实现与验收见 `docs/verification/changxu-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。历史 WorkBuddy ZIP 保持为 2026-10-25 旧版快照，不含后续文心及长序功能；接手新版以当前 `main` 为准。源码仓库不含远端用户作品数据库。
+模型按原格式直接交付。使用说明和原生检查见 [模型资料](docs/models/)。历史回执中的路径记录了验收当时的位置。
+
+实现与验收见 `docs/verification/changxu-20261026.json`，接口合同见 `formspace/shared/portfolio.ts`。2026-10-25 的 WorkBuddy 快照已核对并展开留档于本机 `.local-history/workbuddy-20261025/`，原 ZIP 可从本机整理备份或 Git 历史追溯。接手新版使用当前 `main`。
 
 浏览器空间与旧数据保留边界见 `wiki_memory/决策/ADR-006-免账号浏览器创作空间.md`。
 

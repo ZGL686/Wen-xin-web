@@ -21,7 +21,7 @@ const textured='mtllib triangle.mtl\nusemtl test\n'+obj;
 const stl='solid triangle\nfacet normal 0 0 1\nouter loop\nvertex -1 -1 0\nvertex 1 -1 0\nvertex 0 1 0\nendloop\nendfacet\nendsolid triangle';
 const files={
  'gltf':Buffer.from(JSON.stringify(document)), 'obj':Buffer.from(obj),'stl':Buffer.from(stl),
- 'fbx':readFileSync(path.join(root,'../deliverables/Keyboard_Rapoo_20261029/Keyboard_Rapoo.fbx')),
+ 'fbx':readFileSync(path.join(root,'../assets/pipeline/Keyboard_Rapoo.fbx')),
  'step':readFileSync(path.join(root,'node_modules/occt-import-js/test/testfiles/simple-basic-cube/cube.stp')),
  'stp':readFileSync(path.join(root,'node_modules/occt-import-js/test/testfiles/simple-basic-cube/cube.stp')),
  'zip':Buffer.from(zipSync({'models/triangle.gltf':encoder.encode(JSON.stringify(external)),'data/triangle.bin':new Uint8Array(triangle.buffer)}))

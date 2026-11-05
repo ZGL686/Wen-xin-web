@@ -1,5 +1,7 @@
 (
-local log=createFile @"C:\Users\SM\Desktop\3d\assets\house-cute\build-status.txt"
+local out=@"C:\Users\SM\Desktop\3d\formspace\outputs\house-native\"
+makeDir out all:true
+local log=createFile (out+"build-status.txt")
 try (
  fileIn @"C:\Users\SM\Desktop\3d\assets\house-cute\pipeline\build_house.ms"
  format "BUILD_RENDER_OK\n" to:log

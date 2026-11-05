@@ -1,4 +1,4 @@
-﻿-- Native 3ds Max 2026 reference-driven 104-key keyboard. Centimeters.
+-- Native 3ds Max 2026 reference-driven 104-key keyboard. Centimeters.
 -- Runs in a NEW scene. Photo scale/unseen underside inferred.
 (
 global keyboardWorldMesh
@@ -2080,12 +2080,12 @@ l=omniLight name:"Studio_Fill" pos:[28,-7,24] multiplier:0.30; lightsLayer.addNo
 l=omniLight name:"Studio_Rim" pos:[0,20,25] multiplier:0.40; lightsLayer.addNode l
 select Keyboard_Parts; try (max zoomext sel all) catch(); clearSelection()
 try (viewport.setCamera cam) catch()
-saveMaxFile @"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\Keyboard_Rapoo_3dsMax2026.max" quiet:true
+saveMaxFile @"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\Keyboard_Rapoo_3dsMax2026.max" quiet:true
 format "SAVED_MAX\n" to:buildLog; flush buildLog
 pluginManager.loadClass FBXEXP; FBXExporterSetParam "ASCII" false; FBXExporterSetParam "Animation" false; FBXExporterSetParam "Cameras" false; FBXExporterSetParam "Lights" false; FBXExporterSetParam "SmoothingGroups" true; FBXExporterSetParam "UpAxis" "Z"
 fileIn @"C:\Users\SM\Desktop\3d\assets\keyboard-rapoo-reference\world_mesh.ms"
 local fbxCopies=#(); for p in Keyboard_Parts do (local c=mesh mesh:(keyboardWorldMesh p) name:("FBX_"+p.name); c.material=p.material; append fbxCopies c)
-select fbxCopies; exportFile @"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\Keyboard_Rapoo.fbx" #noPrompt selectedOnly:true using:FBXEXP; delete fbxCopies; clearSelection()
+select fbxCopies; exportFile @"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\Keyboard_Rapoo.fbx" #noPrompt selectedOnly:true using:FBXEXP; delete fbxCopies; clearSelection()
 format "EXPORTED_FBX\n" to:buildLog; flush buildLog
 local jf=createFile @"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\native-meshes.json"
 format "{\"objects\":[" to:jf; local first=true
@@ -2098,9 +2098,9 @@ format "],\"faces\":[" to:jf; for i=1 to msh.numfaces do (local f=getFace msh i;
 format "]}" to:jf))
 format "]}" to:jf; close jf
 format "MESH_EXPORT_DONE\n" to:buildLog; flush buildLog
-render camera:cam outputFile:@"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\Keyboard_Hero.png" width:1800 height:1050 vfb:false
+render camera:cam outputFile:@"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\Keyboard_Hero.png" width:1800 height:1050 vfb:false
 format "HERO_RENDERED\n" to:buildLog; flush buildLog
-render camera:cam2 outputFile:@"C:\Users\SM\Desktop\3d\deliverables\Keyboard_Rapoo_20261029\Keyboard_Top.png" width:2000 height:850 vfb:false
+render camera:cam2 outputFile:@"C:\Users\SM\Desktop\3d\formspace\outputs\keyboard\Keyboard_Top.png" width:2000 height:850 vfb:false
 format "TOP_RENDERED\nSUCCESS\n" to:buildLog
 )
 ) catch (format "ERROR: %\n" (getCurrentException()) to:buildLog)

@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-05",
+  "result": "passed",
+  "looseFilesComparedToPriorDeliveryBytes": 15,
+  "historicalWorkBuddyFilesVerified": 47,
+  "activeZipFiles": 0,
+  "zipFilesMovedToLocalBackup": 7,
+  "websiteAssetsOrRuntimeModified": false,
+  "looseFileManifest": "docs/models/SHA256SUMS.json",
+  "reversibleBackup": ".local-history/cleanup-20261105/former-deliverables",
+  "workbuddyExpandedBackup": ".local-history/workbuddy-20261025",
+  "teapot": {
+    "reopenedIn3dsMax2026": true,
+    "editableParts": 13,
+    "triangles": 106224,
+    "renderDimensions": [
+      1400,
+      1100
+    ],
+    "renderRgbExactlyMatchesPrior": true
+  }
+}

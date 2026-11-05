@@ -13,6 +13,6 @@
 *.glb filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
 
-# Preserve the sealed delivery's exact bytes so its SHA manifest survives checkout.
-deliverables/Cute_House_2026/*.json -text
-deliverables/Cute_House_2026/*.txt -text
+# Preserve the exact bytes of the historical house verification files.
+docs/models/house/*.json -text
+docs/models/house/*.txt -text

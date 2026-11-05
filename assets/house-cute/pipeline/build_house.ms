@@ -5,7 +5,8 @@ units.SystemType=#centimeters
 units.SystemScale=1.0
 global HouseParts=#()
 global HouseRoot=@"C:\Users\SM\Desktop\3d\"
-global HouseOut=HouseRoot+@"deliverables\Cute_House_2026\"
+global HouseOut=HouseRoot+@"formspace\outputs\house-native\"
+makeDir HouseOut all:true
 fn houseLayer s=(local l=LayerManager.getLayerFromName s;if l==undefined do l=LayerManager.newLayerFromName s;l)
 fn clay s c=(standardMaterial name:s diffuse:c ambient:c specularLevel:18 glossiness:28)
 local cream=clay "01_Vanilla_Plaster" (color 244 221 177)

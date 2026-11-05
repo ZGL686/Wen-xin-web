@@ -4,6 +4,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 const root=path.resolve(import.meta.dirname,'..');
 const source=path.resolve(root,'../assets/pipeline');
+const renders=path.resolve(root,'../assets/renders');
 const original=path.resolve(root,'../assets/3d source');
 const assets=JSON.parse(await readFile(path.join(source,'assets.json'),'utf8'));
 const works=JSON.parse(await readFile(path.join(root,'data/works.json'),'utf8'));
@@ -12,7 +13,7 @@ await mkdir(path.join(root,'public/originals'),{recursive:true});
 for(const asset of assets){
  const work=works.find(w=>w.id===asset.id);
  await copyFile(path.join(source,asset.glb),path.join(root,'public/portfolio',asset.glb));
- await sharp(path.join(source,asset.image)).webp({quality:88,alphaQuality:95}).toFile(path.join(root,'public/portfolio',asset.id+'.webp'));
+ await sharp(path.join(renders,asset.id,asset.image)).webp({quality:88,alphaQuality:95}).toFile(path.join(root,'public/portfolio',asset.id+'.webp'));
  const bytes=await readFile(path.join(original,asset.original_file));
  const digest=createHash('sha256').update(bytes).digest('hex');
  if(digest.toLowerCase()!==asset.original_sha256.toLowerCase())throw new Error('Source file changed: '+asset.id);

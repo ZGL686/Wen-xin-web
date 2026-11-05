@@ -24,9 +24,10 @@ for(const asset of assets){
  const cover=await bytes('formspace/public/'+work.coverUrl.replace(/^\//,''));
  if(cover.toString('ascii',0,4)!=='RIFF'||cover.toString('ascii',8,12)!=='WEBP')fail('Invalid cover '+asset.id);
 }
-const archive='deliverables/FormSpace_WorkBuddy_China_20261025.zip';
-const expected=(await bytes(archive+'.sha256')).toString('utf8').trim().split(/\s+/)[0];
-if(sha(await bytes(archive))!==expected)fail('Historical handoff ZIP hash mismatch');
+const looseAssets=await json('docs/models/SHA256SUMS.json');
+for(const [file,expected] of Object.entries(looseAssets)){
+ if(sha(await bytes(file))!==expected)fail('Organized asset hash mismatch: '+file);
+}
 try{await access(resolve('formspace/.git'));fail('Embedded formspace Git would become a gitlink.');}catch(error){if(error.message.startsWith('Embedded'))throw error;}
 for(const file of ['AGENTS.md','wiki_memory/AGENTS.md','wiki_memory/当前状态/项目概览.md','tools/project-sync.ps1'])await bytes(file);
 const paths=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{cwd:root,encoding:'utf8'}).split('\0').filter(Boolean);
@@ -41,7 +42,7 @@ for(const file of new Set(paths)){
   const content=await readFile(resolve(file),'utf8');if(secret.test(content))fail('Possible credential in '+file);textFiles++;
  }
 }
-for(const privateName of ['.env','formspace/.env.production','formspace/node_modules/probe','deliverables/FormSpace_WorkBuddy_China_20261025/源码/probe','.local-history/probe','assets/pipeline/probe.log']){
+for(const privateName of ['.env','formspace/.env.production','formspace/node_modules/probe','formspace/outputs/handovers/probe','.local-history/probe','assets/pipeline/probe.log']){
  try{execFileSync('git',['check-ignore','-q',privateName],{cwd:root});}catch{fail('Ignore boundary missing: '+privateName);}
 }
-console.log(JSON.stringify({result:'passed',originals:assets.length,downloadCopies:assets.length,glbPairs:assets.length,covers:assets.length,handoffSha256:expected,textFilesScanned:textFiles}));
+console.log(JSON.stringify({result:'passed',originals:assets.length,downloadCopies:assets.length,glbPairs:assets.length,covers:assets.length,looseAssets:Object.keys(looseAssets).length,textFilesScanned:textFiles}));

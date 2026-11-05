@@ -14,7 +14,7 @@ import sys
 
 
 TEXTURED_MATERIALS = {"BlueWhite_Peony", "Lid_Peony"}
-TEXTURE_PATH = Path(__file__).resolve().parent.parent / "peony_albedo.png"
+TEXTURE_PATH = Path(__file__).resolve().parents[3] / "assets/3d source/Porcelain_Teapot_2026/peony_albedo.png"
 
 
 def vector(value, length, label):

@@ -9,7 +9,7 @@ const original=path.join(repository,'formspace');
 const packageDate=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const packageName=process.argv[3]||'FormSpace_WorkBuddy_China_'+packageDate.replaceAll('-','');
 if(!/^[A-Za-z0-9_-]+$/.test(packageName))throw new Error('Use a simple archive name.');
-const delivery=path.join(repository,'deliverables',packageName);
+const delivery=path.join(repository,'formspace','outputs','handovers',packageName);
 const source=path.join(delivery,'源码');
 const mode=process.argv[2]||'prepare';
 const docs={

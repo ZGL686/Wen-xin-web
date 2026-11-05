@@ -2,9 +2,13 @@
 
 本目录为本次用户单视图参考的自定义比例重建，不使用标准 Utah Teapot 冒充参考造型。所有模型几何由本机 3ds Max 2026.2 真实执行 MAXScript 创建；渲染与重新打开验证也在 Max 里完成，没有使用 Blender 或把其他格式改名为 MAX。
 
-从仓库根目录运行 `generate_scene.py`（本机 Max Python 3.11.12 可用）生成忽略的 `build_teapot.ms`，再由 `3dsmaxbatch.exe` 执行 `run_build.ms`。这是本项目路径绑定的制作配方，修改路径或参数后应重新渲染验证。`verify_native.ms` 从磁盘重新打开 `3d.max`，检查13个Editable Poly部件、材质、贴图、单位和尺寸，并整理交付贴图引用。
+从仓库根目录运行 `generate_scene.py`（本机 Max Python 3.11.12 可用）生成忽略的 `build_teapot.ms`，再由 `3dsmaxbatch.exe` 执行 `run_build.ms`。这是本项目路径绑定的制作配方，修改路径或参数后应重新渲染验证。`verify_native.ms` 从磁盘重新打开 `3d.max`，检查 13 个 Editable Poly 部件、材质、贴图、单位和尺寸。
 
 `export_native.ms` 在 Max 内对实际保存场景求值并导出顶点、三角形和UV；忽略的 `native-meshes.json` 只是中间数据。`export_glb.py` 使用Python标准库打包这些实际网格，进行厘米Z-up至米Y-up转换、法线和UV处理，嵌入牡丹PNG并输出自包含GLB及检查回执。网页PBR与Max标准材质不同，不保证像素级渲染一致。
+
+可编辑场景与牡丹贴图同放在 `assets/3d source/Porcelain_Teapot_2026/`。最终 GLB 为 `assets/pipeline/Teapot.glb`，渲染图位于 `assets/renders/teapot/`，说明和本地验收位于 `docs/models/teapot/`。
+
+重新执行制作配方时，生成文件先写入忽略目录 `formspace/outputs/teapot-native/`，验收后再按授权更新正式文件。归位后的 MAX 保持原有字节，使用同目录的牡丹贴图。Max 原生重开检查保留 13 个部件和 106,224 个三角面，实际重新渲染的 1400×1100 图与原渲染 RGB 逐像素一致。
 
 ## 生产复用调查（2026-11-05）
 

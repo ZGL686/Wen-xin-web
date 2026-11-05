@@ -7,7 +7,7 @@ import numpy as np
 
 ROOT=Path(__file__).resolve().parent
 PROJECT=ROOT.parents[1]
-OUT=PROJECT/'deliverables'/'Keyboard_Rapoo_20261029'
+OUT=PROJECT/'formspace'/'outputs'/'keyboard'
 source=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else PROJECT/'formspace/outputs/keyboard/native-meshes.json'
 target=Path(sys.argv[2]).resolve() if len(sys.argv)>2 else OUT/'Keyboard_Rapoo.glb'
 target.parent.mkdir(parents=True,exist_ok=True)
