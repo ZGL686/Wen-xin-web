@@ -1,0 +1,142 @@
+{
+  "source": "3ds Max 2026 evaluated native meshes",
+  "input": "native-meshes.json",
+  "output": "Teapot.glb",
+  "objects": 13,
+  "triangles": 106224,
+  "vertices": 54935,
+  "uvVertices": 54935,
+  "uvMappedObjects": 13,
+  "materials": 4,
+  "embeddedImages": 1,
+  "embeddedTextureBytes": 2962844,
+  "externalResources": 0,
+  "glbBytes": 6007672,
+  "bufferBytes": 5995452,
+  "degenerateTrianglesSkipped": 0,
+  "units": "meters",
+  "axes": "Y-up",
+  "bounds": {
+    "min": [
+      -0.155832,
+      0.00239453,
+      -0.0925
+    ],
+    "max": [
+      0.16229600000000002,
+      0.21439,
+      0.0925
+    ],
+    "dimensions": [
+      0.318128,
+      0.21199547,
+      0.185
+    ]
+  },
+  "parts": [
+    {
+      "name": "01_Body_Hollow_Editable",
+      "material": "BlueWhite_Peony",
+      "vertices": 20382,
+      "triangles": 40192,
+      "uvVertices": 20382,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "02_Foot_Ring",
+      "material": "Porcelain_White",
+      "vertices": 2813,
+      "triangles": 5376,
+      "uvVertices": 2813,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "03_Lid_Removable",
+      "material": "Lid_Peony",
+      "vertices": 7869,
+      "triangles": 15360,
+      "uvVertices": 7869,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "04_Knob_White",
+      "material": "Porcelain_White",
+      "vertices": 5917,
+      "triangles": 11520,
+      "uvVertices": 5917,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "05_Knob_Red_Tip",
+      "material": "Vermilion_Red",
+      "vertices": 833,
+      "triangles": 1536,
+      "uvVertices": 833,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "06_Spout_Hollow_Editable",
+      "material": "Porcelain_White",
+      "vertices": 3626,
+      "triangles": 7008,
+      "uvVertices": 3626,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "07_Handle_White_Editable",
+      "material": "Porcelain_White",
+      "vertices": 1815,
+      "triangles": 3456,
+      "uvVertices": 1815,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "08_Handle_Red_Inlay",
+      "material": "Vermilion_Red",
+      "vertices": 715,
+      "triangles": 1296,
+      "uvVertices": 715,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "09_Mouth_Red_Rim",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096,
+      "uvVertices": 2193,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "10_Mouth_Inner_Red",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096,
+      "uvVertices": 2193,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "11_Lid_White_Bead",
+      "material": "Porcelain_White",
+      "vertices": 2193,
+      "triangles": 4096,
+      "uvVertices": 2193,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "12_Knob_Red_Band",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096,
+      "uvVertices": 2193,
+      "degenerateTrianglesSkipped": 0
+    },
+    {
+      "name": "13_Knob_Red_Band_Lower",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096,
+      "uvVertices": 2193,
+      "degenerateTrianglesSkipped": 0
+    }
+  ]
+}

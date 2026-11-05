@@ -1,0 +1,261 @@
+{
+  "date": "2026-11-05",
+  "reference": {
+    "filename": "0142.jpg_wh860.jpg",
+    "sha256": "80624e1dc69726a9b2d428532d2f18bdd1b8aa77df1c13c16f305c65b3e1f640",
+    "views": 1
+  },
+  "native": {
+    "file": "deliverables/Porcelain_Teapot_2026/3d.max",
+    "host": "3ds Max 2026.2 Simplified Chinese",
+    "realMaxFile": true,
+    "diskReopenPassed": true,
+    "editablePolyParts": 13,
+    "triangles": 106224,
+    "units": "centimeters",
+    "dimensions": [
+      31.8127,
+      18.5,
+      21.1995
+    ],
+    "missingMaterials": 0,
+    "texturesPresent": true,
+    "validation": "deliverables/Porcelain_Teapot_2026/native-verification.txt"
+  },
+  "webModel": {
+    "source": "3ds Max 2026 evaluated native meshes",
+    "input": "native-meshes.json",
+    "output": "Teapot.glb",
+    "objects": 13,
+    "triangles": 106224,
+    "vertices": 54935,
+    "uvVertices": 54935,
+    "uvMappedObjects": 13,
+    "materials": 4,
+    "embeddedImages": 1,
+    "embeddedTextureBytes": 2962844,
+    "externalResources": 0,
+    "glbBytes": 6007672,
+    "bufferBytes": 5995452,
+    "degenerateTrianglesSkipped": 0,
+    "units": "meters",
+    "axes": "Y-up",
+    "bounds": {
+      "min": [
+        -0.155832,
+        0.00239453,
+        -0.0925
+      ],
+      "max": [
+        0.16229600000000002,
+        0.21439,
+        0.0925
+      ],
+      "dimensions": [
+        0.318128,
+        0.21199547,
+        0.185
+      ]
+    },
+    "parts": [
+      {
+        "name": "01_Body_Hollow_Editable",
+        "material": "BlueWhite_Peony",
+        "vertices": 20382,
+        "triangles": 40192,
+        "uvVertices": 20382,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "02_Foot_Ring",
+        "material": "Porcelain_White",
+        "vertices": 2813,
+        "triangles": 5376,
+        "uvVertices": 2813,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "03_Lid_Removable",
+        "material": "Lid_Peony",
+        "vertices": 7869,
+        "triangles": 15360,
+        "uvVertices": 7869,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "04_Knob_White",
+        "material": "Porcelain_White",
+        "vertices": 5917,
+        "triangles": 11520,
+        "uvVertices": 5917,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "05_Knob_Red_Tip",
+        "material": "Vermilion_Red",
+        "vertices": 833,
+        "triangles": 1536,
+        "uvVertices": 833,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "06_Spout_Hollow_Editable",
+        "material": "Porcelain_White",
+        "vertices": 3626,
+        "triangles": 7008,
+        "uvVertices": 3626,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "07_Handle_White_Editable",
+        "material": "Porcelain_White",
+        "vertices": 1815,
+        "triangles": 3456,
+        "uvVertices": 1815,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "08_Handle_Red_Inlay",
+        "material": "Vermilion_Red",
+        "vertices": 715,
+        "triangles": 1296,
+        "uvVertices": 715,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "09_Mouth_Red_Rim",
+        "material": "Vermilion_Red",
+        "vertices": 2193,
+        "triangles": 4096,
+        "uvVertices": 2193,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "10_Mouth_Inner_Red",
+        "material": "Vermilion_Red",
+        "vertices": 2193,
+        "triangles": 4096,
+        "uvVertices": 2193,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "11_Lid_White_Bead",
+        "material": "Porcelain_White",
+        "vertices": 2193,
+        "triangles": 4096,
+        "uvVertices": 2193,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "12_Knob_Red_Band",
+        "material": "Vermilion_Red",
+        "vertices": 2193,
+        "triangles": 4096,
+        "uvVertices": 2193,
+        "degenerateTrianglesSkipped": 0
+      },
+      {
+        "name": "13_Knob_Red_Band_Lower",
+        "material": "Vermilion_Red",
+        "vertices": 2193,
+        "triangles": 4096,
+        "uvVertices": 2193,
+        "degenerateTrianglesSkipped": 0
+      }
+    ]
+  },
+  "deliveryHashes": {
+    "3d.max": {
+      "bytes": 11542528,
+      "sha256": "2ba6189c80ee77ce45dbd31719a5bffbaeaf8f0dadd962b141ebd3a4097df6e7"
+    },
+    "peony_albedo.png": {
+      "bytes": 2962844,
+      "sha256": "62e1ce316d7c7d3d186ed25bc28609cffde0b549c2dcf4fb9cee615056a0dae8"
+    },
+    "Teapot.glb": {
+      "bytes": 6007672,
+      "sha256": "22815891907ae4c8031f1f60f4a37705af432ec7c516fd2147e50e69bac8acbb"
+    },
+    "Teapot_Hero.png": {
+      "bytes": 2890079,
+      "sha256": "b4987efff523eb8a704fc0395eda9924bd9a9687b9f1e812051529ac3cf87cce"
+    },
+    "Teapot_Alternate.png": {
+      "bytes": 2942599,
+      "sha256": "0c2909ef2b8b7adb4133767d26bb449a4055fa7371d22bc188774b3575478cbf"
+    },
+    "使用说明.txt": {
+      "bytes": 1358,
+      "sha256": "32f7d4a7b47a5d0efbf88d63d7666892b76b4aa7116926fef446305ed3c58fff"
+    },
+    "native-verification.txt": {
+      "bytes": 283,
+      "sha256": "64f589364274b143e650c6586c3aa467505ac132ca8b14e1385e93fb7e63b500"
+    },
+    "Teapot.verification.json": {
+      "bytes": 3413,
+      "sha256": "ae196bba99dfdc984074d1c4a836ceab47aebe32e57634f4c5a4e0d139f61957"
+    }
+  },
+  "archives": {
+    "Porcelain_Teapot_3dsMax2026_Package.zip": {
+      "bytes": 15493247,
+      "sha256": "5e3191623c766abfe663921c09eaac06f9e656313ec6ecca3bcad1a7703ae193",
+      "crcPassed": true
+    },
+    "Porcelain_Teapot_MAX_Texture.zip": {
+      "bytes": 5766703,
+      "sha256": "ff054d780ce0f6b9aa70aaed540d3ea20b37de5ad180c90fd2ef5e9903e0ec5b",
+      "crcPassed": true
+    }
+  },
+  "website": {
+    "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/5f35ce63-e3b3-4d8c-b167-fa5935983686",
+    "workId": "5f35ce63-e3b3-4d8c-b167-fa5935983686",
+    "space": "existing user IAB browser space",
+    "visibility": "private",
+    "version1Saved": true,
+    "finalRevisionVerified": true,
+    "siteCodeChanged": false,
+    "siteRedeployed": false,
+    "versionNumber": 2,
+    "versionCount": 2,
+    "versionId": "90be2842-a85c-48d3-8f01-0aca730ea219",
+    "sourceFilename": "Porcelain_Teapot_MAX_Texture.zip",
+    "sourceDownloadHashMatches": true,
+    "personalWorkVisible": true,
+    "browserSpaceWorkCountBefore": 1,
+    "browserSpaceWorkCountAfter": 2,
+    "ownerControlsPresent": true,
+    "publicWorkCount": 7,
+    "images": 2,
+    "sourceAndModelSeparate": true,
+    "rotationZoomFitChecked": true,
+    "coverLoadedPixels": [
+      1400,
+      1100
+    ],
+    "screenshot": "teapot-site-20261105.jpg",
+    "downloadedMaxBytesMatch": true
+  },
+  "control": {
+    "dccMcpLiveInstances": 0,
+    "dccMcpRealHostCallVerified": false,
+    "actualExecution": "native 3dsmaxbatch with saved/reopened scene",
+    "productionReuseContract": "dcc-mcp-production-reuse/v1"
+  },
+  "limits": [
+    "Single-photo shape and size reconstruction; unseen side and generated floral design are approximations.",
+    "No manufacturing or continuous fluid-path validation.",
+    "General MAX cloud conversion remains deferred."
+  ],
+  "uploadRecovery": {
+    "firstFinalUploadTimedOut": true,
+    "serverRevisionCheckedBeforeRetry": 1,
+    "failedAttemptCreatedVersion": false,
+    "retrySourceZipExcludesDuplicateWebPreviews": true,
+    "retryCoverEncoding": "JPEG quality 94 from same PNG renders",
+    "retryUploadBytes": 12089378
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "3d.max": {
+    "bytes": 11542528,
+    "sha256": "2ba6189c80ee77ce45dbd31719a5bffbaeaf8f0dadd962b141ebd3a4097df6e7"
+  },
+  "peony_albedo.png": {
+    "bytes": 2962844,
+    "sha256": "62e1ce316d7c7d3d186ed25bc28609cffde0b549c2dcf4fb9cee615056a0dae8"
+  },
+  "Teapot.glb": {
+    "bytes": 6007672,
+    "sha256": "22815891907ae4c8031f1f60f4a37705af432ec7c516fd2147e50e69bac8acbb"
+  },
+  "Teapot_Hero.png": {
+    "bytes": 2890079,
+    "sha256": "b4987efff523eb8a704fc0395eda9924bd9a9687b9f1e812051529ac3cf87cce"
+  },
+  "Teapot_Alternate.png": {
+    "bytes": 2942599,
+    "sha256": "0c2909ef2b8b7adb4133767d26bb449a4055fa7371d22bc188774b3575478cbf"
+  },
+  "使用说明.txt": {
+    "bytes": 1358,
+    "sha256": "32f7d4a7b47a5d0efbf88d63d7666892b76b4aa7116926fef446305ed3c58fff"
+  },
+  "native-verification.txt": {
+    "bytes": 283,
+    "sha256": "64f589364274b143e650c6586c3aa467505ac132ca8b14e1385e93fb7e63b500"
+  },
+  "Teapot.verification.json": {
+    "bytes": 3413,
+    "sha256": "ae196bba99dfdc984074d1c4a836ceab47aebe32e57634f4c5a4e0d139f61957"
+  }
+}

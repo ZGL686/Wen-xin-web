@@ -1,0 +1,85 @@
+{
+  "units": "centimeters",
+  "reference": "single supplied front photograph",
+  "estimatedHeightCm": 21.42,
+  "components": [
+    {
+      "name": "01_Body_Hollow_Editable",
+      "material": "BlueWhite_Peony",
+      "vertices": 20382,
+      "triangles": 40192
+    },
+    {
+      "name": "02_Foot_Ring",
+      "material": "Porcelain_White",
+      "vertices": 2813,
+      "triangles": 5376
+    },
+    {
+      "name": "03_Lid_Removable",
+      "material": "Lid_Peony",
+      "vertices": 7869,
+      "triangles": 15360
+    },
+    {
+      "name": "04_Knob_White",
+      "material": "Porcelain_White",
+      "vertices": 5917,
+      "triangles": 11520
+    },
+    {
+      "name": "05_Knob_Red_Tip",
+      "material": "Vermilion_Red",
+      "vertices": 833,
+      "triangles": 1536
+    },
+    {
+      "name": "06_Spout_Hollow_Editable",
+      "material": "Porcelain_White",
+      "vertices": 3626,
+      "triangles": 7008
+    },
+    {
+      "name": "07_Handle_White_Editable",
+      "material": "Porcelain_White",
+      "vertices": 1815,
+      "triangles": 3456
+    },
+    {
+      "name": "08_Handle_Red_Inlay",
+      "material": "Vermilion_Red",
+      "vertices": 715,
+      "triangles": 1296
+    },
+    {
+      "name": "09_Mouth_Red_Rim",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096
+    },
+    {
+      "name": "10_Mouth_Inner_Red",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096
+    },
+    {
+      "name": "11_Lid_White_Bead",
+      "material": "Porcelain_White",
+      "vertices": 2193,
+      "triangles": 4096
+    },
+    {
+      "name": "12_Knob_Red_Band",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096
+    },
+    {
+      "name": "13_Knob_Red_Band_Lower",
+      "material": "Vermilion_Red",
+      "vertices": 2193,
+      "triangles": 4096
+    }
+  ]
+}

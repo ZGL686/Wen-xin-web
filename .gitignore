@@ -35,5 +35,9 @@ Thumbs.db
 
 # Generated validation captures and expanded, immutable handoff copies
 formspace/outputs/
+assets/teapot/native-meshes.json
+assets/teapot/pipeline/build_teapot.ms
+assets/teapot/pipeline/production-guide.md
+assets/teapot/build-status.txt
 deliverables/FormSpace_WorkBuddy_China_20261025/
 deliverables/**/*.partial

@@ -3,7 +3,7 @@ type: moc
 status: active
 kind: process
 importance: high
-updated: 2026-11-04
+updated: 2026-11-05
 topic: work-log-index
 source_logs: []
 supersedes: null
@@ -15,6 +15,8 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-05 | feature | - | archived | porcelain-teapot-native-model-and-user-space-upload | [[日志/2026-11-05-青花茶壶原生建模与个人作品上传.md|青花茶壶原生建模与个人作品上传]] |
+| 2026-11-05 | feature | 完成青花茶壶原生MAX建模并上传个人作品 | archived | session-20261105-113045-756-e6117415 | [[日志/2026-11-05-113045-756-feature-e6117415.md|2026-11-05｜完成青花茶壶原生MAX建模并上传个人作品]] |
 | 2026-11-04 | discussion | 核对传智杯AI应用生成赛规则与长序参赛适配 | archived | session-20261104-102930-049-164b4939 | [[日志/2026-11-04-102930-049-discussion-164b4939.md|2026-11-04｜核对传智杯AI应用生成赛规则与长序参赛适配]] |
 | 2026-11-03 | feature | - | archived | favorites-page-implementation-and-release | [[日志/2026-11-03-独立收藏页与原有收藏保留.md|独立收藏页与原有收藏保留]] |
 | 2026-11-03 | feature | 上线独立收藏页并保留原有收藏记录 | archived | session-20261103-165313-002-63711500 | [[日志/2026-11-03-165313-002-feature-63711500.md|2026-11-03｜上线独立收藏页并保留原有收藏记录]] |
