@@ -39,5 +39,8 @@ assets/teapot/native-meshes.json
 assets/teapot/pipeline/build_teapot.ms
 assets/teapot/pipeline/production-guide.md
 assets/teapot/build-status.txt
+assets/house-cute/native-meshes.json
+assets/house-cute/pipeline/production-guide.md
+assets/house-cute/build-status.txt
 deliverables/FormSpace_WorkBuddy_China_20261025/
 deliverables/**/*.partial

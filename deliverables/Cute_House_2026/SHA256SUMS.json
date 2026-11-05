@@ -1,0 +1,42 @@
+{
+  "3d.max": {
+    "bytes": 9936896,
+    "sha256": "4783fed9f5a0d0e123dbdc37dffccaae071a08f854dd33106582b01a2074e1bc"
+  },
+  "House.glb": {
+    "bytes": 2657096,
+    "sha256": "9e5cf0b729003147956b6b2df192f6f8dfbff9b28ceae46adea6ebfdccdd9455"
+  },
+  "House_Hero.png": {
+    "bytes": 4233369,
+    "sha256": "f13d30a9414844713817e2c1254958184149582cde19e548a142a2ee2a342617"
+  },
+  "House_Alternate.png": {
+    "bytes": 4543036,
+    "sha256": "c143915b0071d0ebe49495aac2cd9679e1dbfe0498c2f63154d8bd47438de3ed"
+  },
+  "House_Hero.jpg": {
+    "bytes": 225935,
+    "sha256": "b706f988315403781cfdeb5eda6f0eba5b35db6964e7e3934bd3c4e4eac33ea6"
+  },
+  "House_Alternate.jpg": {
+    "bytes": 228782,
+    "sha256": "622b7d13d92aee628d92c6848ce3331923b9a90fcb7b2eaa1808dd5c3ddfcfd0"
+  },
+  "使用说明.txt": {
+    "bytes": 2204,
+    "sha256": "275cfc33202ff854b014d96404767168e3a255e42e672dfa8402774b680e3150"
+  },
+  "native-verification.txt": {
+    "bytes": 40678,
+    "sha256": "630e30f069a163b1bc7c2d98cacc55b58dc69af38596520d271827468642015d"
+  },
+  "native-verification.json": {
+    "bytes": 524,
+    "sha256": "ac4d07279cadd76c50c9dceff041b942a63716e2aa41e6cf1533c0a9e3ca765c"
+  },
+  "House.verification.json": {
+    "bytes": 596,
+    "sha256": "effc28ee3fcdad97ca9c342150345c29be0926addae58b0e018cdac6a73d6ac4"
+  }
+}

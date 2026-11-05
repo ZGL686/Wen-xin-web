@@ -1,0 +1,211 @@
+{
+  "date": "2026-11-05",
+  "task": "Rebuild the original house as editable cute cartoon cottage, replace its current files and web exhibit, and upload to the existing personal space",
+  "title": "莓糖小屋",
+  "nativeHost": "3ds Max 2026.2 (28.2.0.20659)",
+  "modeling": {
+    "oleSignature": true,
+    "isMaxFile": true,
+    "reopened": true,
+    "hostYear": 2026,
+    "parts": 330,
+    "editablePolyParts": 330,
+    "triangles": 98280,
+    "vertices": 49800,
+    "materials": 19,
+    "missingMaterials": 0,
+    "emptyObjects": 0,
+    "invalidCoordinates": 0,
+    "externalBitmapMaps": 0,
+    "partLayers": 6,
+    "roofParts": 143,
+    "doorWindowParts": 46,
+    "gardenParts": 112,
+    "units": "centimeters",
+    "systemScale": 1.0,
+    "bounds": {
+      "min": [
+        -50.0,
+        -63.5,
+        0.0
+      ],
+      "max": [
+        50.0,
+        51.5,
+        60.375
+      ],
+      "dimensions": [
+        100.0,
+        115.0,
+        60.375
+      ]
+    },
+    "unitsPass": true,
+    "boundsPass": true,
+    "categoriesPass": true,
+    "allChecksPass": true
+  },
+  "webModel": {
+    "source": "3ds Max 2026 evaluated native meshes",
+    "objects": 330,
+    "triangles": 98218,
+    "vertices": 52650,
+    "materials": 19,
+    "glbBytes": 2657096,
+    "externalResources": 0,
+    "units": "meters",
+    "axes": "Y-up",
+    "normalSources": {
+      "nativeCorners": 330,
+      "nativeVertices": 0,
+      "areaWeightedFallback": 0
+    },
+    "degenerateTrianglesSkipped": 62,
+    "bounds": {
+      "min": [
+        -0.5,
+        0.0,
+        -0.515
+      ],
+      "max": [
+        0.5,
+        0.60375,
+        0.635
+      ],
+      "dimensions": [
+        1.0,
+        0.60375,
+        1.15
+      ]
+    }
+  },
+  "delivery": {
+    "result": "passed",
+    "nativeReopenChecks": true,
+    "zipCrcPass": true,
+    "zipEntries": 11,
+    "fileShaChecks": 11,
+    "archive": "Cute_House_3dsMax2026_Package.zip",
+    "archiveBytes": 10062908,
+    "archiveSha256": "034d7bfca3e4d486688dcccd180a1a73a8971b7c251fee936d5e70e2eaab7d04",
+    "manifest": "SHA256SUMS.json",
+    "manifestFiles": 10,
+    "evidenceExcludedFromArchive": [
+      "package-verification.json"
+    ],
+    "files": {
+      "3d.max": {
+        "bytes": 9936896,
+        "sha256": "4783fed9f5a0d0e123dbdc37dffccaae071a08f854dd33106582b01a2074e1bc"
+      },
+      "House.glb": {
+        "bytes": 2657096,
+        "sha256": "9e5cf0b729003147956b6b2df192f6f8dfbff9b28ceae46adea6ebfdccdd9455"
+      },
+      "House_Hero.png": {
+        "bytes": 4233369,
+        "sha256": "f13d30a9414844713817e2c1254958184149582cde19e548a142a2ee2a342617"
+      },
+      "House_Alternate.png": {
+        "bytes": 4543036,
+        "sha256": "c143915b0071d0ebe49495aac2cd9679e1dbfe0498c2f63154d8bd47438de3ed"
+      },
+      "House_Hero.jpg": {
+        "bytes": 225935,
+        "sha256": "b706f988315403781cfdeb5eda6f0eba5b35db6964e7e3934bd3c4e4eac33ea6"
+      },
+      "House_Alternate.jpg": {
+        "bytes": 228782,
+        "sha256": "622b7d13d92aee628d92c6848ce3331923b9a90fcb7b2eaa1808dd5c3ddfcfd0"
+      },
+      "使用说明.txt": {
+        "bytes": 2204,
+        "sha256": "275cfc33202ff854b014d96404767168e3a255e42e672dfa8402774b680e3150"
+      },
+      "native-verification.txt": {
+        "bytes": 40678,
+        "sha256": "630e30f069a163b1bc7c2d98cacc55b58dc69af38596520d271827468642015d"
+      },
+      "native-verification.json": {
+        "bytes": 524,
+        "sha256": "ac4d07279cadd76c50c9dceff041b942a63716e2aa41e6cf1533c0a9e3ca765c"
+      },
+      "House.verification.json": {
+        "bytes": 596,
+        "sha256": "effc28ee3fcdad97ca9c342150345c29be0926addae58b0e018cdac6a73d6ac4"
+      }
+    }
+  },
+  "originalArchive": "archive/house-before-cute-20261105",
+  "previousMaxSha256": "850c56242f2fc6acc7e3d4ffdfcc8e13177acd9f797bc1117841981b21fb74f3",
+  "sourcePath": "assets/3d source/房子3d.max",
+  "downloadPath": "formspace/public/originals/house.max",
+  "publicExhibitId": "house",
+  "localSourceAndDownloadMatch": true,
+  "siteStatus": "pending",
+  "personalUploadStatus": "pending",
+  "limitations": [
+    "Exterior and garden decorative model; no construction documents or furnished interior.",
+    "Single offline export; universal MAX cloud conversion remains deferred.",
+    "Web PBR and native Max renderer are different."
+  ],
+  "compactUpload": {
+    "sourceArchive": "deliverables/Cute_House_MAX_Source.zip",
+    "sourceArchiveBytes": 408131,
+    "sourceArchiveSha256": "5cc5205c95ca86ea1fff3f0af8ded2c009910de1953b7e51c0231327a78f55ce",
+    "previewArchive": "deliverables/Cute_House_Web_Preview.zip",
+    "previewArchiveBytes": 422753,
+    "previewArchiveSha256": "43b7921d3863bbd195c7f38d267c7b387a058e5db51d5dabfe7e1c46fb1e0220",
+    "zipContentsByteIdentical": true
+  },
+  "localBrowser": {
+    "result": "passed",
+    "origin": "http://127.0.0.1:8815",
+    "checks": [
+      "public gallery API succeeds",
+      "all existing system works remain in the gallery",
+      "house detail API succeeds",
+      "existing system house identity is retained",
+      "current house title matches source",
+      "current house fileName matches source",
+      "current house fileSize matches source",
+      "current house modelUrl matches source",
+      "current house coverUrl matches source",
+      "current house objects matches source",
+      "current house triangles matches source",
+      "current house dimensions matches source",
+      "asset is readable: /originals/house.max",
+      "asset bytes match: /originals/house.max",
+      "asset is readable: /portfolio/house.glb",
+      "asset bytes match: /portfolio/house.glb",
+      "asset is readable: /portfolio/house.webp",
+      "asset bytes match: /portfolio/house.webp",
+      "asset is readable: /portfolio/house-alternate.jpg",
+      "asset bytes match: /portfolio/house-alternate.jpg",
+      "actual house model rotates",
+      "actual house model zooms",
+      "house wireframe works",
+      "house cover displays",
+      "alternate render displays",
+      "house image lightbox opens",
+      "house page has no horizontal overflow",
+      "no house page runtime errors",
+      "preview does not start file download"
+    ],
+    "errors": [],
+    "downloads": [],
+    "workWrites": 0,
+    "browser": "156.0.4314.58",
+    "workId": "house",
+    "publicIds": [
+      "cabinet",
+      "house",
+      "lamp",
+      "rapoo-keyboard",
+      "sofa"
+    ]
+  },
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "gitCheckoutManifestPayloadsVerified": 10
+}

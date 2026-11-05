@@ -12,3 +12,7 @@
 *.fbx filter=lfs diff=lfs merge=lfs -text
 *.glb filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+
+# Preserve the sealed delivery's exact bytes so its SHA manifest survives checkout.
+deliverables/Cute_House_2026/*.json -text
+deliverables/Cute_House_2026/*.txt -text

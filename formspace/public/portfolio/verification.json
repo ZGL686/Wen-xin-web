@@ -1,31 +1,34 @@
 [
   {
     "id": "house",
-    "title": "房子 · 空间习作",
+    "title": "莓糖小屋 · 卡通可爱风房子",
     "original_file": "房子3d.max",
-    "original_bytes": 737280,
-    "original_sha256": "850C56242F2FC6ACC7E3D4FFDFCC8E13177ACD9F797BC1117841981B21FB74F3",
+    "original_bytes": 9936896,
+    "original_sha256": "4783FED9F5A0D0E123DBDC37DFFCCAAE071A08F854DD33106582B01A2074E1BC",
     "source_unchanged": true,
     "source_bounds_metres": [
-      1.5191809,
-      1.526272,
-      1.311861
+      1.0,
+      1.15,
+      0.60375
     ],
-    "visible_meshes": 2,
-    "triangles": 200,
+    "visible_meshes": 330,
+    "triangles": 98218,
     "glb": "house.glb",
-    "glb_bytes": 15124,
-    "glb_sha256": "c286f401aabbe882ca13ecdd422a0615644ffa39487fa5d73192dd2ba8dd17bd",
+    "glb_bytes": 2657096,
+    "glb_sha256": "9e5cf0b729003147956b6b2df192f6f8dfbff9b28ceae46adea6ebfdccdd9455",
     "image": "house.png",
     "image_size": [
-      1000,
-      900
+      1600,
+      1400
     ],
-    "image_transparent": true,
-    "conversion": "3ds Max visible geometry → OBJ → Blender → GLB",
-    "viewer_scale": "Longest source dimension normalized to 3 viewer units. Refer to source_bounds_metres for physical dimensions.",
-    "material_note": "真实源几何。网页材质为基础色与粗糙度近似；3ds Max 原始材质、灯光和效果以 MAX 文件为准。",
-    "status": "verified"
+    "image_transparent": false,
+    "conversion": "3ds Max 2026 native Editable Poly evaluated meshes and corner normals → self-contained GLB",
+    "viewer_scale": "Native centimetres converted to metres; viewer frames the whole model.",
+    "material_note": "19种纯色材质；网页PBR近似原生Max标准材质，无外部贴图。",
+    "status": "verified",
+    "source_replaced_by_user_request": "2026-11-05",
+    "previous_original_archive": "archive/house-before-cute-20261105/房子3d.max",
+    "native_triangles": 98280
   },
   {
     "id": "cabinet",
