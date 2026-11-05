@@ -1,0 +1,220 @@
+{
+  "date": "2026-11-05",
+  "result": "passed",
+  "site": {
+    "projectId": "appgprj_6addc2985e6c8191b7e6b6a746e0911c",
+    "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+    "houseUrl": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/house",
+    "accessMode": "public",
+    "r2": "BUCKET",
+    "d1": null,
+    "audienceAndStoragePreserved": true
+  },
+  "source": {
+    "helperResult": "completed exit 0",
+    "commitSha": "1fb9225528d51c960b7f43d6f454a06d171d5757",
+    "archiveFile": "cute-house-20261105.tar.gz",
+    "archiveBytes": 16923894,
+    "archiveSha256": "031209b5193a0f7e0beef769b6d3fe4ac62d933e5b3c8c232eb563af67783999"
+  },
+  "savedVersion": {
+    "number": 11,
+    "id": "appgprj_6addc2985e6c8191b7e6b6a746e0911c~appgver_59829c55401c81918383e609a5633ea6",
+    "archiveStorage": {
+      "format": "tar",
+      "contentHash": "sha256:33981b9f471fff5d9fa6485f728a8d5e97010ec57e529f129a6b029319b6fc9d",
+      "sizeBytes": 57169920,
+      "fileCount": 53
+    }
+  },
+  "deployment": {
+    "id": "appgdep_6aec05eeb95c8191b91f0dafdcb4a2b3",
+    "status": "succeeded",
+    "type": "publish",
+    "updatedAt": "2026-11-05T04:28:50.818139+00:00",
+    "envSetRevision": 0
+  },
+  "validation": {
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "localBrowser": {
+      "result": "passed",
+      "origin": "http://127.0.0.1:8815",
+      "checks": [
+        "public gallery API succeeds",
+        "all existing system works remain in the gallery",
+        "house detail API succeeds",
+        "existing system house identity is retained",
+        "current house title matches source",
+        "current house fileName matches source",
+        "current house fileSize matches source",
+        "current house modelUrl matches source",
+        "current house coverUrl matches source",
+        "current house objects matches source",
+        "current house triangles matches source",
+        "current house dimensions matches source",
+        "asset is readable: /originals/house.max",
+        "asset bytes match: /originals/house.max",
+        "asset is readable: /portfolio/house.glb",
+        "asset bytes match: /portfolio/house.glb",
+        "asset is readable: /portfolio/house.webp",
+        "asset bytes match: /portfolio/house.webp",
+        "asset is readable: /portfolio/house-alternate.jpg",
+        "asset bytes match: /portfolio/house-alternate.jpg",
+        "actual house model rotates",
+        "actual house model zooms",
+        "house wireframe works",
+        "house cover displays",
+        "alternate render displays",
+        "house image lightbox opens",
+        "house page has no horizontal overflow",
+        "no house page runtime errors",
+        "preview does not start file download"
+      ],
+      "errors": [],
+      "downloads": [],
+      "workWrites": 0,
+      "browser": "156.0.4314.58",
+      "workId": "house",
+      "publicIds": [
+        "cabinet",
+        "house",
+        "lamp",
+        "rapoo-keyboard",
+        "sofa"
+      ]
+    },
+    "productionBrowser": {
+      "result": "passed",
+      "origin": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+      "checks": [
+        "public gallery API succeeds",
+        "all existing system works remain in the gallery",
+        "house detail API succeeds",
+        "existing system house identity is retained",
+        "current house title matches source",
+        "current house fileName matches source",
+        "current house fileSize matches source",
+        "current house modelUrl matches source",
+        "current house coverUrl matches source",
+        "current house objects matches source",
+        "current house triangles matches source",
+        "current house dimensions matches source",
+        "asset is readable: /originals/house.max",
+        "asset bytes match: /originals/house.max",
+        "asset is readable: /portfolio/house.glb",
+        "asset bytes match: /portfolio/house.glb",
+        "asset is readable: /portfolio/house.webp",
+        "asset bytes match: /portfolio/house.webp",
+        "asset is readable: /portfolio/house-alternate.jpg",
+        "asset bytes match: /portfolio/house-alternate.jpg",
+        "actual house model rotates",
+        "actual house model zooms",
+        "house wireframe works",
+        "house cover displays",
+        "alternate render displays",
+        "house image lightbox opens",
+        "house page has no horizontal overflow",
+        "no house page runtime errors",
+        "preview does not start file download"
+      ],
+      "errors": [],
+      "downloads": [],
+      "workWrites": 0,
+      "browser": "156.0.4314.58",
+      "workId": "house",
+      "publicIds": [
+        "73a2a5c1-e085-4a58-a49d-a6517dd2a401",
+        "cabinet",
+        "f0b4e73e-169e-41a1-bc3f-4505be3d802d",
+        "house",
+        "lamp",
+        "rapoo-keyboard",
+        "sofa"
+      ]
+    },
+    "cache": {
+      "result": "passed",
+      "origin": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site",
+      "scope": "Unchanged public asset paths fetched and conditionally revalidated; no cookie or work writes",
+      "records": [
+        {
+          "path": "/portfolio/house.glb",
+          "cacheBustingQuery": false,
+          "status": 200,
+          "bytes": 2657096,
+          "sha256": "9e5cf0b729003147956b6b2df192f6f8dfbff9b28ceae46adea6ebfdccdd9455",
+          "matchesLocal": true,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "etag": "\"c02809a4031e22d6b897d9404e2592aa\"",
+            "last-modified": null,
+            "age": null,
+            "cf-cache-status": "HIT",
+            "content-length": "2657096",
+            "content-type": "application/octet-stream"
+          },
+          "conditional": {
+            "sentIfNoneMatch": "\"c02809a4031e22d6b897d9404e2592aa\"",
+            "status": 304,
+            "etag": "\"c02809a4031e22d6b897d9404e2592aa\"",
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "sha256": null
+          }
+        },
+        {
+          "path": "/portfolio/house.webp",
+          "cacheBustingQuery": false,
+          "status": 200,
+          "bytes": 93202,
+          "sha256": "d499eff3fcfacc683471155a49ab7b32a7efff5d51ce01b43d2fc1e04cd6d446",
+          "matchesLocal": true,
+          "headers": {
+            "cache-control": "public, max-age=0, must-revalidate",
+            "etag": "\"b7687839c49c93ad2863d59767092317\"",
+            "last-modified": null,
+            "age": null,
+            "cf-cache-status": "HIT",
+            "content-length": "93202",
+            "content-type": "image/webp"
+          },
+          "conditional": {
+            "sentIfNoneMatch": "\"b7687839c49c93ad2863d59767092317\"",
+            "status": 304,
+            "etag": "\"b7687839c49c93ad2863d59767092317\"",
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "sha256": null
+          }
+        }
+      ]
+    },
+    "screenshot": "docs/verification/cute-house-site-20261105.png",
+    "screenshotVisuallyInspected": true,
+    "screenshotSha256": "91e35d2056f479b01399a081e4c8d508d57aa7f1ee19b986669f527a6ae1f61a"
+  },
+  "files": {
+    "formspace/public/originals/house.max": {
+      "bytes": 9936896,
+      "sha256": "4783fed9f5a0d0e123dbdc37dffccaae071a08f854dd33106582b01a2074e1bc"
+    },
+    "formspace/public/portfolio/house.glb": {
+      "bytes": 2657096,
+      "sha256": "9e5cf0b729003147956b6b2df192f6f8dfbff9b28ceae46adea6ebfdccdd9455"
+    },
+    "formspace/public/portfolio/house.webp": {
+      "bytes": 93202,
+      "sha256": "d499eff3fcfacc683471155a49ab7b32a7efff5d51ce01b43d2fc1e04cd6d446"
+    },
+    "formspace/public/portfolio/house-alternate.jpg": {
+      "bytes": 228782,
+      "sha256": "622b7d13d92aee628d92c6848ce3331923b9a90fcb7b2eaa1808dd5c3ddfcfd0"
+    }
+  },
+  "notes": [
+    "Existing house ID retained; no duplicate system work created.",
+    "Production QA uses a separate browser context and does not write works.",
+    "GLB and WebP were fetched at the unchanged original paths without cache-busting queries; both hashes match the final local files and both ETag conditional requests return 304 with public, max-age=0, must-revalidate.",
+    "Initial production QA encountered an image-load timing race; the test harness now waits for complete images and the same 29 checks pass. No product or deployment archive was changed for that test wait.",
+    "Personal-work upload is verified separately in docs/verification/house-20261105.json."
+  ]
+}

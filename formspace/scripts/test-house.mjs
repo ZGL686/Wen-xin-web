@@ -39,8 +39,9 @@ try{
  await page.getByRole('button',{name:'线框',exact:true}).click();check(await page.getByRole('button',{name:'线框',exact:true}).getAttribute('aria-pressed')==='true','house wireframe works');await page.getByRole('button',{name:'线框',exact:true}).click();
  await page.screenshot({path:path.join(out,origin.startsWith('https:')?'live-model.png':'local-model.png'),fullPage:true});
  await page.getByRole('button',{name:'图片',exact:true}).click();await page.locator('.detail-image').waitFor();
+ await page.waitForFunction(()=>{const image=document.querySelector('.detail-image');return image?.complete&&image.naturalWidth>0},null,{timeout:90000});
  check(await page.locator('.detail-image').evaluate(image=>image.complete&&image.naturalWidth>0),'house cover displays');
- if(expected.images.length>1){await page.getByRole('button',{name:'下一张图片',exact:true}).click();check((await page.locator('.detail-image').getAttribute('src'))===expected.images[1],'alternate render displays');}
+ if(expected.images.length>1){await page.getByRole('button',{name:'下一张图片',exact:true}).click();await page.waitForFunction(url=>{const image=document.querySelector('.detail-image');return image?.getAttribute('src')===url&&image.complete&&image.naturalWidth>0},expected.images[1],{timeout:90000});check((await page.locator('.detail-image').getAttribute('src'))===expected.images[1],'alternate render displays');}
  await page.getByRole('button',{name:'放大图片',exact:true}).click();check(await page.getByRole('dialog',{name:'作品图片大图'}).isVisible(),'house image lightbox opens');await page.keyboard.press('Escape');
  check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'house page has no horizontal overflow');
  check(errors.length===0,'no house page runtime errors');check(downloads.length===0,'preview does not start file download');
