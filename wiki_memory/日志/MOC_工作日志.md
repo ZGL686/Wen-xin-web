@@ -15,6 +15,7 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-06 | discussion | 诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词 | archived | session-20261106-220016-227-968b1f0a | [[日志/2026-11-06-220016-227-discussion-968b1f0a.md|2026-11-06｜诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词]] |
 | 2026-11-06 | feature | 交付 27 英寸显示器原生模型并公开到长序展厅 | archived | session-20261106-214534-727-9caaedc4 | [[日志/2026-11-06-214534-727-feature-9caaedc4.md|2026-11-06｜交付 27 英寸显示器原生模型并公开到长序展厅]] |
 | 2026-11-05 | feature | - | archived | porcelain-teapot-native-model-and-user-space-upload | [[日志/2026-11-05-青花茶壶原生建模与个人作品上传.md|青花茶壶原生建模与个人作品上传]] |
 | 2026-11-05 | discussion | 评估长序网页的华灿奖赛道与参赛材料 | archived | session-20261105-165512-317-c2312cf9 | [[日志/2026-11-05-165512-317-discussion-c2312cf9.md|2026-11-05｜评估长序网页的华灿奖赛道与参赛材料]] |
