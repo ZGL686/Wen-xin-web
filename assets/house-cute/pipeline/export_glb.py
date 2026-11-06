@@ -36,12 +36,13 @@ def linear(c):
     return c/12.92 if c <= .04045 else ((c+.055)/1.055)**2.4
 
 
-def export(source, target):
+def export(source, target, *, scene_name="Berry Cottage", material_options=None):
     objects = json.loads(source.read_text(encoding="utf-8-sig")).get("objects")
     if not isinstance(objects, list) or not objects:
         raise ValueError("Expected a nonempty objects array")
-    g = {"asset": {"version": "2.0", "generator": "3ds Max 2026 evaluated house meshes / Changxu"},
-         "scene": 0, "scenes": [{"name": "Berry Cottage", "nodes": []}],
+    generator = "3ds Max 2026 evaluated house meshes / Changxu" if scene_name == "Berry Cottage" else "3ds Max 2026 evaluated meshes / Changxu"
+    g = {"asset": {"version": "2.0", "generator": generator},
+         "scene": 0, "scenes": [{"name": scene_name, "nodes": []}],
          "nodes": [], "meshes": [], "materials": [], "accessors": [], "bufferViews": [], "buffers": []}
     binary = bytearray()
     materials = {}
@@ -123,7 +124,14 @@ def export(source, target):
             raise ValueError(name+" color must be in 0..1")
         if material_name not in materials:
             materials[material_name] = len(g["materials"])
-            g["materials"].append({"name": material_name, "pbrMetallicRoughness": {"baseColorFactor": [linear(c) for c in color]+[1], "metallicFactor": 0, "roughnessFactor": .78}})
+            options = material_options(material_name) if material_options else {}
+            base_color = [linear(c) for c in color]
+            material = {"name": material_name, "pbrMetallicRoughness": {"baseColorFactor": base_color+[1],
+                        "metallicFactor": options.get("metallic", 0), "roughnessFactor": options.get("roughness", .78)}}
+            if options.get("unlit"):
+                material["extensions"] = {"KHR_materials_unlit": {}}
+                g["extensionsUsed"] = ["KHR_materials_unlit"]
+            g["materials"].append(material)
         primitive = {"attributes": {"POSITION": accessor(positions, 5126, "VEC3", 34962, True), "NORMAL": accessor(normals, 5126, "VEC3", 34962)},
                      "indices": accessor(indices, 5125, "SCALAR", 34963), "material": materials[material_name]}
         g["meshes"].append({"name": name, "primitives": [primitive]})
@@ -166,6 +174,11 @@ def self_test():
         assert struct.unpack_from("<3f", raw, 28+length+view["byteOffset"]) == (0,1,0)
         assert report["triangles"] == 1 and report["normalSources"]["nativeCorners"] == 1
         assert report["bounds"]["dimensions"] == [1,0,1]
+        export(source, target, scene_name="Monitor", material_options=lambda _: {"unlit": True})
+        raw = target.read_bytes()
+        doc = json.loads(raw[20:20+struct.unpack_from("<I", raw, 12)[0]])
+        assert doc["scenes"][0]["name"] == "Monitor"
+        assert "KHR_materials_unlit" in doc["materials"][0]["extensions"]
         obj["faces"] = [[0,1,9]]
         source.write_text(json.dumps({"objects": [obj]}))
         try:

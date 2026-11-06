@@ -1,0 +1,30 @@
+{
+  "result": "passed",
+  "sha256": "e01e6705d559bbc8497c1cdf0e3b06ef744e39d396ba82e47a37cb34f3a7fc9e",
+  "bytes": 714432,
+  "objects": 126,
+  "materials": 30,
+  "triangles": 23712,
+  "nativeTriangles": 23712,
+  "degenerateTrianglesSkipped": 0,
+  "verticesAndNormals": 14282,
+  "maxSquaredNormalLengthError": 8.11778733122992e-08,
+  "boundsMetersYUp": {
+    "min": [
+      -0.3062500059604645,
+      0.0,
+      -0.11999999731779099
+    ],
+    "max": [
+      0.3062500059604645,
+      0.47475001215934753,
+      0.09399999678134918
+    ]
+  },
+  "screenCm": {
+    "width": 59.769999980926514,
+    "height": 33.6200013756752,
+    "diagonal": 68.57665339035114
+  },
+  "externalResources": 0
+}

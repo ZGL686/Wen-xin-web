@@ -1,0 +1,49 @@
+{
+  "bytes": 786432,
+  "uploadSizeTargetBytes": 4194304,
+  "uploadSizeTargetMet": true,
+  "oleSignature": true,
+  "isMaxFile": true,
+  "reopened": true,
+  "hostYear": 2026,
+  "parts": 126,
+  "editablePolyParts": 126,
+  "triangles": 23712,
+  "vertices": 13260,
+  "materials": 30,
+  "missingMaterials": 0,
+  "nonStandardMaterialParts": 0,
+  "emptyObjects": 0,
+  "invalidCoordinates": 0,
+  "externalBitmapMaps": 0,
+  "unmarkedModelGeometry": 0,
+  "modelLayers": 4,
+  "unitsPass": true,
+  "systemScale": 1.0,
+  "boundsCm": {
+    "min": [
+      -30.625,
+      -9.4,
+      0.0
+    ],
+    "max": [
+      30.625,
+      12.0,
+      47.475
+    ],
+    "dimensions": [
+      61.25,
+      21.4,
+      47.475
+    ]
+  },
+  "screenCm": {
+    "width": 59.77,
+    "height": 33.62,
+    "diagonal": 68.5767
+  },
+  "componentsPass": true,
+  "layersPass": true,
+  "screenPass": true,
+  "allChecksPass": true
+}

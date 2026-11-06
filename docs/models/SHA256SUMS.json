@@ -19,5 +19,9 @@
   "assets/renders/lamp/lamp.png": "3654385afb3222cb806148e3140b9ca14ff1ebf70fb0013711a86c7853f10517",
   "assets/renders/sofa/sofa.png": "cf341e1c7eb91da6649b18b41c1257a11ab37b9a4c10edf9b84d4a319783b9b2",
   "assets/renders/teapot/Teapot_Alternate.png": "0c2909ef2b8b7adb4133767d26bb449a4055fa7371d22bc188774b3575478cbf",
-  "assets/renders/teapot/Teapot_Hero.png": "b4987efff523eb8a704fc0395eda9924bd9a9687b9f1e812051529ac3cf87cce"
+  "assets/renders/teapot/Teapot_Hero.png": "b4987efff523eb8a704fc0395eda9924bd9a9687b9f1e812051529ac3cf87cce",
+  "assets/3d source/Monitor_27_3dsMax2026.max": "7d5f501864a6a6bf7ba822a2910747f5adc372f13293c51625bf40b61b4b05ba",
+  "assets/pipeline/Monitor_27.glb": "e01e6705d559bbc8497c1cdf0e3b06ef744e39d396ba82e47a37cb34f3a7fc9e",
+  "assets/renders/monitor/Monitor_Front.png": "e501522e958495260ac4cf1aaf3107afb1e61ae4ff6134b38c9a8d9426ef8269",
+  "assets/renders/monitor/Monitor_Rear.png": "41f6574d4aa2842302aeeee93e0b047d1fff5206ff3e45d16a1effc7f6c67e75"
 }

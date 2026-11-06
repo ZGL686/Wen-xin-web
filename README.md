@@ -57,6 +57,7 @@ pwsh -File tools/project-sync.ps1 -Summary "本轮任务" -Kind maintenance -Det
 - 莓糖小屋使用 [房子3d.max](<assets/3d source/房子3d.max>)，渲染图位于 [house](assets/renders/house/)。
 - RAPOO 键盘使用 [Keyboard_Rapoo_3dsMax2026.max](<assets/3d source/Keyboard_Rapoo_3dsMax2026.max>)，FBX 和 GLB 位于 [转换目录](assets/pipeline/)，渲染图位于 [keyboard](assets/renders/keyboard/)。
 - 青花瓷壶的 MAX 与牡丹贴图放在同一个 [茶壶源文件夹](<assets/3d source/Porcelain_Teapot_2026/>)，渲染图位于 [teapot](assets/renders/teapot/)。
+- 27 英寸桌面显示器使用 [Monitor_27_3dsMax2026.max](<assets/3d source/Monitor_27_3dsMax2026.max>)，编辑方式见[模型说明](docs/models/monitor/README.md)，也可[在长序展厅查看](https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/04e21be9-8843-4993-9d40-52d3754e0554)。
 
 模型按原格式直接交付。使用说明和原生检查见 [模型资料](docs/models/)。历史回执中的路径记录了验收当时的位置。
 

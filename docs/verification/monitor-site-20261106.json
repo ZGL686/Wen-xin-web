@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-06",
+  "title": "27 英寸桌面显示器",
+  "workId": "04e21be9-8843-4993-9d40-52d3754e0554",
+  "url": "https://formspace-sm-3d-studio.h2969351680.chatgpt.site/#/work/04e21be9-8843-4993-9d40-52d3754e0554",
+  "displayVersion": 1,
+  "displayVersionId": "a83ee2a5-77b2-4956-a436-d9c09e83f879",
+  "status": "final",
+  "visibility": "public",
+  "processPublished": false,
+  "siteRedeployed": false,
+  "browser": {
+    "originalAuthorSpace": true,
+    "cardVisibleInAuthorSpace": true,
+    "cardVisibleInPublicGallery": true,
+    "liveModelLoaded": true,
+    "manualDragChangedView": true
+  },
+  "anonymous": {
+    "listStatus": 200,
+    "listed": true,
+    "detailStatus": 200,
+    "isOwner": false,
+    "originalLinkExposed": false,
+    "allowSourceDownload": false
+  },
+  "authorOriginalDownload": {
+    "filename": "Monitor_27_3dsMax2026.max",
+    "bytes": 786432,
+    "sha256": "7d5f501864a6a6bf7ba822a2910747f5adc372f13293c51625bf40b61b4b05ba",
+    "equalsLocal": true
+  },
+  "anonymousPreviewDownload": {
+    "filename": "Monitor_27.glb",
+    "rangeStatuses": [206, 206, 206],
+    "bytes": 714432,
+    "sha256": "e01e6705d559bbc8497c1cdf0e3b06ef744e39d396ba82e47a37cb34f3a7fc9e",
+    "equalsLocal": true
+  },
+  "anonymousImages": [
+    {
+      "filename": "Monitor_Front.jpg",
+      "status": 200,
+      "bytes": 73829,
+      "sha256": "7960126a9cc11a59720821066746c7c3fdc7d65c0987307c0048f889a67aadc1"
+    },
+    {
+      "filename": "Monitor_Rear.jpg",
+      "status": 200,
+      "bytes": 53415,
+      "sha256": "b5faa76ab4752ecacfcd37249ae9c185921fe22ee512cd2d0c9ea2db8f5fe6cc"
+    }
+  ]
+}
