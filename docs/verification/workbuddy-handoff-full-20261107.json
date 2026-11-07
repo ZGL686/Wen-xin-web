@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-07",
+  "sourceCommit": "71e248357550b01b4fa741499bde1c873e0a6401",
+  "archive": "deliverables/Changxu_WorkBuddy_China_20261107_Full.zip",
+  "bytes": 38749064,
+  "sha256": "dc997b822c393e8db436f254009ab781f7fd9984ae61e6d9562bb792ac22d223",
+  "files": 208,
+  "manifestHashes": 207,
+  "maxFiles": 8,
+  "builtInWorks": 5,
+  "supplementaryWorks": 3,
+  "zipIntegrity": "passed",
+  "sourceSnapshotMatches": 74,
+  "packagingExceptions": [
+    ".openai/hosting.json identity removed",
+    ".gitignore runtime data ignored"
+  ],
+  "nodeVersion": "v24.20.0",
+  "apiChecks": 542,
+  "nodeIntegrationChecks": 9,
+  "typecheck": "passed",
+  "independentInstall": "passed",
+  "build": "passed",
+  "derivedStaticProtection": "passed",
+  "productionCosVerified": false,
+  "domesticDeploymentCompleted": false,
+  "remoteUserDataExported": false,
+  "browserQaRepeated": false,
+  "credentialsIncluded": false,
+  "existingSiteIdentityIncluded": false,
+  "deploymentTemplatesIncluded": true,
+  "previousCandidatePreserved": "deliverables/Changxu_WorkBuddy_China_20261107.zip"
+}
