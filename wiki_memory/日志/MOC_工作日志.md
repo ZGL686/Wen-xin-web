@@ -3,7 +3,7 @@ type: moc
 status: active
 kind: process
 importance: high
-updated: 2026-11-06
+updated: 2026-11-07
 topic: work-log-index
 source_logs: []
 supersedes: null
@@ -15,6 +15,7 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-07 | feature | Node.js 后端本地适配：R2 兼容存储抽象（FS/COS）、node-server、集成测试 | archived | session-20261107-191234-053-4ff0abdd | [[日志/2026-11-07-191234-053-feature-4ff0abdd.md|2026-11-07｜Node.js 后端本地适配：R2 兼容存储抽象（FS/COS）、node-server、集成测试]] |
 | 2026-11-06 | discussion | 诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词 | archived | session-20261106-220016-227-968b1f0a | [[日志/2026-11-06-220016-227-discussion-968b1f0a.md|2026-11-06｜诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词]] |
 | 2026-11-06 | feature | 交付 27 英寸显示器原生模型并公开到长序展厅 | archived | session-20261106-214534-727-9caaedc4 | [[日志/2026-11-06-214534-727-feature-9caaedc4.md|2026-11-06｜交付 27 英寸显示器原生模型并公开到长序展厅]] |
 | 2026-11-05 | feature | - | archived | porcelain-teapot-native-model-and-user-space-upload | [[日志/2026-11-05-青花茶壶原生建模与个人作品上传.md|青花茶壶原生建模与个人作品上传]] |
