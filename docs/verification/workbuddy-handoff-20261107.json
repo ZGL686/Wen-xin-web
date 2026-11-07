@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-07",
+  "sourceCommit": "71e248357550b01b4fa741499bde1c873e0a6401",
+  "archive": "deliverables/Changxu_WorkBuddy_China_20261107.zip",
+  "bytes": 38744244,
+  "sha256": "b6898888f337f03ab089e0006707c8ddeace8ed918c0428282badf41b97ae805",
+  "files": 206,
+  "manifestHashes": 205,
+  "maxFiles": 8,
+  "builtInWorks": 5,
+  "supplementaryWorks": 3,
+  "zipIntegrity": "passed",
+  "lfsPointersIncluded": false,
+  "nodeVersion": "v24.20.0",
+  "checks": [
+    {
+      "command": "npm ci",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run test:node",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test-derived-build.mjs",
+      "exitCode": 0
+    }
+  ],
+  "apiChecks": 542,
+  "nodeIntegrationChecks": 9,
+  "productionCosVerified": false,
+  "domesticDeploymentCompleted": false,
+  "remoteUserDataExported": false,
+  "browserQaRepeated": false,
+  "credentialsIncluded": false,
+  "existingSiteIdentityIncluded": false
+}

@@ -1,0 +1,59 @@
+{
+  "checkedDate": "2026-11-07",
+  "nodeVersion": "v24.20.0",
+  "sourceCommit": "71e248357550b01b4fa741499bde1c873e0a6401",
+  "sourceDirectory": "源码",
+  "independentInstall": true,
+  "checks": [
+    {
+      "result": "138 packages installed; 18 seconds",
+      "exitCode": 0,
+      "command": "npm ci",
+      "arguments": [
+        "--prefer-offline",
+        "--no-audit",
+        "--no-fund"
+      ]
+    },
+    {
+      "exitCode": 0,
+      "command": "npm run typecheck",
+      "result": "TypeScript passed"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm test",
+      "result": "542 meaningful API checks passed"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm run build",
+      "result": "Vite client and Worker production builds passed"
+    },
+    {
+      "exitCode": 0,
+      "command": "npm run test:node",
+      "result": "9 Node integration checks passed, including static serving"
+    },
+    {
+      "modelBytes": 3464316,
+      "exitCode": 0,
+      "command": "node scripts/test-derived-build.mjs",
+      "result": "0 static private-model copies; derivative hash valid"
+    }
+  ],
+  "warnings": [
+    "Existing Three.js chunk exceeds the 700 kB warning threshold; build succeeded",
+    "npm reported install-script approval notices; the actual build and checks completed"
+  ],
+  "notTested": [
+    "Real COS service and SDK response semantics",
+    "Domestic cloud/network",
+    "New domain and old author transfer",
+    "Linux Nginx/systemd examples",
+    "New browser UI or physical device matrix",
+    "Restart recovery and production backup restore"
+  ],
+  "remoteUserDataExported": false,
+  "productionDeploymentChanged": false
+}

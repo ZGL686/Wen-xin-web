@@ -15,6 +15,9 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-11-07 | maintenance | - | archived | workbuddy-china-handoff-20261107 | [[日志/2026-11-07-长序国内部署WorkBuddy完整交接.md|2026-11-07｜长序国内部署 WorkBuddy 完整交接]] |
+| 2026-11-07 | maintenance | - | archived | workbuddy-china-handoff-20261107 | [[日志/2026-11-07-WorkBuddy国内部署交接包.md|WorkBuddy 国内部署交接包]] |
+| 2026-11-07 | maintenance | 打包长序 WorkBuddy 国内部署交接材料 | archived | session-20261107-195406-685-d5b7a541 | [[日志/2026-11-07-195406-685-maintenance-d5b7a541.md|2026-11-07｜打包长序 WorkBuddy 国内部署交接材料]] |
 | 2026-11-07 | feature | Node.js 后端本地适配：R2 兼容存储抽象（FS/COS）、node-server、集成测试 | archived | session-20261107-191234-053-4ff0abdd | [[日志/2026-11-07-191234-053-feature-4ff0abdd.md|2026-11-07｜Node.js 后端本地适配：R2 兼容存储抽象（FS/COS）、node-server、集成测试]] |
 | 2026-11-06 | discussion | 诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词 | archived | session-20261106-220016-227-968b1f0a | [[日志/2026-11-06-220016-227-discussion-968b1f0a.md|2026-11-06｜诊断长序访问时延并整理 WorkBuddy 大陆迁移提示词]] |
 | 2026-11-06 | feature | 交付 27 英寸显示器原生模型并公开到长序展厅 | archived | session-20261106-214534-727-9caaedc4 | [[日志/2026-11-06-214534-727-feature-9caaedc4.md|2026-11-06｜交付 27 英寸显示器原生模型并公开到长序展厅]] |

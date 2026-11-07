@@ -1,0 +1,21 @@
+# Install as /etc/systemd/system/changxu.service after replacing paths/user.
+[Unit]
+Description=Changxu portfolio Node server
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=changxu
+Group=changxu
+WorkingDirectory=/opt/changxu/源码
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/changxu/server.env
+ExecStart=/usr/bin/node server/node-server.mjs
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/changxu-data
+[Install]
+WantedBy=multi-user.target
