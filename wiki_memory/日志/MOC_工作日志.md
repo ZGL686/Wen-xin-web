@@ -17,6 +17,7 @@ supersedes: null
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-07 | maintenance | - | archived | workbuddy-china-handoff-20261107 | [[日志/2026-11-07-长序国内部署WorkBuddy完整交接.md|2026-11-07｜长序国内部署 WorkBuddy 完整交接]] |
 | 2026-11-07 | maintenance | - | archived | workbuddy-china-handoff-20261107 | [[日志/2026-11-07-WorkBuddy国内部署交接包.md|WorkBuddy 国内部署交接包]] |
+| 2026-11-07 | discussion | 整理可直接交给WorkBuddy的国内部署提示词 | archived | session-20261107-200415-507-80bf7dcb | [[日志/2026-11-07-200415-507-discussion-80bf7dcb.md|2026-11-07｜整理可直接交给WorkBuddy的国内部署提示词]] |
 | 2026-11-07 | discussion | 澄清国内迁移后网站内容保留范围 | archived | session-20261107-200122-109-ebbec4ce | [[日志/2026-11-07-200122-109-discussion-ebbec4ce.md|2026-11-07｜澄清国内迁移后网站内容保留范围]] |
 | 2026-11-07 | maintenance | 完成长序WorkBuddy完整交接包与部署模板验收 | archived | session-20261107-195735-991-14d1f56b | [[日志/2026-11-07-195735-991-maintenance-14d1f56b.md|2026-11-07｜完成长序WorkBuddy完整交接包与部署模板验收]] |
 | 2026-11-07 | maintenance | 打包长序 WorkBuddy 国内部署交接材料 | archived | session-20261107-195406-685-d5b7a541 | [[日志/2026-11-07-195406-685-maintenance-d5b7a541.md|2026-11-07｜打包长序 WorkBuddy 国内部署交接材料]] |
